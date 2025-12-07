@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Blog Post Policy</title>
+		<meta name="description" content="Pawn002 blog Ethical Guidelines for Content Creation and Updates">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="blog-post-policy">Blog Post Policy</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2025-10-15">15 October 2025</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/moral-leadership/" class="post-tag">Moral-Leadership</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/policy-analysis/" class="post-tag">Policy-Analysis</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/principal-level/" class="post-tag">Principal-Level</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ecosystem-design/" class="post-tag">Ecosystem-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/accountability/" class="post-tag">Accountability</a>
+		</li>
+</ul>
+
+<hr>
+
+<div class="min-text">
+<p><em>Updated: 21 October 2025</em></p>
+</div>
+<p>In launching this blog-portfolio hybrid, I aim to create a space where thoughtful discourse and practical insights on corporate communications can flourish. The ethical stance that guides this platform, rooted in pragmatic consequentialism, informs how I curate, update, and present content. Below is the revised policy that reflects this ethical framework alongside the latest guidance:</p>
+<h2 id="1-outcomes-matter">1. Outcomes Matter</h2>
+<p>Content on this blog will be developed and updated with a primary focus on outcomes. Each post aims not only to share information but to foster understanding, provoke thought, and stimulate constructive action. I will assess the implications of my posts, considering how they can serve the interests of my audience and the broader community.</p>
+<h2 id="2-intellectual-modesty">2. Intellectual Modesty</h2>
+<p>Recognizing the complexities of qualitative value, I commit to maintaining intellectual modesty. I acknowledge that measuring value can be subjective and nuanced, and I will strive to present information that reflects this complexity. Feedback from my audience will be welcomed and considered to enhance the quality and relevance of the content.</p>
+<h2 id="3-negotiated-social-contracts">3. Negotiated Social Contracts</h2>
+<p>I treat formal ethical frameworks as negotiated social contracts rather than absolute constraints. This means that the ethical guidelines I follow will be subject to adaptation based on context and community standards. Ongoing dialogue with readers will be essential to reassess these frameworks and ensure they align with collective priorities and values.</p>
+<h2 id="4-content-updates-for-current-relevancy">4. Content Updates for Current Relevancy</h2>
+<p>Each post will be updated to ensure current relevance. An &quot;edited&quot; or &quot;updated&quot; caveat will be included prominently in the post rather than modifying the initial post date. To further clarify, these caveat dates will include specific timestamps to differentiate the original post date from the last update date.</p>
+<h2 id="5-reader-empowerment-and-feedback">5. Reader Empowerment and Feedback</h2>
+<p>Readers interested in previous iterations of a post will have access to my contact information to reach out. They are encouraged to provide feedback on revisions to the posts or this policy, and I will strive to address all input thoughtfully.</p>
+<h2 id="6-third-party-audits">6. Third-Party Audits</h2>
+<p>As time permits, I may reach out to peers to act as third-party auditors for this policy and the responses to feedback. Their insights will help ensure the integrity and effectiveness of the content and its updates.</p>
+<h2 id="7-dedicated-policy-post">7. Dedicated Policy Post</h2>
+<p>This policy, along with any future iterations or updates, will be presented as its own distinct post, allowing easy access for reference and discussion.</p>
+<h2 id="8-engagement-and-responsibility">8. Engagement and Responsibility</h2>
+<p>Reader engagement is vital to this platform. I encourage discussion, questions, and critiques to foster a rich dialogue that can lead to better outcomes. I am committed to responding to comments and maintaining a respectful environment for discourse.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This blog-portfolio hybrid exemplifies my commitment to ethical content creation. By prioritizing meaningful outcomes, embracing humility, and being open to negotiation, I aim to contribute positively to conversations around corporate communications while remaining responsive to the needs and values of my audience. This policy will be reviewed periodically to ensure it stays aligned with evolving ethical standards and community expectations. Thank you for being part of this journey!</p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/post_policy/` was built on 2025-12-07T20:45:24.644Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>

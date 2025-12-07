@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Contrast Chaser Zero: From Personal Frustration to Product</title>
+		<meta name="description" content="How applying product development fundamentals transformed a workflow problem into an accessibility tool adopted across government agencies.">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="contrast-chaser-zero-from-personal-frustration-to-product">Contrast Chaser Zero: From Personal Frustration to Product</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2025-11-25">25 November 2025</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/portfolio/" class="post-tag">Portfolio</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/accessibility/" class="post-tag">Accessibility</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/inclusive-design/" class="post-tag">Inclusive-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/product-development/" class="post-tag">Product-Development</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/design-strategy/" class="post-tag">Design-Strategy</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/systems-integration/" class="post-tag">Systems-Integration</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/wcag-compliance/" class="post-tag">WCAG-Compliance</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/data-visualization/" class="post-tag">Data-Visualization</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/product-architecture/" class="post-tag">Product-Architecture</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/principal-level/" class="post-tag">Principal-Level</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/mission-alignment/" class="post-tag">Mission-Alignment</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/accountability/" class="post-tag">Accountability</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/strategic-foresight/" class="post-tag">Strategic-Foresight</a>
+		</li>
+</ul>
+
+<hr>
+
+<p><picture><source type="image/avif" srcset="/blog-test/img/oDmhy9L-X--400.avif 400w, /blog-test/img/oDmhy9L-X--800.avif 800w, /blog-test/img/oDmhy9L-X--1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/oDmhy9L-X--400.webp 400w, /blog-test/img/oDmhy9L-X--800.webp 800w, /blog-test/img/oDmhy9L-X--1536.webp 1536w" sizes="100vw"><img src="content\img\oDmhy9L-X--400.png" alt="Data visualization showing accessibility metrics with an accessibility icon, trending graph, gauge chart, and bar chart in shades of blue and orange on a dark background" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/oDmhy9L-X--400.png 400w, /blog-test/img/oDmhy9L-X--800.png 800w, /blog-test/img/oDmhy9L-X--1536.png 1536w" sizes="100vw"></picture></p>
+<div class="min-text">
+<p><strong>Disclaimer:</strong> Contrast Chaser was developed as part of my U.S. federal government employment. The tool, its development, and associated intellectual property are the property of the U.S. government. This case study describes my role as lead product manager, designer, developer, and user researcher on the project, documenting general product development principles and my professional contributions. No proprietary, classified, or sensitive government information is disclosed. References to adoption and usage reflect the tool's role in supporting government accessibility compliance efforts.</p>
+</div>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>When new accessibility requirements emerged, they broke my design workflow. Rather than accepting a slower process, I applied <strong>product development fundamentals</strong>—<strong>problem identification</strong>, <strong>market research</strong>, <strong>ideation</strong>, <strong>prototyping</strong>, and <strong>user validation</strong>—to build Contrast Chaser, a tool that measures contrast and provides solutions in a single interface. This case study documents how systematic research and iteration produced the initial <strong>minimum viable product (MVP)</strong>, demonstrating that product thinking applies whether you're building for commercial markets or internal organizational needs.</p>
+<h2 id="problem-identification">Problem Identification</h2>
+<p>Contrast Chaser was born from good intention and personal frustration.</p>
+<p>As a senior cartographer specializing in map-based visualizations, I was considered a corporate resource on visual design. When my office began an ad hoc effort to improve accessibility, everything changed. The Web Content Accessibility Guidelines (WCAG) contrast requirements—with their objective measurements—essentially invalidated most of what was considered &quot;good design&quot; at the time.</p>
+<p>The existing practice of creating a design, testing it for contrast, then adjusting colors was far too slow to meet production output needs. Traditional tools operated on a pass/fail binary: they measured contrast, told designers they had failed, then left them to figure out solutions on their own.</p>
+<p>This experience led to a clear <strong>problem statement</strong>:</p>
+<blockquote>
+<p>&quot;Accessible contrast testing is too slow.&quot;</p>
+</blockquote>
+<p>Effective <strong>problem identification</strong> requires more than recognizing frustration—it requires articulating a gap between current state and desired state that a product can close. The problem wasn't accessibility itself; it was the friction accessibility introduced into creative workflows.</p>
+<h2 id="market-research-and-user-needs">Market Research and User Needs</h2>
+<p><strong>Ideating</strong> about the needs of visualization producers like myself, I identified two core jobs-to-be-done:</p>
+<ol>
+<li>Measure contrast</li>
+<li>Find a new color that meets contrast requirements when the current color fails</li>
+</ol>
+<p>Conducting initial <strong>market research</strong> through interviews with colleagues facing the same problem validated several personal needs while revealing additional <strong>user requirements</strong>:</p>
+<ul>
+<li>Preference for familiar interface patterns</li>
+<li>Need to understand <em>why</em> existing colors don't pass</li>
+<li>Desire for actionable alternatives rather than just failure messages</li>
+</ul>
+<p>This research phase—informal but structured—distinguished assumptions from validated needs. The insight that users wanted understanding, not just compliance, shaped the product's eventual direction toward education as well as utility.</p>
+<h2 id="prototyping-research-through-building">Prototyping: Research Through Building</h2>
+<p>Because this was a passion project without immediate commercial goals, formal <strong>product roadmap planning</strong> with market milestones could be abbreviated. Instead, attention focused on <strong>prototyping</strong>—the creation of working models to test specific hypotheses.</p>
+<p>Several prototypes addressed different aspects of the eventual <strong>MVP</strong>:</p>
+<h3 id="grey-getter-user-experience-validation">Grey Getter: User Experience Validation</h3>
+<img src="/blog-test/img/figure_1_greyGetter.gif" alt="Grey Getter interface showing color input fields, contrast options, and a visualization that updates based on user choices" loading="lazy" decoding="async">
+<p>Grey Getter served as a <strong>proof of concept</strong> validating the core user experience. It established that users could work with an interface allowing color input, contrast ratio selection, and dynamic visualization updates. This prototype answered: <em>Can the basic interaction model work?</em></p>
+<h3 id="color-blind-color-schemes-understanding-success-factors">Color Blind Color Schemes: Understanding Success Factors</h3>
+<img src="/blog-test/img/figure_2_colorBlindColorSchemes.gif" alt="Color Blind Color Schemes visualization showing hue, lightness, and saturation represented as circle size, revealing patterns in accessible color combinations" loading="lazy" decoding="async">
+<p>Color Blind Color Schemes explored which aspects of color explained why certain combinations succeed for users with vision disabilities. By visualizing hue, lightness, and saturation together, this prototype generated <strong>design insights</strong> about accessible color relationships that would inform the algorithm's recommendations.</p>
+<h3 id="color-contrast-trends-edge-case-identification">Color Contrast Trends: Edge Case Identification</h3>
+<img src="/blog-test/img/figure_3_colorContrastTrends.gif" alt="Color Contrast Trends scatterplot showing patterns specific to certain contrast ratios, identifying design limits the application must handle" loading="lazy" decoding="async">
+<p>Color Contrast Trends researched color patterns specific to certain contrast ratios. These patterns represented <strong>design constraints</strong>—limits that any production tool must handle gracefully. Understanding edge cases before building prevents user frustration with unexpected failures.</p>
+<h2 id="mvp-development-synthesis-and-release">MVP Development: Synthesis and Release</h2>
+<p>Combining validated learnings from each prototype, Contrast Chaser's <strong>minimum viable product</strong> took shape.</p>
+<img src="/blog-test/img/figure_4_contrastChaserZero.gif" alt="Contrast Chaser Zero interface combining color input, contrast measurement, and accessible color alternatives in a single application" loading="lazy" decoding="async">
+<p>Contrast Chaser Zero synthesized:</p>
+<ul>
+<li>The validated interaction model from Grey Getter</li>
+<li>The color relationship research from Color Blind Color Schemes</li>
+<li>The edge case handling from Color Contrast Trends</li>
+</ul>
+<p>The result: an application that measures contrast success while providing users intuitive alternatives to keep their designs moving forward.</p>
+<p>This MVP was released to the workforce as a <strong>usable beta</strong> with explicit expectations: users would test the concept and provide feedback. The goal was learning, not perfection.</p>
+<h2 id="user-feedback-and-iteration">User Feedback and Iteration</h2>
+<p>While all feedback was recorded for later action—representing diverse <strong>pain points</strong> across the product—one issue dominated:</p>
+<blockquote>
+<p>&quot;It's too hard to input colors into the application!&quot;</p>
+</blockquote>
+<p>The solution was straightforward: an eyedropper feature similar to standard design tools. However, browser support for the EyeDropper API didn't exist yet.</p>
+<p>This gap between <strong>identified solution</strong> and <strong>technical feasibility</strong> required a two-track response:</p>
+<ol>
+<li><strong>Near-term</strong>: User training specific to common workflows provided relief</li>
+<li><strong>Long-term</strong>: Anticipatory <strong>ideation, research, and planning</strong> prepared the eyedropper feature for rapid deployment once browser support arrived</li>
+</ol>
+<p>When browsers finally added support, the prepared work paid off. The feature launched in hours rather than weeks. The Monday following a Friday afternoon deployment brought genuine user excitement—validation that the <strong>iterative development</strong> approach worked.</p>
+<h2 id="from-mvp-to-product">From MVP to Product</h2>
+<p>Typical steps following an MVP's graduation into an official product include:</p>
+<ul>
+<li><strong>Sourcing</strong>: Identifying suppliers and resources</li>
+<li><strong>Costing</strong>: Establishing financial models</li>
+<li><strong>Commercialization</strong>: Scaling and revenue generation</li>
+</ul>
+<p>In a government context, these steps were reinterpreted:</p>
+<ul>
+<li>Identifying maintenance barriers</li>
+<li>Working within taxpayer-funded IT constraints</li>
+<li>Generating continuing mission impact</li>
+</ul>
+<p>The underlying <strong>product lifecycle</strong> principles remained constant even as their application differed from private industry norms. Products require sustainable infrastructure, understood costs, and clear value propositions regardless of whether revenue or mission defines success.</p>
+<h2 id="outcomes-and-organizational-impact">Outcomes and Organizational Impact</h2>
+<p>Today Contrast Chaser enjoys wide usage across government, enabling visualization producers to create inclusive media efficiently. The tool has become central to communicating official accessibility policies across multiple agencies.</p>
+<p>Beyond the product itself, I now lead an independent Contrast Chaser team that operates with management confidence in autonomous <strong>product management</strong>. This trust emerged from demonstrated success: initial development that addressed real user needs, consistent <strong>user advocacy</strong>, and a track record of delivering value.</p>
+<p>The project demonstrates that <strong>product development methodology</strong> applies beyond commercial contexts. Government, nonprofit, and internal tooling all benefit from:</p>
+<ul>
+<li>Systematic problem identification</li>
+<li>User research before building</li>
+<li>Prototyping to validate hypotheses</li>
+<li>MVP releases for rapid learning</li>
+<li>Iterative improvement based on feedback</li>
+</ul>
+<h2 id="lessons-in-product-development">Lessons in Product Development</h2>
+<p>Contrast Chaser Zero illustrates several product development principles:</p>
+<p><strong>Start with the problem, not the solution.</strong> The initial insight wasn't &quot;build a color tool&quot;—it was &quot;accessible contrast testing is too slow.&quot; Framing the problem correctly enabled better solutions.</p>
+<p><strong>Validate assumptions through research.</strong> Interviewing colleagues revealed needs beyond my own assumptions. Users wanted understanding, not just pass/fail verdicts.</p>
+<p><strong>Prototype to learn, not to ship.</strong> Each prototype tested specific hypotheses. Grey Getter validated interaction models. Color Blind Color Schemes generated algorithmic insights. Color Contrast Trends identified edge cases. None were intended as final products.</p>
+<p><strong>Release MVPs for feedback, not applause.</strong> Shipping an imperfect but usable beta generated the insight that color input was the primary pain point—something not predicted during development.</p>
+<p><strong>Prepare for opportunities.</strong> Anticipating browser support for the EyeDropper API meant the feature deployed in hours when the opportunity arrived. Strategic foresight enables tactical speed.</p>
+<p>Whether building for commercial markets or internal organizational needs, these fundamentals produce better outcomes than intuition alone.</p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/contrast_chaser_zero/` was built on 2025-12-07T20:45:24.643Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>
