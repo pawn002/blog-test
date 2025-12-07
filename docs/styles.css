@@ -1,0 +1,21 @@
+body {
+    padding: 8rem 4rem;
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+p,
+li {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
