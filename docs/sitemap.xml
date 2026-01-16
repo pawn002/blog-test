@@ -101,8 +101,15 @@
 	
 		
 		<url>
+			<loc>/blog-test/blog/prompt-engineering-case-study/</loc>
+			<lastmod>2026-01-15</lastmod>
+		</url>
+	
+	
+		
+		<url>
 			<loc>/blog-test/feed/feed.xml</loc>
-			<lastmod>2025-12-07</lastmod>
+			<lastmod>2026-01-16</lastmod>
 		</url>
 	
 </urlset>

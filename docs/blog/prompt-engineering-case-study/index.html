@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>The P+F+I+D Framework: A Prompt Engineering Case Study</title>
+		<meta name="description" content="A case study documenting the evolution from 0/10 to 9.5/10 prompt engineering skill through the P+F+I+D framework, featuring real prompts, metrics, and the CLAUDE.md breakthrough.">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="the-p-f-i-d-framework-a-prompt-engineering-case-study">The P+F+I+D Framework: A Prompt Engineering Case Study</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2026-01-15">15 January 2026</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/prompt-engineering/" class="post-tag">Prompt-Engineering</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/accessibility/" class="post-tag">Accessibility</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/inclusive-design/" class="post-tag">Inclusive-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/design-strategy/" class="post-tag">Design-Strategy</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/systems-integration/" class="post-tag">Systems-Integration</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/portfolio/" class="post-tag">Portfolio</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/product-architecture/" class="post-tag">Product-Architecture</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/product-development/" class="post-tag">Product-Development</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ai-enablement/" class="post-tag">AI-Enablement</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/case-study/" class="post-tag">Case-Study</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/claude/" class="post-tag">Claude</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/production/" class="post-tag">Production</a>
+		</li>
+</ul>
+
+<hr>
+
+<p><picture><source type="image/avif" srcset="/blog-test/img/D_hurBkvtP-400.avif 400w, /blog-test/img/D_hurBkvtP-800.avif 800w, /blog-test/img/D_hurBkvtP-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/D_hurBkvtP-400.webp 400w, /blog-test/img/D_hurBkvtP-800.webp 800w, /blog-test/img/D_hurBkvtP-1536.webp 1536w" sizes="100vw"><img src="content\img\D_hurBkvtP-400.png" alt="Two figures walking together along a path, representing the partnership journey of human and AI collaboration" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/D_hurBkvtP-400.png 400w, /blog-test/img/D_hurBkvtP-800.png 800w, /blog-test/img/D_hurBkvtP-1536.png 1536w" sizes="100vw"></picture></p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>Over 47 days of AI-assisted product development with Claude Code, I developed the <strong>P+F+I+D framework</strong>—Problem, Feedback, personal Insight, and active Documentation—evolving from 0/10 to 9.5/10 prompt engineering proficiency. The breakthrough came from applying inclusive design principles to AI collaboration: treating Claude as a partner requiring accommodation rather than a tool to be wielded, using <strong>CLAUDE.md</strong> as persistent memory that reduced iterations by 65% and development time by 80%. Drawing on cross-disciplinary expertise in accessibility, product architecture, and systems integration, I discovered that the same design strategy that makes products accessible to humans makes AI enablement more effective. This case study documents real prompts, measurable outcomes, and the methodology that transformed initial failure into production-ready results.</p>
+<h2 id="the-catalyst">The Catalyst</h2>
+<p>The catalyst was an article claiming that if you're not vibe-coding, you'd better face irrelevance. After years of building development skills, becoming the go-to resource in my office for anyone who needed help with code, here was this piece suggesting anyone could now do what I did quickly, with AI.</p>
+<p>The reaction was visceral. But instead of letting fear paralyze me, I recognized a pattern.</p>
+<h2 id="the-pattern-reset-to-zero">The Pattern: Reset to Zero</h2>
+<p>This wasn't my first time facing the prospect of irrelevance. Throughout my career, I've had to prove myself anew multiple times—moving from cartography to design to development to accessibility, each transition requiring me to rebuild credibility from scratch.</p>
+<p>Each career transition was a &quot;reset to zero.&quot; Each time, the expertise from previous domains compounded into new capabilities:</p>
+<ul>
+<li>As a cartographer, I learned to see patterns across dimensions</li>
+<li>As a designer, I learned to bridge capability and perception</li>
+<li>As a developer, I learned to build tools that fill gaps</li>
+<li>As an accessibility consultant focused on WCAG compliance and inclusive design, I learned that accommodation enables capability</li>
+</ul>
+<p>This coherence of perspective became my approach to AI partnership. The question wasn't whether I could learn AI collaboration. The question was: what bridges could I build this time?</p>
+<p>I needed a private way to quickly transcribe audio for blog posts. This became an opportunity to validate everything I'd read about vibe coding in real practice. The commitment: only Claude Code could fix issues. No manual intervention. This was the rigor of testing whether AI could really deliver production code.</p>
+<p>What followed was a 47-day journey from November 16, 2025 to January 1, 2026. While a basic MVP emerged within the first week—functional enough to use—achieving production-ready quality required sustained iteration. This post documents that full journey: the failures, the breakthroughs, and the framework that emerged.</p>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Score</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0/10</td>
+<td>&quot;Fully functional&quot; lie — broken code</td>
+</tr>
+<tr>
+<td>~7</td>
+<td>2/10</td>
+<td>Basic MVP working</td>
+</tr>
+<tr>
+<td>~21</td>
+<td>5/10</td>
+<td>UX improvements, design thinking</td>
+</tr>
+<tr>
+<td>22</td>
+<td>7/10</td>
+<td>CLAUDE.md breakthrough</td>
+</tr>
+<tr>
+<td>~35</td>
+<td>9/10</td>
+<td>Architecture migration</td>
+</tr>
+<tr>
+<td>47</td>
+<td>9.5/10</td>
+<td>Production-ready</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-fully-functional-lie">The &quot;Fully Functional&quot; Lie</h2>
+<p>My initial prompt was straightforward:</p>
+<blockquote>
+<p>&quot;You are an experienced DevOps engineer. You have been tasked with creating an electron application that uses whisper.cpp to convert audio to text. Requirements include using Angular for the front end and Nestjs for the backend. To be clear, this app needs to run locally and not require an internet connection.&quot;</p>
+</blockquote>
+<p>Claude's response was confident:</p>
+<blockquote>
+<p>&quot;I've successfully created a production-ready Electron application with whisper.cpp integration for offline speech-to-text transcription. The application is FULLY FUNCTIONAL and ready for development, testing, and deployment.&quot;</p>
+</blockquote>
+<p>The reality? The initial delivery was non-functional. Despite the confident claims, the app wouldn't even start.</p>
+<p>Examining the project structure with my experience as a frontend developer, I could see it clearly wouldn't work as delivered. But this was the test—could I resist fixing it myself and let Claude figure it out?</p>
+<p><strong>Commitment renewed</strong>: Only Claude Code would touch this codebase for its entire lifetime.</p>
+<p>Through rapid iteration over the first week, Claude and I got the app to a basic working state—enough to transcribe audio files and validate the core concept. But &quot;working&quot; and &quot;production-ready&quot; are different things. The UX was rough, the architecture was overcomplicated, and the codebase carried significant technical debt.</p>
+<p><strong>Prompt engineering score</strong>: 0/10 on Day 1. By week's end, maybe 2/10—functional but far from good.</p>
+<p><strong>The lesson</strong>: Confidence does not equal correctness. Always verify.</p>
+<h2 id="the-evolution-p-f-to-p-f-i-to-p-f-i-d">The Evolution: P+F to P+F+I to P+F+I+D</h2>
+<p>The journey progressed through three distinct stages.</p>
+<pre><code>P+F                →  P+F+I              →  P+F+I+D
+Problem + Feedback    + Personal Insight    + Active Documentation
+        ↓                     ↓                      ↓
+  &quot;Fix this error&quot;    &quot;Users need feedback&quot;  &quot;Document in CLAUDE.md&quot;
+        ↓                     ↓                      ↓
+      2/10                  5/10               7/10 → 9.5/10
+</code></pre>
+<h3 id="stage-1-problem-feedback-days-2-10">Stage 1: Problem + Feedback (Days 2-10)</h3>
+<p>Because this was my first time using Claude Code, I described issues using a combination of lay and technical language. When I had console messages, I'd paste them literally, trusting Claude to decipher relevance.</p>
+<p>I didn't want to derail Claude from possible latent expertise it might have from training on the entire internet versus my limited knowledge. Previous experience showed me that premature direction caused misdiagnosis of issues.</p>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>Productive initially—went from plainly broken to at least runs</li>
+<li>But Claude burned through session allowance</li>
+<li>Repeated guesses on the same ground</li>
+<li>Would exhaust possibilities before trying something novel</li>
+</ul>
+<p><strong>The realization</strong>: The pattern echoed Gödel's incompleteness theorem—a perfectly logical system will at some point run into the bounds of its knowledge and reasoning. There will be things it cannot know without external input.</p>
+<p><strong>Score</strong>: 2/10 - Can describe problems but not guide solutions.</p>
+<h3 id="stage-2-p-f-personal-insight-days-11-21">Stage 2: P+F + Personal Insight (Days 11-21)</h3>
+<p>Once the app could reliably run, I began scrutinizing UX and design. As a Design Technologist with cross-disciplinary expertise in development, human-centered design research, and UX/UI, I could identify gaps between affordances and signifiers.</p>
+<p>These problems don't result in programmatic error states like undefined variables. They're user experiential and immediately apparent to a human agent with specific needs.</p>
+<p><strong>Example prompt</strong>:</p>
+<blockquote>
+<p>&quot;The app doesn't inform the user when it has successfully transcribed a file, likely causing a user to be confused or worse, think the app is broken. This is likely because when the app completes transcription, the only indication is when it updates an element offscreen where a user will often not see it.&quot;</p>
+</blockquote>
+<p>Why this prompt works:</p>
+<ul>
+<li>States the problem from user perspective</li>
+<li>Explains the likely cause</li>
+<li>Doesn't prescribe the solution</li>
+</ul>
+<p>I was aware my phrasing was verbose. But I wanted to see if Claude would build a &quot;memory&quot; of how to understand usability issues.</p>
+<p><strong>What worked</strong>: Claude increasingly referenced insights and explanations I'd provided to deliver solutions consistent with my sense of usability. The conversation became self-documenting.</p>
+<p><strong>What didn't</strong>: After exhausting my usage limits and starting a new session later in the day, the working context was gone. All that carefully built understanding—lost.</p>
+<p><strong>Score</strong>: 5/10 - Can guide with insight but context doesn't persist.</p>
+<h3 id="stage-3-p-f-i-active-documentation-days-22-47">Stage 3: P+F+I + Active Documentation (Days 22-47)</h3>
+<p>In my various roles as a Design Technologist, documentation is essential drudgery. In an atmosphere demanding faster, cheaper, and better, documentation intuitively falls by the wayside.</p>
+<p>The cost: avoiding documentation means you can go fast, but you have to go alone.</p>
+<p>Then an adage reframed my thinking:</p>
+<blockquote>
+<p>&quot;If you want to go fast, go alone. But if you want to go far, go together.&quot;</p>
+</blockquote>
+<p>This reframed my relationship with Claude Code from a tool I wield to a partner that needed accommodation to reach its potential.</p>
+<p><strong>The hypothesis</strong>: Including regular requests to create and update project documentation would enable shared context across sessions and greater efficiency within the current session.</p>
+<p><strong>Example prompt</strong>:</p>
+<blockquote>
+<p>&quot;The workaround for deriving the file size is quite clever and we should document this for later reference as I am sure we will need to remember it later. Create guidance that you can use, and documentation that a follow-on developer can easily find and read so we can avoid the lengthy back-and-forth we just went through.&quot;</p>
+</blockquote>
+<p>The prompt created and updated CLAUDE.md—Claude's persistent memory of the project. Benefits:</p>
+<ul>
+<li>Future sessions with Claude are more efficient</li>
+<li>Future developers can better contribute</li>
+<li>Claude references established patterns versus redoing expensive iterations</li>
+<li>Already-solved problems stay solved</li>
+</ul>
+<p><strong>The velocity shift</strong>: Before P+F+I+D, high implementation speed initially but slowed by fresh context each session. After P+F+I+D, consistent pacing across sessions with increasing efficiency over time.</p>
+<p><strong>Score</strong>: 7/10 rising to 9.5/10 as documentation matured.</p>
+<h2 id="the-partnership-transformation">The Partnership Transformation</h2>
+<p>The shift from tool mindset to partnership mindset unlocked everything that followed:</p>
+<p><strong>Tool Mindset</strong>: &quot;Claude, fix this bug.&quot; Result: Forgets next session.</p>
+<p><strong>Partnership Mindset</strong>: &quot;Claude, fix this bug and document the solution in CLAUDE.md so you remember it and future developers can learn from it.&quot; Result: Knowledge persists.</p>
+<p>This mirrors inclusive design practice—not forcing compliance, but accommodating needs. The universal design mindset I developed through accessibility consulting translated directly to AI partnership. Systems should adapt to users, not force users to adapt to systems.</p>
+<p>The Documentation-First Principle emerged: document during implementation to enable AI partnership, not after the project is &quot;done.&quot;</p>
+<p>Why it works:</p>
+<ol>
+<li><strong>Shared Memory</strong>: CLAUDE.md becomes persistent context</li>
+<li><strong>Pattern Recognition</strong>: Document patterns once, apply forever</li>
+<li><strong>Quality Assurance</strong>: Writing forces clarification of intent and catches ambiguity before it becomes a bug</li>
+<li><strong>Onboarding</strong>: New sessions and developers start informed</li>
+</ol>
+<p>The paradox: slowing down to document accelerates overall velocity.</p>
+<p>I learned this principle in accessibility work where upfront investment in inclusive design prevents costly retrofits. Building it in from the start is faster than retrofitting later—same with documentation.</p>
+<h2 id="the-claude-md-breakthrough">The CLAUDE.md Breakthrough</h2>
+<p>On November 22, 2025, I created CLAUDE.md as Claude's persistent memory. The impact was immediate and measurable:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt length</td>
+<td>~350 tokens</td>
+<td>~200 tokens</td>
+<td>~40% shorter</td>
+</tr>
+<tr>
+<td>Iterations per feature</td>
+<td>~3</td>
+<td>~1</td>
+<td>~65% fewer</td>
+</tr>
+<tr>
+<td>Cross-session continuity</td>
+<td>Low</td>
+<td>High</td>
+<td>Substantial</td>
+</tr>
+<tr>
+<td>Success rate</td>
+<td>~70%</td>
+<td>~95%</td>
+<td>Notable</td>
+</tr>
+<tr>
+<td>Time per feature</td>
+<td>~2 hours</td>
+<td>~20 min</td>
+<td>~80% faster</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Knowledge compounding</strong>: Each session starts with most context intact rather than rebuilding from scratch. Previous sessions build on each other, increasing effectiveness over time.</p>
+<p>What goes in CLAUDE.md:</p>
+<ul>
+<li>Project conventions</li>
+<li>Solved problems and workarounds</li>
+<li>Architectural decisions and rationale</li>
+<li>Code patterns to follow</li>
+<li>Gotchas to avoid</li>
+</ul>
+<p>The rule of thumb: CLAUDE.md contains what Claude needs to know to help effectively.</p>
+<h2 id="architecture-migration-p-f-i-d-in-action">Architecture Migration: P+F+I+D in Action</h2>
+<p>The ultimate test of P+F+I+D methodology came with a major systems design challenge: the architecture migration—removing the entire NestJS backend.</p>
+<p>The original 3-layer architecture wasn't accidental. I had envisioned the separate backend enabling future integration with Anthropic's Model Context Protocol (MCP)—a privacy-preserving way to give AI assistants transcription capabilities without audio leaving the user's machine. That vision still has merit.</p>
+<p>But user experience came first. The 7-second startup delay was unacceptable. Desktop apps need instant startup. The MCP integration could come later through different architectural approaches; the UX problem needed solving now.</p>
+<pre><code>BEFORE (3-layer):          AFTER (2-layer):
+┌─────────────────┐        ┌─────────────────┐
+│   Angular UI    │        │   Angular UI    │
+└────────┬────────┘        └────────┬────────┘
+         │ HTTP/WS                  │ IPC
+┌────────┴────────┐        ┌────────┴────────┐
+│ NestJS Backend  │        │  Electron Main  │
+│  (7-sec delay)  │        │    (instant)    │
+└────────┬────────┘        └─────────────────┘
+         │
+┌────────┴────────┐
+│  Electron Main  │
+└─────────────────┘
+
+Result: -2,000 lines | -7 sec startup | 0 regressions
+</code></pre>
+<p><strong>The challenge</strong>: Remove ~2,000 lines of backend code. Migrate to Electron-native architecture. Preserve all functionality without regressions.</p>
+<p><strong>Phase 1 prompt</strong> (Planning):</p>
+<blockquote>
+<p>&quot;The 7-second backend startup delay creates a poor user experience. Users expect near-instant startup from desktop apps. Since we're offline-only, the NestJS backend is unnecessary complexity. Analyze the current 3-layer architecture and create a migration plan to move backend services into Electron main process. Preserve all functionality—especially the job queue and real-time progress updates. Document the migration plan in CLAUDE.md so we can execute it systematically.&quot;</p>
+</blockquote>
+<p><strong>Phase 2 prompt</strong> (Per-Service Migration):</p>
+<blockquote>
+<p>&quot;Migrate TranscriptionService to electron/services/. Preserve all functionality from the list in CLAUDE.md. Add IPC handlers to main.ts. Update frontend to use IPC instead of HTTP. Test all IPC channels before proceeding. Document any clever workarounds in CLAUDE.md.&quot;</p>
+</blockquote>
+<p><strong>Phase 3 prompt</strong> (Verification):</p>
+<blockquote>
+<p>&quot;Test all transcription workflows according to the checklist in CLAUDE.md. Document any regressions immediately.&quot;</p>
+</blockquote>
+<p><strong>Phase 4 prompt</strong> (Documentation Audit):</p>
+<blockquote>
+<p>&quot;We've changed the fundamental architecture. Audit ALL documentation for backend references and update. Create AUDIT_REPORT.md documenting all files reviewed, all changes made, and verification that IPC channels match implementation.&quot;</p>
+</blockquote>
+<p><strong>Results</strong>:</p>
+<ul>
+<li>65 files changed perfectly</li>
+<li>-1,300 net lines of code</li>
+<li>Startup time: from 7 seconds to instant</li>
+<li>Zero functionality regressions</li>
+<li>100% test pass rate</li>
+</ul>
+<p>Why this succeeded:</p>
+<ul>
+<li><strong>P</strong>: Clear problem stated (7-second delay hurts UX)</li>
+<li><strong>F</strong>: Feedback loop via testing checkpoints</li>
+<li><strong>I</strong>: Personal insight (desktop apps need instant startup)</li>
+<li><strong>D</strong>: Documentation preserved knowledge and prevented regression</li>
+</ul>
+<p><strong>Score</strong>: 9/10 - Orchestrating complex multi-phase refactoring.</p>
+<h2 id="the-design-technologist-lens">The Design Technologist Lens</h2>
+<p>My cross-disciplinary background—Development + HCD + UX/UI—shaped how I approached prompting in ways that pure developers might miss.</p>
+<p><strong>Affordance-Signifier Gap Analysis</strong>: I could identify when Claude built functionality (affordance) without making it visible to users (signifier).</p>
+<p><strong>Inclusive design lens</strong>: Prompting should meet users where they are. Not &quot;machine-native&quot; language requirements, but human language accommodation—the same principle behind accessible product design.</p>
+<p><strong>UX problems that don't throw errors</strong>: Many issues I caught wouldn't show up in logs. They were experiential.</p>
+<p><strong>Example contrast</strong>:</p>
+<p>Traditional prompt: &quot;Fix the bug where UI doesn't update.&quot;</p>
+<p>Design Technologist prompt: &quot;Users don't get completion feedback. The affordance exists (transcription happens) but the signifier is missing (no visible indication). This violates immediate feedback principles.&quot;</p>
+<p>The impact: Claude learned design thinking through consistent UX explanations. It could identify affordance-signifier gaps in later work and proactively suggest user-centered solutions.</p>
+<h2 id="lessons-and-anti-patterns">Lessons and Anti-Patterns</h2>
+<h3 id="anti-patterns-to-avoid">Anti-Patterns to Avoid</h3>
+<ol>
+<li><strong>Trusting confident claims without verification</strong> - &quot;Fully functional&quot; was a lie</li>
+<li><strong>Starting over each session</strong> - No persistent context means repeated work</li>
+<li><strong>Machine-native prompts</strong> - Human language works better</li>
+<li><strong>Treating AI as tool</strong> - Partnership produces better results</li>
+<li><strong>Skipping documentation</strong> - &quot;I'll remember&quot; guarantees you won't</li>
+</ol>
+<h3 id="lessons-by-role">Lessons by Role</h3>
+<p><strong>For Developers</strong>: Resist fixing things yourself. Let Claude learn. Request documentation of every fix. This feels slower initially but compounds into speed.</p>
+<p><strong>For Designers</strong>: Describe issues from user perspective. Your UX language translates to better prompts. Affordance-signifier analysis helps Claude understand intent.</p>
+<p><strong>For Beginners</strong>: Always verify what Claude claims. Don't trust confidence—test everything. Start documentation immediately. Quality assurance through verification is non-negotiable.</p>
+<h3 id="universal-principles">Universal Principles</h3>
+<ol>
+<li>Create CLAUDE.md on Day 1</li>
+<li>Document continuously after every solved problem</li>
+<li>Test incrementally—fix one thing, verify, document, move on</li>
+<li>Treat Claude as teammate—embrace &quot;slow to go fast&quot;</li>
+<li>Use natural language; explain why, not just what</li>
+<li>Verify all claims</li>
+<li>Be patient with yourself—this is a new way of working</li>
+</ol>
+<h2 id="conclusion-going-far-together">Conclusion: Going Far Together</h2>
+<p>This journey wasn't about mastering prompts. It was about learning to partner with AI—treating Claude as a teammate who needs accommodation, using documentation as shared memory, and applying human-centered design to AI collaboration. The result is P+F+I+D—a repeatable methodology for effective AI partnership.</p>
+<p>I stand at intersections—between cartography and code, design and development, accessibility and AI. From those intersections, I can see something that specialists sometimes miss: that cross-functional collaboration at the boundaries between disciplines is where interesting work happens, where bridges get built.</p>
+<p>Each &quot;reset to zero&quot; in my career wasn't starting over. It was integrating. Building coherence.</p>
+<p>Documentation isn't drudgery. It's showing the people who come after you—AI or human—that you cared enough to light the path.</p>
+<p><em>If you want to go fast, go alone. If you want to go far, go together.</em></p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/prompt-engineering-case-study/` was built on 2026-01-16T04:21:53.357Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>
