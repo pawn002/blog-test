@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Compliance without Accommodation: The Unfortunate Circumstance of Existing Accessibility Guidance</title>
+		<meta name="description" content="How WCAG&#39;s legal codification has created a paradox in digital accessibility governance, where organizations face risk when adopting better solutions—leaving disabled users underserved despite apparent compliance.">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="compliance-without-accommodation-the-unfortunate-circumstance-of-existing-accessibility-guidance">Compliance without Accommodation: The Unfortunate Circumstance of Existing Accessibility Guidance</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2026-01-20">20 January 2026</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/accessibility/" class="post-tag">Accessibility</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/inclusive-design/" class="post-tag">Inclusive-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/wcag-compliance/" class="post-tag">WCAG-Compliance</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/policy-analysis/" class="post-tag">Policy-Analysis</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/design-strategy/" class="post-tag">Design-Strategy</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/systems-integration/" class="post-tag">Systems-Integration</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/accountability/" class="post-tag">Accountability</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/strategic-foresight/" class="post-tag">Strategic-Foresight</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/principal-level/" class="post-tag">Principal-Level</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/government/" class="post-tag">Government</a>
+		</li>
+</ul>
+
+<hr>
+
+<p><picture><source type="image/avif" srcset="/blog-test/img/E2qTcBK4Oq-400.avif 400w, /blog-test/img/E2qTcBK4Oq-800.avif 800w, /blog-test/img/E2qTcBK4Oq-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/E2qTcBK4Oq-400.webp 400w, /blog-test/img/E2qTcBK4Oq-800.webp 800w, /blog-test/img/E2qTcBK4Oq-1536.webp 1536w" sizes="100vw"><img src="content\img\E2qTcBK4Oq-400.png" alt="Figure placing a stone to build a bridge across a gap, with rigid geometric columns and grids on the left representing legal frameworks, and organic flowing shapes with a human silhouette on the right representing users" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/E2qTcBK4Oq-400.png 400w, /blog-test/img/E2qTcBK4Oq-800.png 800w, /blog-test/img/E2qTcBK4Oq-1536.png 1536w" sizes="100vw"></picture></p>
+<div class="min-text">
+<p><em>This post discusses accessibility standards and legal frameworks for educational purposes. It is not legal advice. Consult qualified counsel for compliance decisions.</em></p>
+</div>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>WCAG 2.x's color contrast algorithm—designed for CRT monitors—misclassifies nearly half of all color combinations on modern displays. A superior alternative, the <strong>Accessible Perceptual Contrast Algorithm (APCA)</strong>, exists and is expected in WCAG 3.0, but legal counsel increasingly advises against early adoption because WCAG compliance is effectively codified in U.S. disability law through Section 508 and ADA enforcement patterns. This creates an accessibility governance dilemma: organizations can satisfy legal requirements while failing users, or pursue better outcomes while accepting litigation exposure. The accountability gap falls on disabled users caught between outdated standards and inaccessible alternatives. This post examines both positions and proposes a <strong>dual-measurement approach</strong>—conforming to WCAG 2.x for legal defensibility while measuring against APCA for genuine accessibility outcomes, bridging the gap between what law requires and what users need.</p>
+<h2 id="the-paradox">The Paradox</h2>
+<p>The enshrining of the Web Content Accessibility Guidelines (WCAG) into U.S. disability law was, by any reasonable measure, a victory for digital accessibility. For the first time, organizations faced enforceable requirements to make web content accessible. Yet this victory has come with an unintended consequence: the very mechanisms intended to protect people with disabilities have, in some cases, become barriers to protecting them more effectively. Compliance became the measure of success—and actually serving users became secondary.</p>
+<p>This is the paradox of accessibility compliance in 2025. A better algorithm for evaluating color contrast exists. It has been validated by peer-reviewed research. It produces more accurate results for users with low vision. And cautious corporate counsel across industries advise against adopting it—not because it fails to serve users, but because WCAG 2.x has been effectively codified as law. Practitioners now work in a gap—caught between what regulations require and what users actually need.</p>
+<h2 id="the-contrast-problem">The Contrast Problem</h2>
+<p>The Web Content Accessibility Guidelines (WCAG), developed by the World Wide Web Consortium (W3C), provide a comprehensive framework for making web content accessible. Much of it remains sound guidance.</p>
+<p>The problem lies specifically in WCAG 2.x's approach to color contrast. The contrast ratio calculation, designed in an era of CRT monitors and limited display technology, does not accurately model how humans perceive luminance differences on modern displays. Research suggests the algorithm is wrong nearly half the time.</p>
+<p>The Accessible Perceptual Contrast Algorithm (APCA), developed by Andrew Somers and expected in WCAG 3.0, addresses these deficiencies through calculations grounded in modern vision science. Yet APCA adoption remains blocked by legal uncertainty—and WCAG 3.0 remains years away.</p>
+<h2 id="two-perspectives">Two Perspectives</h2>
+<p>This situation admits no easy answer. Critics argue that legal entrenchment of a flawed standard actively harms the users it was designed to protect. Defenders counter that legal stability provides more practical protection than promising but immature alternatives.</p>
+<p>Both arguments have force. The details reveal the tension.</p>
+<details>
+<summary><strong>The Compliance Trap: Why WCAG's Legal Entrenchment Harms Users</strong></summary>
+<p><strong>The Core Problem</strong></p>
+<p>WCAG 2.x's contrast algorithm is not perceptually accurate. Research from Myndex estimates the algorithm is &quot;wrong nearly half the time&quot;: roughly 40% of color combinations passing WCAG criteria should actually be rejected for poor readability, while over 50% of &quot;failing&quot; combinations are perfectly readable.</p>
+<p><strong>The &quot;Orange Button Problem&quot;</strong></p>
+<p>White text on medium orange is clearly readable to most users, including many with visual impairments, yet fails WCAG's requirements. Conversely, text meeting the 4.5:1 ratio against near-black can be functionally unreadable yet passes.</p>
+<p><strong>Legal Lock-In</strong></p>
+<p>Section 508 explicitly incorporates WCAG 2.0 Level AA. ADA enforcement consistently cites WCAG 2.1 AA as the settlement standard. This creates an unintended incentive structure: organizations optimize for legal defensibility rather than actual user experience. Deviating from WCAG—even for demonstrably superior alternatives—exposes organizations to litigation risk.</p>
+<p><strong>The APCA Alternative</strong></p>
+<p>The Accessible Perceptual Contrast Algorithm (APCA) addresses these failures by:</p>
+<ul>
+<li>Recognizing that contrast perception is polarity-sensitive (swapping text/background produces different results)</li>
+<li>Accounting for font size and weight</li>
+<li>Providing graduated guidance rather than arbitrary pass/fail thresholds</li>
+</ul>
+<p>When properly implemented, APCA conformance exceeds WCAG 2.x AAA requirements—the highest level of the current standard.</p>
+<p><strong>The Timeline Problem</strong></p>
+<p>As of early 2025, WCAG 3.0—which is expected to incorporate APCA—remains years away from becoming an official W3C Recommendation. The working group does not expect to finalize a timeline until 2026. Until then, organizations must choose between adhering to a flawed standard or adopting superior approaches that expose them to legal risk.</p>
+<p><em>Sources: <a href="https://git.apcacontrast.com/documentation/WhyAPCA.html">Myndex Research APCA Documentation</a>; <a href="https://github.com/w3c/wcag3/issues/192">W3C WCAG 3.0 Issue #192</a>; WebAIM Million analysis</em></p>
+</details>
+<details>
+<summary><strong>In Defense of Stability: Why Legal Certainty Matters</strong></summary>
+<p><strong>The Value of Legal Certainty</strong></p>
+<p>Legal standards exist to provide predictable, enforceable protections—not to facilitate perpetual technical refinement. For 1.3 billion people worldwide living with disabilities, consistent enforcement of known standards offers more practical protection than theoretically superior algorithms that remain years from adoption.</p>
+<p><strong>APCA's Implementation Challenges</strong></p>
+<p>The APCA system introduces complexity that falls disproportionately on smaller organizations:</p>
+<ul>
+<li>Every color combination requires checking for both font-size and weight</li>
+<li>Designers must compare chosen fonts to a Helvetica-based reference table—a process described as &quot;error-prone&quot;</li>
+<li>The algorithm itself continues to change, meaning colors sufficient today may not be sufficient under later versions</li>
+</ul>
+<p>When the algorithm's own developer acknowledges ongoing simplification efforts, it seems premature to fault regulators for not adopting it.</p>
+<p><strong>WCAG Is More Than Contrast</strong></p>
+<p>The focus on contrast algorithms obscures a crucial point: WCAG addresses keyboard accessibility, text alternatives, navigability, timing, seizure prevention, and dozens of other critical success criteria. Even APCA's creator acknowledges: &quot;There's a lot in WCAG 2 that's very good and very important for accessibility—just not the contrast.&quot;</p>
+<p>WCAG 2.2 was published in October 2023 with nine new success criteria, demonstrating that the standard continues to evolve within its established structure while maintaining backwards compatibility.</p>
+<p><strong>The Compliance Floor</strong></p>
+<p>Clear legal requirements establish baselines below which conduct becomes actionable. A person with low vision denied access to a non-conforming website has grounds for complaint. Replacing clear thresholds with sliding scales makes legal enforcement murkier. Organizations genuinely committed to accessibility will exceed requirements regardless of which algorithm underlies them.</p>
+<p><em>Sources: <a href="https://www.w3.org/TR/WCAG21/">W3C WCAG 2.1</a>; <a href="https://yatil.net/blog/wcag-3-is-not-ready-yet">Eric Eggert, &quot;WCAG 3 is not ready yet&quot;</a></em></p>
+</details>
+<h2 id="the-cost-of-uncertainty">The Cost of Uncertainty</h2>
+<p>Both arguments have merit. But here is what gets lost in the debate: while regulators deliberate and standards bodies refine, real users encounter interfaces every day that technically comply with WCAG yet fail to serve them.</p>
+<p>Dark mode—now ubiquitous across operating systems and applications—exposes this constantly. The contrast algorithm only works reliably with light backgrounds and dark text, providing little meaningful guidance for modern interface design. Meanwhile, organizations facing thousands of ADA accessibility lawsuits annually optimize for defensibility rather than usability. The question &quot;Does this pass WCAG?&quot; supplants &quot;Does this work for users?&quot;</p>
+<p>The result: disabled users lose access to better accommodation they could have today because the legal risk of innovation outweighs the benefit of serving users better. The accountability gap falls on those least able to advocate for change.</p>
+<h2 id="a-path-forward">A Path Forward</h2>
+<p>The solution is not to abandon compliance—legal protections for accessibility are essential and hard-won. But neither is the solution to accept indefinitely a standard that even its governing body acknowledges is deeply flawed in specific areas.</p>
+<p>Organizations committed to genuine accessibility—not just compliance—can adopt a dual approach: measuring against WCAG 2.x for legal conformance while also measuring against APCA to achieve better actual outcomes. Tools like Bridge PCA exist specifically to provide WCAG 2.x compatibility while using APCA technology internally. (I built <a href="/blog-test/blog/contrast_chaser_zero/">Contrast Chaser</a> to address similar workflow friction within WCAG's constraints.) This is not ideal—it adds complexity and cost—but it represents a pragmatic response to an imperfect situation.</p>
+<p>More fundamentally, this situation illustrates a broader challenge in accessibility governance and systems integration. Standards that worked for one technological era become constraints in the next. Legal codification, while necessary for enforcement, freezes those constraints in place. The feedback loop between accessibility science and accessibility law moves slowly, and disabled users bear the cost of that misalignment.</p>
+<p>Until regulatory bodies catch up with accessibility science, inclusive design practitioners must navigate the gap between what the law requires and what users actually need. That gap is where the real work of digital accessibility happens.</p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/compliance_without_accommodation/` was built on 2026-01-18T03:44:41.290Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>

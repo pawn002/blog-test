@@ -109,7 +109,14 @@
 		
 		<url>
 			<loc>/blog-test/feed/feed.xml</loc>
-			<lastmod>2026-01-16</lastmod>
+			<lastmod>2026-01-18</lastmod>
+		</url>
+	
+	
+		
+		<url>
+			<loc>/blog-test/blog/compliance_without_accommodation/</loc>
+			<lastmod>2026-01-20</lastmod>
 		</url>
 	
 </urlset>
