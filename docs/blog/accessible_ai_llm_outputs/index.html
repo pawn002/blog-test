@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Accessible AI: Why LLM Outputs Fail Users with Disabilities (Prompt Engineering the System, Not the User)</title>
+		<meta name="description" content="LLMs produce technically-valid outputs that fail to serve disabled users. Context is the intervention - examining prompt engineering patterns that shift burden from users to systems.">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="accessible-ai-why-llm-outputs-fail-users-with-disabilities-prompt-engineering-the-system-not-the-user">Accessible AI: Why LLM Outputs Fail Users with Disabilities (Prompt Engineering the System, Not the User)</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2026-01-21">21 January 2026</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/accessibility/" class="post-tag">Accessibility</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ai/" class="post-tag">AI</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ethics/" class="post-tag">Ethics</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/wcag/" class="post-tag">WCAG</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/prompt-engineering/" class="post-tag">Prompt-Engineering</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/inclusive-design/" class="post-tag">Inclusive-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/bias-mitigation/" class="post-tag">Bias-Mitigation</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/systems-design/" class="post-tag">Systems-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/case-study/" class="post-tag">Case-Study</a>
+		</li>
+</ul>
+
+<hr>
+
+<p><picture><source type="image/avif" srcset="/blog-test/img/wv2v3h2-Of-400.avif 400w, /blog-test/img/wv2v3h2-Of-800.avif 800w, /blog-test/img/wv2v3h2-Of-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/wv2v3h2-Of-400.webp 400w, /blog-test/img/wv2v3h2-Of-800.webp 800w, /blog-test/img/wv2v3h2-Of-1536.webp 1536w" sizes="100vw"><img src="content\img\wv2v3h2-Of-400.png" alt="Hero illustration showing transformation from hollow, faded speech bubble to solid gold speech bubble with accessibility symbol, connected by a beam of light - representing how context transforms LLM outputs from technically valid to meaningfully accessible" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/wv2v3h2-Of-400.png 400w, /blog-test/img/wv2v3h2-Of-800.png 800w, /blog-test/img/wv2v3h2-Of-1536.png 1536w" sizes="100vw"></picture></p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>Over 1.3 billion people rely on AI systems that default to failing them - a responsible AI problem hiding in plain sight. When I tested Claude's alt text generation across four blog images, context-free prompts produced descriptions that named visual elements but conveyed no meaning. Adding purpose and audience context transformed outputs from technically valid to functionally useful - same AI, different prompts, dramatically different accessibility outcomes.</p>
+<p>Three prompt engineering patterns consistently improved results: including purpose context (&quot;this is a hero image for a post about accessibility metrics&quot;), specifying audience (&quot;describe this for someone who cannot see it&quot;), and referencing WCAG's &quot;equivalent purpose&quot; standard. Research validates this approach - University of Washington studies found LLMs handle simple accessibility tasks better than complex ones, while Microsoft Research confirms that understanding what blind users actually need produces more useful descriptions.</p>
+<p>The intervention is context, but the burden belongs on systems design, not individual users. Disabled users shouldn't need to engineer better prompts to get adequate access. WCAG compliance provides the foundation; building trustworthy AI requires encoding accessibility through inclusive design and centering disabled voices in design decisions.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Over 1.3 billion people worldwide live with disabilities. As AI proliferates across every digital touchpoint, the accessibility of LLM outputs becomes a responsible AI imperative, not a feature request. Yet most AI systems ship with defaults that fail these users - offering illusions of access rather than the real thing.</p>
+<p>This post examines where LLM-generated accessibility content falls short, why this matters ethically, what standards can tell us, and practical prompt engineering patterns that improve outcomes. I write as an accessibility practitioner who can evaluate outputs against WCAG criteria - but I cite research for claims about user experience outside my direct domain knowledge.</p>
+<p>The core insight: <strong>context is the intervention</strong>. Prompts that include purpose and audience produce meaningfully better accessibility content than &quot;describe this image.&quot; The burden should fall on system designers to provide that context, not on disabled users to compensate for inadequate defaults.</p>
+<h2 id="the-accountability-gap">The Accountability Gap</h2>
+<p>The American Foundation for the Blind articulated the problem in their 2024 analysis: AI-generated image descriptions give users &quot;the illusion of access but without the reliability or fidelity that meaningful access demands.&quot; This phrase captures something that should trouble anyone building AI systems. We're shipping appearance without substance.</p>
+<p>The scale is significant. Fewer than 6% of English-language Wikipedia images have adequate alt text. When AI attempts to fill this gap, it often produces descriptions that are <em>technically</em> valid but <em>functionally</em> useless.</p>
+<p>In my own testing, I generated alt text for four blog images using Claude, varying the prompting approach. The results were instructive.</p>
+<p>For a hero image combining an accessibility symbol with performance metrics (graphs, gauges), the prompt &quot;describe this image&quot; yielded: <em>&quot;Abstract illustration with accessibility symbol, line graph trending upward, bar chart, and speedometer gauge on blue geometric background.&quot;</em></p>
+<p><picture><source type="image/avif" srcset="/blog-test/img/oDmhy9L-X--400.avif 400w, /blog-test/img/oDmhy9L-X--800.avif 800w, /blog-test/img/oDmhy9L-X--1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/oDmhy9L-X--400.webp 400w, /blog-test/img/oDmhy9L-X--800.webp 800w, /blog-test/img/oDmhy9L-X--1536.webp 1536w" sizes="100vw"><img src="content\img\oDmhy9L-X--400.png" alt="Hero illustration for Contrast Chaser Zero post: accessibility symbol integrated with performance metrics including an upward-trending line graph, bar chart, and gauge, representing measurable accessibility improvement" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/oDmhy9L-X--400.png 400w, /blog-test/img/oDmhy9L-X--800.png 800w, /blog-test/img/oDmhy9L-X--1536.png 1536w" sizes="100vw"></picture></p>
+<p>This is accurate. It's also useless. A screen reader user learns what visual elements are present but not why they matter. The description provides mechanics without semantics.</p>
+<p>When I added context - &quot;this is a hero image for a post about accessibility metrics tools&quot; - the output improved dramatically: <em>&quot;Hero illustration combining accessibility symbol with performance metrics - trending line graph, bar chart, and gauge - representing the intersection of accessibility and measurable improvement.&quot;</em></p>
+<p>Same image. Same AI. The difference was entirely in what I, as the system designer, provided. The LLM had no way to know the purpose without being told.</p>
+<p>This gap between <em>technically compliant</em> and <em>functionally useful</em> defines the accountability problem. An alt attribute exists, so checkboxes get ticked. But the user isn't served.</p>
+<h2 id="why-this-is-a-systems-design-problem">Why This Is a Systems Design Problem</h2>
+<p>The alt text example reveals a broader pattern: compliance without substance. WCAG permits empty alt text (<code>alt=&quot;&quot;</code>) for images that are purely decorative. But this permission is routinely misapplied. The &quot;decorative&quot; label becomes a cop-out - an excuse to avoid the harder work of describing <em>why</em> content exists.</p>
+<p>Disabled users correctly suspect they're being denied context their peers receive. A sighted user sees a hero image that establishes mood, signals topic, creates visual hierarchy. A screen reader user gets silence. The standard permits this; the outcome fails them.</p>
+<p>This connects to a broader pattern I explored in <a href="/blog-test/blog/compliance_without_accommodation/">Compliance without Accommodation</a>: meeting the letter of WCAG criteria while failing its spirit. Alt text is another instance. The criterion exists to ensure equivalent access to information. Empty alt text on images that convey meaning - even subtle meaning - produces unequal outcomes.</p>
+<p>Inadequate defaults manifest differently across domains. University of Washington researchers found that ChatGPT and GPT-4 consistently ranked resumes with disability-related credentials lower than identical resumes without them. Disability honors were penalized. An autism leadership award was deemed to show &quot;less emphasis on leadership roles.&quot; This is disability bias embedded in defaults.</p>
+<p>Custom GPTs trained on bias-mitigation principles showed improvement - but the improvement was uneven. Autism-related bias proved more resistant than others. The problem isn't a simple bug to fix. It's structural.</p>
+<p>This requires systems thinking. Individual prompts can improve individual outputs. But we need AI systems that default to better behavior, not systems that require users to compensate for inadequate design. This is what AI governance should address: encoding ethical defaults at the system level.</p>
+<h2 id="what-standards-tell-us">What Standards Tell Us</h2>
+<p>But what makes a default &quot;better&quot;? Without measurable criteria, accessibility claims become subjective assertions. This is where standards matter.</p>
+<p>WCAG provides the measurable framework for evaluating AI accessibility outputs. For alt text, the relevant criterion is 1.1.1 (Non-text Content): all non-text content must have a text alternative that serves the equivalent purpose.</p>
+<p>&quot;Equivalent purpose&quot; is the key phrase. A description isn't automatically equivalent just because it names what's visible. Equivalence requires conveying the same information or function the visual provides to sighted users.</p>
+<p>Research on LLM-generated code accessibility found that LLMs handle basic accessibility issues (color contrast, simple alt text) better than complex ones (ARIA attributes, keyboard navigation). Default code frequently fails WCAG standards; structured feedback and screenshot-based prompts improve fixes.</p>
+<p>This maps to my alt text testing. For UI screenshots where information is explicit - buttons, labels, text - LLM defaults are reasonable. For abstract or conceptual images where meaning isn't explicit, defaults fail.</p>
+<p>Standards provide measurement criteria but can't guarantee outcomes. WCAG 3.0, currently in draft, will explicitly address emerging technologies. Accessibility Standards Canada's AI Technical Guide emphasizes inclusive design with people with disabilities. But without the ethical commitment to serve users—the foundation of trustworthy AI—standards become another checkbox.</p>
+<h2 id="prompting-for-better-defaults">Prompting for Better Defaults</h2>
+<p>Standards define the criteria. The question is how to meet them in practice.</p>
+<p>Context is the intervention. My evaluation identified three prompt engineering patterns that consistently improved alt text quality:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Example Prompt</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add purpose context</td>
+<td>&quot;This is a hero image for a post about accessibility metrics. Describe it.&quot;</td>
+<td>Shifts from describing mechanics to conveying meaning</td>
+</tr>
+<tr>
+<td>Specify audience</td>
+<td>&quot;Describe this image for someone who cannot see it&quot;</td>
+<td>Shifts from visual inventory to equivalent information</td>
+</tr>
+<tr>
+<td>Reference WCAG</td>
+<td>&quot;Write alt text that provides equivalent information per WCAG 1.1.1&quot;</td>
+<td>Anchors output on the &quot;equivalent purpose&quot; standard</td>
+</tr>
+</tbody>
+</table>
+<p>The phrase &quot;for someone who cannot see it&quot; proved particularly effective. It reframes the task from <em>describe visually</em> to <em>provide equivalent information</em>. The prompt makes the user present, not abstract.</p>
+<p>Some approaches failed. &quot;Write accessible alt text&quot; produced verbose, overly detailed output. LLMs conflate &quot;accessible&quot; with &quot;comprehensive.&quot; For abstract images, providing article context caused over-interpretation - the LLM projected symbolism that might not match creator intent. An interconnected network of shapes became &quot;representing the interconnection of ethical principles&quot; when given context about an ethics post. This may or may not be accurate.</p>
+<p><picture><source type="image/avif" srcset="/blog-test/img/F6kNVcFFAt-400.avif 400w, /blog-test/img/F6kNVcFFAt-800.avif 800w, /blog-test/img/F6kNVcFFAt-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/F6kNVcFFAt-400.webp 400w, /blog-test/img/F6kNVcFFAt-800.webp 800w, /blog-test/img/F6kNVcFFAt-1536.webp 1536w" sizes="100vw"><img src="content\img\F6kNVcFFAt-400.png" alt="Abstract geometric network of interconnected nodes in blue and gold tones - an image where meaning is interpretive rather than explicit" loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/F6kNVcFFAt-400.png 400w, /blog-test/img/F6kNVcFFAt-800.png 800w, /blog-test/img/F6kNVcFFAt-1536.png 1536w" sizes="100vw"></picture></p>
+<p>Research validates this user-centered approach. The Microsoft Research alt text initiative, in collaboration with UT Austin, focuses on increasing the utility of automatically generated descriptions by understanding what blind and low vision users actually need - not just what's technically describable.</p>
+<p>The ethical framing matters. These prompting patterns shouldn't be user burden. A blind user shouldn't need to engineer better prompts to get adequate alt text. The burden belongs on content creators, platform designers, and AI developers.</p>
+<p>This means encoding accessibility intent at the system level—a core principle of inclusive design and responsible AI development—in platform defaults, tool configurations, organizational guidelines. System interventions scale where individual prompts don't.</p>
+<h2 id="beyond-compliance-what-standards-dont-capture">Beyond Compliance: What Standards Don't Capture</h2>
+<p>These patterns improve measurable outcomes: WCAG compliance, information equivalence, technical validity. But meeting standards is the floor, not the ceiling. User research reveals needs that technical evaluation alone can't address.</p>
+<p>Stanford HAI research found that blind and low vision users often prefer descriptions that are <em>subjective and context-appropriate</em> rather than objective and neutral. &quot;If the dog is cute or the sunny day is beautiful, depending on context, the description might need to say so.&quot; This preference for contextual judgment goes beyond what WCAG requires - and informs better prompting strategies.</p>
+<p>Neurodivergent users have documented format preferences: bullet points, numbered lists, segmented steps, clear structure supporting executive functioning. These preferences suggest that verbose prose - even technically accurate prose - may not serve everyone. Designing with these needs in mind produces outputs that work for broader audiences.</p>
+<p>Deaf and hard of hearing users prefer verbatim captions over summarized ones. Accuracy in high-stakes contexts (legal, medical, employment) requires standards current AI often fails to meet. These are real constraints that shape when and how LLMs should be deployed for accessibility content.</p>
+<p>Significant research gaps remain. Studies focus heavily on visual impairments; non-visual disabilities are underexamined. Compounding factors - disability combined with other marginalized identities - receives limited attention. Global South perspectives are largely absent from Western-centric research.</p>
+<p>This is why participatory design—a cornerstone of universal design methodology—matters. &quot;Nothing about us without us&quot; isn't a slogan - it's a design imperative. Standards-based evaluation provides a foundation. Building on that foundation requires the voices and experiences of the users these systems are meant to serve.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>LLM outputs give the illusion of access without the substance. Technically valid alt text that describes mechanics without semantics. Default behaviors shaped by biased training data. Standards met while users are failed.</p>
+<p>The intervention is context. Prompts that include purpose, audience, and accessibility framing produce better outputs. System designers should encode this context by default, not expect users to compensate.</p>
+<p>Technical evaluation provides the foundation: measuring outputs against WCAG criteria, identifying which prompting patterns improve compliance, documenting where defaults fail specific standards. But meeting standards is necessary, not sufficient. Building systems that truly serve disabled users requires their voices - not just in user research, but in the rooms where these systems are designed.</p>
+<p>Build AI that defaults to serving everyone. Don't ship illusions of access.</p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/accessible_ai_llm_outputs/` was built on 2026-01-22T03:29:50.009Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>
