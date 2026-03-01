@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Safe on Paper: What Accessibility Standards Teach AI Safety Governance</title>
+		<meta name="description" content="Standards calcify. Accessibility governance spent 25 years learning what happens when compliance diverges from outcomes — AI safety is setting up the same dynamic, with those lessons available in advance.">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		
+		
+		
+		<style>
+			/* This is an arbitrary CSS string added to the bundle */
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace:
+		Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console,
+		Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #c0c0c0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050f;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #c0c0c0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--background-color: #15202b;
+	}
+}
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: 0.875rem;
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main,
+footer {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 2px solid var(--color-gray-20);
+}
+
+footer {
+	border-top: 1px dashed var(--color-gray-20);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--background-color);
+	color: var(--text-color);
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--color-gray-90);
+	border-radius: 2px;
+}
+
+/* Prevent visually-hidden skip link fom pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	/* Ensure it is positioned on top of everything else when it is shown */
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	flex-grow: 1;
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-metadata time {
+	margin-right: 1em;
+}
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav>
+				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/feed/feed.xml">Feed</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+<h1 id="safe-on-paper-what-accessibility-standards-teach-ai-safety-governance">Safe on Paper: What Accessibility Standards Teach AI Safety Governance</h1>
+
+<ul class="post-metadata">
+	<li>
+		<time datetime="2026-02-28">28 February 2026</time>
+	</li>
+		<li>
+			<a href="/blog-test/tags/accessibility/" class="post-tag">Accessibility</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ethical-ai/" class="post-tag">Ethical-AI</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/inclusive-design/" class="post-tag">Inclusive-Design</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/ai-safety/" class="post-tag">AI-Safety</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/standards-governance/" class="post-tag">Standards-Governance</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/policy-analysis/" class="post-tag">Policy-Analysis</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/government/" class="post-tag">Government</a>, 
+		</li>
+		<li>
+			<a href="/blog-test/tags/case-study/" class="post-tag">Case-Study</a>
+		</li>
+</ul>
+
+<hr>
+
+<p><picture><source type="image/avif" srcset="/blog-test/img/jZR4iIAtg0-400.avif 400w, /blog-test/img/jZR4iIAtg0-800.avif 800w, /blog-test/img/jZR4iIAtg0-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/jZR4iIAtg0-400.webp 400w, /blog-test/img/jZR4iIAtg0-800.webp 800w, /blog-test/img/jZR4iIAtg0-1536.webp 1536w" sizes="100vw"><img src="content\img\jZR4iIAtg0-400.png" alt="A split-panel illustration divided by a sharp vertical seam. Left: a pristine compliance document with crisp navy and white contrast, a checkbox grid, and an approval stamp — perfectly legible and certified. Right: the same document as it might appear to someone with low vision — colors collapsed, contrast dissolved, text bleeding into the background, the certification mark indistinct. The two panels represent the gap between passing a compliance standard and actually being accessible." loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/jZR4iIAtg0-400.png 400w, /blog-test/img/jZR4iIAtg0-800.png 800w, /blog-test/img/jZR4iIAtg0-1536.png 1536w" sizes="100vw"></picture></p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>I built a color contrast tool that spread to federal agencies and became the de facto standard for accessible visualization in my part of the federal government. That reach made a different problem visible: the underlying accessibility standard the tool was built on produces documented false passes for people with low vision. Better guidance existed. Getting it into practice required years of navigating institutional inertia that had nothing to do with whether the science was sound.</p>
+<p>That pattern has three parts: standards that produce wrong answers once the problem space advances, revision that moves slower than the science does, and affected populations excluded from the working groups that actually move decisions. It's not a WCAG failure specifically. It's what happens to any standard once it embeds in procurement requirements, legal frameworks, and organizational workflows.</p>
+<p>AI safety governance is early enough in that process to build differently. This post traces the failure pattern through a concrete case and proposes specific structural interventions: built-in revision mechanisms, outcome-based evidence requirements, and affected populations in working groups rather than comment periods. The window to act on those lessons is narrower than it looks.</p>
+<hr>
+<h2 id="introduction">Introduction</h2>
+<p>By 2022, Contrast Chaser had spread far enough that accessible visualization was widely considered a solved problem in my part of the federal government. That's the kind of statement that sounds like success. From inside the tool's reach, it looked like something else.</p>
+<p>Practitioners were learning which colors passed — not why they worked or failed. Specialists who understood the underlying logic produced better work. They were the minority. The tool had optimized for speed, and speed trained users toward compliance thinking rather than judgment. A tool that trains practitioners to trust the compliance score makes it harder, not easier, to see when the score is wrong.</p>
+<p>That's the view from inside a standards problem before you've named it as one. What follows is the anatomy of that problem.</p>
+<h2 id="what-the-standard-gets-wrong">What the Standard Gets Wrong</h2>
+<p>WCAG's contrast algorithm uses a luminance ratio. It doesn't account for spatial frequency — text size and weight — which is a known variable in how the human visual system perceives legibility. It doesn't reflect current display technology. And it treats all hues as equally malleable. They aren't.</p>
+<p>Pick yellow: its identity is in its lightness. You can't darken it significantly without it becoming something else. Pick a saturated blue: it's strongest as a dark tone. The hue dictates the options. The standard doesn't make that visible — so practitioners kept handing designers answers without explanations.</p>
+<h2 id="when-better-guidance-cant-get-through">When Better Guidance Can't Get Through</h2>
+<p>That same algorithm covered both text contrast and the non-text contrast WCAG 2.1 added for elements like charts, maps, and visualizations. APCA, grounded in more recent psychophysical research, does a better job of modeling what the visual system actually does for both. I wanted to build it into Contrast Chaser.</p>
+<p>Here's the catch: building APCA in meant any team doing right by their users would find themselves technically out of compliance with existing accessibility regulation. Not because the better guidance was worse — it was better. Because the regulation hadn't caught up with the science. That's not a team failure. It's a standards failure.</p>
+<p>Safe on paper. Less safe in practice.</p>
+<p>Three groups needed to sign off: the people worried about whether it would slow the work, the people worried about liability, and the people whose job was to keep the regulatory floor consistent across the organization.</p>
+<p>The approach: strip other unofficial guidance out of the UI first, to make clear the one official text standard was untouched. Frame new guidance as a tool for continuing the conversation, not rewriting a rule. Build relationships with the regulatory tier over time so they had enough context to tolerate the conflict rather than reject it reflexively. Wait for the right window at the leadership level.</p>
+<p>It worked. It shouldn't have had to be that hard. The science was better. The users would benefit. The path was that complicated because the standard had worked its way into contracting language, legal citations, and day-to-day operational practice — and anything that touched those layers required managing everyone invested in keeping them stable.</p>
+<p>This is what standards calcification looks like from the inside.</p>
+<h2 id="why-this-matters-for-ai-safety">Why This Matters for AI Safety</h2>
+<p>The accessibility case shows the full failure pattern, start to finish. AI safety governance is early enough that it hasn't run to completion yet. Three things happen, reliably, when standards calcify:</p>
+<p><strong>The standard starts producing wrong answers.</strong> WCAG's false passes are the predictable outcome of a static algorithm in a dynamic problem space. The criteria were designed for what we could measure when they were written. The problem space doesn't hold still.</p>
+<p>A model that clears red-teaming evaluations and alignment benchmarks is &quot;safe&quot; the same way a WCAG-compliant interface is &quot;accessible.&quot; Teams that optimize for benchmarks learn benchmark thinking. They develop judgment about passing scores, not about the failure modes the scores were meant to detect.</p>
+<p><strong>Standards revision moves slower than the science does.</strong> APCA — evaluated by the W3C's Visual Contrast of Text Subgroup for inclusion in WCAG 3 before that subgroup went inactive — still isn't the standard. <a href="https://www.w3.org/TR/wcag-3.0/">WCAG 3 itself has been in working draft since 2021</a> and isn't final. The slow pace isn't necessarily bad faith; updating legal frameworks, automated testing tools, and procurement language simultaneously is genuinely complex. But the practical effect is the same bind: practitioners who want to do right by their users end up caught between better evidence and entrenched compliance requirements, with no clean path through.</p>
+<p>The AI safety version of this is early enough to interrupt. Evaluation frameworks and benchmark suites are accumulating institutional weight — referenced in agency guidance, cited in policy documents, becoming shorthand for &quot;we checked.&quot; That's the mechanism. Once procurement requirements attach to specific evaluation methods, updating them means moving every layer that built on top of them simultaneously. The science of what current benchmarks actually measure isn't settled — but the governance machinery is building anyway.</p>
+<p><strong>The people most affected aren't in the room.</strong> Users with low vision who encounter false-passing color combinations daily had no structured role in the WCAG revision process. The people best positioned to identify where the standard was failing — because they lived with the failures — had no reliable mechanism to flag when the standard was wrong.</p>
+<p>The same structural gap exists in AI safety governance. The populations most likely to encounter AI agent failures in high-stakes contexts — people with disabilities who depend on agents as accommodation tools, people who interact with government services by necessity, people for whom a miscalibrated system means a denied benefit or a missed medical alert — are not the ones defining what alignment looks like. Their failure modes tend to surface as edge cases rather than primary design criteria, if they surface at all.</p>
+<h2 id="what-to-do-differently">What to Do Differently</h2>
+<p>Standards are necessary. They're also machinery, and machinery has inertia. The question isn't whether to have AI safety standards — it's how to build them so they can stay true to their purpose as the problem space evolves.</p>
+<p>The first structural gap the accessibility case reveals is the absence of built-in revision mechanisms. WCAG has no native process for incorporating better evidence once the standard embeds — APCA still isn't the standard. The Contrast Chaser experience shows how it operates at the organizational level: even adopting APCA within a single organization required navigating those same layers simultaneously — none of which were designed with revision in mind. At the standards level, those layers likely multiply. AI safety evaluation frameworks are early enough that revision mechanisms can be designed in rather than retrofitted later. Sunset clauses. Named processes for when a benchmark suite is superseded by better evidence. They're currently absent.</p>
+<p>The second gap is the difference between process compliance and outcome evidence. WCAG compliance is process-based: run the algorithm, report the ratio, clear the threshold. A WCAG-compliant interface can still fail real users — the algorithm reports whether the math cleared the bar, not whether anyone with low vision can actually read the result. The AI safety equivalent is a safety evaluation that reports whether a model cleared its benchmarks — not whether those benchmarks would catch a harmful model. The standard to hold instead: evaluation methods must demonstrate they catch the failure modes they're designed to detect, and that they work for the specific populations at risk, not just the median case.</p>
+<p>The third gap is structural inclusion. Disability advocates have formally objected to WCAG over failures the standard missed — one objection about cognitive and learning disability gaps drew signatures from over 40 organizations. But comment periods accept input; they don't determine who sits on the working groups that act on it. Those high-stakes populations need structural roles in working groups, not submissions in comment periods. Those are not equivalent forms of participation, and treating them as equivalent is how affected populations end up with a channel into the process but no seat in it. This is what inclusive design looks like applied to the governance layer itself: not accommodating the margin after the standard is set, but ensuring the margin shapes the standard from the start.</p>
+<p>The accessibility community spent 25 years learning these lessons reactively. AI safety gets them in advance. The playbook exists. Use it.</p>
+
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul>
+				<li>
+					<a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/post_policy/">Post Policy</a>
+				</li>
+				<li>
+					<a href="/blog-test/blog/privacy_policy/">Privacy Policy</a>
+				</li>
+
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/safe-on-paper/` was built on 2026-03-01T23:19:59.279Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>

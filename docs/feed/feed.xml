@@ -5,11 +5,53 @@
   <subtitle>Design integration, accessibility advocacy, and ethical AI strategy</subtitle>
   <link href="https://pawn002.github.io/blog-test/feed/feed.xml" rel="self" />
   <link href="https://pawn002.github.io/blog-test/blog-public/" />
-  <updated>2026-01-21T00:00:00Z</updated>
+  <updated>2026-02-28T00:00:00Z</updated>
   <id>https://pawn002.github.io/blog-test/blog-public/</id>
   <author>
     <name>John Rioflorido</name>
   </author>
+  <entry>
+    <title>Safe on Paper: What Accessibility Standards Teach AI Safety Governance</title>
+    <link href="https://pawn002.github.io/blog-test/blog/safe-on-paper/" />
+    <updated>2026-02-28T00:00:00Z</updated>
+    <id>https://pawn002.github.io/blog-test/blog/safe-on-paper/</id>
+    <content type="html">&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/jZR4iIAtg0-400.avif 400w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-800.avif 800w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-1536.avif 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/jZR4iIAtg0-400.webp 400w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-800.webp 800w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-1536.webp 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;img src=&quot;https://pawn002.github.io/blog-test/blog/safe-on-paper/content/img/jZR4iIAtg0-400.png&quot; alt=&quot;A split-panel illustration divided by a sharp vertical seam. Left: a pristine compliance document with crisp navy and white contrast, a checkbox grid, and an approval stamp — perfectly legible and certified. Right: the same document as it might appear to someone with low vision — colors collapsed, contrast dissolved, text bleeding into the background, the certification mark indistinct. The two panels represent the gap between passing a compliance standard and actually being accessible.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; width=&quot;1536&quot; height=&quot;1024&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/jZR4iIAtg0-400.png 400w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-800.png 800w, https://pawn002.github.io/blog-test/img/jZR4iIAtg0-1536.png 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;h2 id=&quot;executive-summary&quot;&gt;Executive Summary&lt;/h2&gt;
+&lt;p&gt;I built a color contrast tool that spread to federal agencies and became the de facto standard for accessible visualization in my part of the federal government. That reach made a different problem visible: the underlying accessibility standard the tool was built on produces documented false passes for people with low vision. Better guidance existed. Getting it into practice required years of navigating institutional inertia that had nothing to do with whether the science was sound.&lt;/p&gt;
+&lt;p&gt;That pattern has three parts: standards that produce wrong answers once the problem space advances, revision that moves slower than the science does, and affected populations excluded from the working groups that actually move decisions. It&#39;s not a WCAG failure specifically. It&#39;s what happens to any standard once it embeds in procurement requirements, legal frameworks, and organizational workflows.&lt;/p&gt;
+&lt;p&gt;AI safety governance is early enough in that process to build differently. This post traces the failure pattern through a concrete case and proposes specific structural interventions: built-in revision mechanisms, outcome-based evidence requirements, and affected populations in working groups rather than comment periods. The window to act on those lessons is narrower than it looks.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;By 2022, Contrast Chaser had spread far enough that accessible visualization was widely considered a solved problem in my part of the federal government. That&#39;s the kind of statement that sounds like success. From inside the tool&#39;s reach, it looked like something else.&lt;/p&gt;
+&lt;p&gt;Practitioners were learning which colors passed — not why they worked or failed. Specialists who understood the underlying logic produced better work. They were the minority. The tool had optimized for speed, and speed trained users toward compliance thinking rather than judgment. A tool that trains practitioners to trust the compliance score makes it harder, not easier, to see when the score is wrong.&lt;/p&gt;
+&lt;p&gt;That&#39;s the view from inside a standards problem before you&#39;ve named it as one. What follows is the anatomy of that problem.&lt;/p&gt;
+&lt;h2 id=&quot;what-the-standard-gets-wrong&quot;&gt;What the Standard Gets Wrong&lt;/h2&gt;
+&lt;p&gt;WCAG&#39;s contrast algorithm uses a luminance ratio. It doesn&#39;t account for spatial frequency — text size and weight — which is a known variable in how the human visual system perceives legibility. It doesn&#39;t reflect current display technology. And it treats all hues as equally malleable. They aren&#39;t.&lt;/p&gt;
+&lt;p&gt;Pick yellow: its identity is in its lightness. You can&#39;t darken it significantly without it becoming something else. Pick a saturated blue: it&#39;s strongest as a dark tone. The hue dictates the options. The standard doesn&#39;t make that visible — so practitioners kept handing designers answers without explanations.&lt;/p&gt;
+&lt;h2 id=&quot;when-better-guidance-cant-get-through&quot;&gt;When Better Guidance Can&#39;t Get Through&lt;/h2&gt;
+&lt;p&gt;That same algorithm covered both text contrast and the non-text contrast WCAG 2.1 added for elements like charts, maps, and visualizations. APCA, grounded in more recent psychophysical research, does a better job of modeling what the visual system actually does for both. I wanted to build it into Contrast Chaser.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the catch: building APCA in meant any team doing right by their users would find themselves technically out of compliance with existing accessibility regulation. Not because the better guidance was worse — it was better. Because the regulation hadn&#39;t caught up with the science. That&#39;s not a team failure. It&#39;s a standards failure.&lt;/p&gt;
+&lt;p&gt;Safe on paper. Less safe in practice.&lt;/p&gt;
+&lt;p&gt;Three groups needed to sign off: the people worried about whether it would slow the work, the people worried about liability, and the people whose job was to keep the regulatory floor consistent across the organization.&lt;/p&gt;
+&lt;p&gt;The approach: strip other unofficial guidance out of the UI first, to make clear the one official text standard was untouched. Frame new guidance as a tool for continuing the conversation, not rewriting a rule. Build relationships with the regulatory tier over time so they had enough context to tolerate the conflict rather than reject it reflexively. Wait for the right window at the leadership level.&lt;/p&gt;
+&lt;p&gt;It worked. It shouldn&#39;t have had to be that hard. The science was better. The users would benefit. The path was that complicated because the standard had worked its way into contracting language, legal citations, and day-to-day operational practice — and anything that touched those layers required managing everyone invested in keeping them stable.&lt;/p&gt;
+&lt;p&gt;This is what standards calcification looks like from the inside.&lt;/p&gt;
+&lt;h2 id=&quot;why-this-matters-for-ai-safety&quot;&gt;Why This Matters for AI Safety&lt;/h2&gt;
+&lt;p&gt;The accessibility case shows the full failure pattern, start to finish. AI safety governance is early enough that it hasn&#39;t run to completion yet. Three things happen, reliably, when standards calcify:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The standard starts producing wrong answers.&lt;/strong&gt; WCAG&#39;s false passes are the predictable outcome of a static algorithm in a dynamic problem space. The criteria were designed for what we could measure when they were written. The problem space doesn&#39;t hold still.&lt;/p&gt;
+&lt;p&gt;A model that clears red-teaming evaluations and alignment benchmarks is &amp;quot;safe&amp;quot; the same way a WCAG-compliant interface is &amp;quot;accessible.&amp;quot; Teams that optimize for benchmarks learn benchmark thinking. They develop judgment about passing scores, not about the failure modes the scores were meant to detect.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Standards revision moves slower than the science does.&lt;/strong&gt; APCA — evaluated by the W3C&#39;s Visual Contrast of Text Subgroup for inclusion in WCAG 3 before that subgroup went inactive — still isn&#39;t the standard. &lt;a href=&quot;https://www.w3.org/TR/wcag-3.0/&quot;&gt;WCAG 3 itself has been in working draft since 2021&lt;/a&gt; and isn&#39;t final. The slow pace isn&#39;t necessarily bad faith; updating legal frameworks, automated testing tools, and procurement language simultaneously is genuinely complex. But the practical effect is the same bind: practitioners who want to do right by their users end up caught between better evidence and entrenched compliance requirements, with no clean path through.&lt;/p&gt;
+&lt;p&gt;The AI safety version of this is early enough to interrupt. Evaluation frameworks and benchmark suites are accumulating institutional weight — referenced in agency guidance, cited in policy documents, becoming shorthand for &amp;quot;we checked.&amp;quot; That&#39;s the mechanism. Once procurement requirements attach to specific evaluation methods, updating them means moving every layer that built on top of them simultaneously. The science of what current benchmarks actually measure isn&#39;t settled — but the governance machinery is building anyway.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The people most affected aren&#39;t in the room.&lt;/strong&gt; Users with low vision who encounter false-passing color combinations daily had no structured role in the WCAG revision process. The people best positioned to identify where the standard was failing — because they lived with the failures — had no reliable mechanism to flag when the standard was wrong.&lt;/p&gt;
+&lt;p&gt;The same structural gap exists in AI safety governance. The populations most likely to encounter AI agent failures in high-stakes contexts — people with disabilities who depend on agents as accommodation tools, people who interact with government services by necessity, people for whom a miscalibrated system means a denied benefit or a missed medical alert — are not the ones defining what alignment looks like. Their failure modes tend to surface as edge cases rather than primary design criteria, if they surface at all.&lt;/p&gt;
+&lt;h2 id=&quot;what-to-do-differently&quot;&gt;What to Do Differently&lt;/h2&gt;
+&lt;p&gt;Standards are necessary. They&#39;re also machinery, and machinery has inertia. The question isn&#39;t whether to have AI safety standards — it&#39;s how to build them so they can stay true to their purpose as the problem space evolves.&lt;/p&gt;
+&lt;p&gt;The first structural gap the accessibility case reveals is the absence of built-in revision mechanisms. WCAG has no native process for incorporating better evidence once the standard embeds — APCA still isn&#39;t the standard. The Contrast Chaser experience shows how it operates at the organizational level: even adopting APCA within a single organization required navigating those same layers simultaneously — none of which were designed with revision in mind. At the standards level, those layers likely multiply. AI safety evaluation frameworks are early enough that revision mechanisms can be designed in rather than retrofitted later. Sunset clauses. Named processes for when a benchmark suite is superseded by better evidence. They&#39;re currently absent.&lt;/p&gt;
+&lt;p&gt;The second gap is the difference between process compliance and outcome evidence. WCAG compliance is process-based: run the algorithm, report the ratio, clear the threshold. A WCAG-compliant interface can still fail real users — the algorithm reports whether the math cleared the bar, not whether anyone with low vision can actually read the result. The AI safety equivalent is a safety evaluation that reports whether a model cleared its benchmarks — not whether those benchmarks would catch a harmful model. The standard to hold instead: evaluation methods must demonstrate they catch the failure modes they&#39;re designed to detect, and that they work for the specific populations at risk, not just the median case.&lt;/p&gt;
+&lt;p&gt;The third gap is structural inclusion. Disability advocates have formally objected to WCAG over failures the standard missed — one objection about cognitive and learning disability gaps drew signatures from over 40 organizations. But comment periods accept input; they don&#39;t determine who sits on the working groups that act on it. Those high-stakes populations need structural roles in working groups, not submissions in comment periods. Those are not equivalent forms of participation, and treating them as equivalent is how affected populations end up with a channel into the process but no seat in it. This is what inclusive design looks like applied to the governance layer itself: not accommodating the margin after the standard is set, but ensuring the margin shapes the standard from the start.&lt;/p&gt;
+&lt;p&gt;The accessibility community spent 25 years learning these lessons reactively. AI safety gets them in advance. The playbook exists. Use it.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Accessible AI: Why LLM Outputs Fail Users with Disabilities (Prompt Engineering the System, Not the User)</title>
     <link href="https://pawn002.github.io/blog-test/blog/accessible_ai_llm_outputs/" />
@@ -816,33 +858,6 @@ Collaborating with Claude Code accelerated development but created architectural
 &lt;p&gt;For any questions, concerns, or feedback related to accessibility, please &lt;a href=&quot;https://pawn002.github.io/blog-test/about/#contact-information&quot;&gt;contact us&lt;/a&gt;. We appreciate your input and are committed to making our site better for everyone.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;By using our blog, you acknowledge our commitment to accessibility and agree to our policies. Thank you for being part of our community and helping us create an inclusive space for all users.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Blog Privacy Policy</title>
-    <link href="https://pawn002.github.io/blog-test/blog/privacy_policy/" />
-    <updated>2025-10-15T00:00:00Z</updated>
-    <id>https://pawn002.github.io/blog-test/blog/privacy_policy/</id>
-    <content type="html">&lt;div class=&quot;min-text&quot;&gt;
-&lt;p&gt;&lt;em&gt;Effective Date: 15 October 2025&lt;/em&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;p&gt;This Privacy Policy outlines how we handle the information provided by readers of this blog. Your privacy is important, and we are committed to protecting any information you share with us.&lt;/p&gt;
-&lt;h2 id=&quot;1-information-we-collect&quot;&gt;1. Information We Collect&lt;/h2&gt;
-&lt;p&gt;The only information we collect is feedback from readers. This may include comments, suggestions, or any inquiries you choose to submit through the contact information provided. We do not collect personal data or actively track any user information.&lt;/p&gt;
-&lt;h2 id=&quot;2-use-of-information&quot;&gt;2. Use of Information&lt;/h2&gt;
-&lt;p&gt;The feedback received may be utilized to revise and enhance the blog&#39;s posts and policies. We may review and analyze the comments to improve the quality and relevance of our content. However, this feedback will not be shared with any third parties without your consent.&lt;/p&gt;
-&lt;h2 id=&quot;3-data-retention&quot;&gt;3. Data Retention&lt;/h2&gt;
-&lt;p&gt;Any feedback submitted will be retained for as long as necessary to achieve the purpose for which it was collected. Once it is no longer needed, we will securely delete or anonymize the data.&lt;/p&gt;
-&lt;h2 id=&quot;4-cookies-and-tracking&quot;&gt;4. Cookies and Tracking&lt;/h2&gt;
-&lt;p&gt;This blog does not use cookies or other tracking technologies to monitor user behavior or collect data. Your browsing experience will not be affected by any tracking or data collection practices.&lt;/p&gt;
-&lt;h2 id=&quot;5-third-party-links&quot;&gt;5. Third-Party Links&lt;/h2&gt;
-&lt;p&gt;Occasionally, this blog may contain links to third-party websites. We are not responsible for the privacy practices or content of these external sites. We encourage you to review their privacy policies before providing any personal information.&lt;/p&gt;
-&lt;h2 id=&quot;6-changes-to-this-policy&quot;&gt;6. Changes to This Policy&lt;/h2&gt;
-&lt;p&gt;We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated effective date. We encourage you to periodically review this policy to stay informed about how we are protecting your information.&lt;/p&gt;
-&lt;h2 id=&quot;7-contact-information&quot;&gt;7. Contact Information&lt;/h2&gt;
-&lt;p&gt;If you have any questions or concerns about this Privacy Policy or your feedback, please feel free to &lt;a href=&quot;https://pawn002.github.io/blog-test/about/#contact-information&quot;&gt;contact us&lt;/a&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;By using this blog, you acknowledge that you have read and understood this Privacy Policy and agree to its terms. Thank you for being a part of our community!&lt;/p&gt;
 </content>
   </entry>
 </feed>
