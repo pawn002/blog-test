@@ -3,34 +3,6 @@
 	
 		
 		<url>
-			<loc>/blog-test/about/</loc>
-			<lastmod>2025-10-01</lastmod>
-		</url>
-	
-	
-		
-		<url>
-			<loc>/blog-test/blog/</loc>
-			<lastmod>2025-10-01</lastmod>
-		</url>
-	
-	
-		
-		<url>
-			<loc>/blog-test/</loc>
-			<lastmod>2025-10-01</lastmod>
-		</url>
-	
-	
-		
-		<url>
-			<loc>/blog-test/tags/</loc>
-			<lastmod>2025-10-01</lastmod>
-		</url>
-	
-	
-		
-		<url>
 			<loc>/blog-test/blog/firstpost/</loc>
 			<lastmod>2025-10-14</lastmod>
 		</url>
@@ -129,8 +101,43 @@
 	
 		
 		<url>
+			<loc>/blog-test/blog/candor-design-system/</loc>
+			<lastmod>2026-04-16</lastmod>
+		</url>
+	
+	
+		
+		<url>
+			<loc>/blog-test/tags/</loc>
+			<lastmod>2026-04-16</lastmod>
+		</url>
+	
+	
+		
+		<url>
+			<loc>/blog-test/about/</loc>
+			<lastmod>2026-04-16</lastmod>
+		</url>
+	
+	
+		
+		<url>
+			<loc>/blog-test/blog/</loc>
+			<lastmod>2026-04-16</lastmod>
+		</url>
+	
+	
+		
+		<url>
+			<loc>/blog-test/</loc>
+			<lastmod>2026-04-16</lastmod>
+		</url>
+	
+	
+		
+		<url>
 			<loc>/blog-test/feed/feed.xml</loc>
-			<lastmod>2026-03-01</lastmod>
+			<lastmod>2026-04-20</lastmod>
 		</url>
 	
 </urlset>
