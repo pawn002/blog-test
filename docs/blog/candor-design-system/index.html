@@ -879,6 +879,48 @@ img.post-card__image {
 	width: 100%;
 }
 
+/* KaTeX display equations — allow horizontal scroll on narrow viewports
+ * so long equations don't force the page wider than the column. */
+.article .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
+}
+.article .katex-display:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Footnotes — markdown-it-footnote default markup, scoped to article context */
+.article .footnote-ref a,
+.article .footnote-ref a:visited {
+	font-size: 0.85em;
+	border-bottom: none;
+	padding: 0 0.1em;
+}
+.article .footnotes {
+	margin-top: var(--spacing-2xl);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+}
+.article .footnotes-sep {
+	border: none;
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	margin: var(--spacing-2xl) 0 var(--spacing-md);
+}
+.article .footnotes-list {
+	padding-left: 1.5rem;
+}
+.article .footnote-item p {
+	margin: 0 0 var(--spacing-xs);
+	line-height: var(--line-height-normal);
+}
+.article .footnote-backref {
+	margin-left: 0.25em;
+	text-decoration: none;
+	border-bottom: none;
+}
+
 /* Hero image — soften edges so the image flows into the page rather than jarring against it.
  * :has(picture) guards against applying image styles to text-only first paragraphs.
  * mask-image fade adapts to both light and dark backgrounds. */
@@ -1281,6 +1323,7 @@ pre[class*="language-diff-"] {
 
 
 
+
 <header class="post-header">
 	<h1 class="post-header__title" id="candor-by-design-when-an-accessibility-blog-failed-its-own-wcag-contrast-audit">Candor by Design: When an Accessibility Blog Failed Its Own WCAG Contrast Audit</h1>
 		<p class="post-header__description">A blog advocating for accessible design couldn&#39;t pass its own dark-mode contrast audit. The fix wasn&#39;t a CSS patch — it was a design system grounded in WCAG compliance, OKLCH color science, and inclusive design.</p>
@@ -1300,6 +1343,7 @@ pre[class*="language-diff-"] {
 				<a href="/blog-test/tags/product-development/" class="chip-link">Product-Development</a>
 				<a href="/blog-test/tags/principal-level/" class="chip-link">Principal-Level</a>
 				<a href="/blog-test/tags/accountability/" class="chip-link">Accountability</a>
+				<a href="/blog-test/tags/open-source/" class="chip-link">Open-Source</a>
 		</div>
 </header>
 
@@ -1421,7 +1465,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/candor-design-system/` was built on 2026-04-20T14:05:14.556Z -->
+		<!-- This page `/blog/candor-design-system/` was built on 2026-05-06T09:21:01.437Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

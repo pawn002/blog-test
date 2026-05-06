@@ -879,6 +879,48 @@ img.post-card__image {
 	width: 100%;
 }
 
+/* KaTeX display equations — allow horizontal scroll on narrow viewports
+ * so long equations don't force the page wider than the column. */
+.article .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
+}
+.article .katex-display:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Footnotes — markdown-it-footnote default markup, scoped to article context */
+.article .footnote-ref a,
+.article .footnote-ref a:visited {
+	font-size: 0.85em;
+	border-bottom: none;
+	padding: 0 0.1em;
+}
+.article .footnotes {
+	margin-top: var(--spacing-2xl);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+}
+.article .footnotes-sep {
+	border: none;
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	margin: var(--spacing-2xl) 0 var(--spacing-md);
+}
+.article .footnotes-list {
+	padding-left: 1.5rem;
+}
+.article .footnote-item p {
+	margin: 0 0 var(--spacing-xs);
+	line-height: var(--line-height-normal);
+}
+.article .footnote-backref {
+	margin-left: 0.25em;
+	text-decoration: none;
+	border-bottom: none;
+}
+
 /* Hero image — soften edges so the image flows into the page rather than jarring against it.
  * :has(picture) guards against applying image styles to text-only first paragraphs.
  * mask-image fade adapts to both light and dark backgrounds. */
@@ -1281,6 +1323,7 @@ pre[class*="language-diff-"] {
 
 
 
+
 <header class="post-header">
 	<h1 class="post-header__title" id="safe-on-paper-what-accessibility-standards-teach-ai-safety-governance">Safe on Paper: What Accessibility Standards Teach AI Safety Governance</h1>
 		<p class="post-header__description">Standards calcify. Accessibility governance spent 25 years learning what happens when compliance diverges from outcomes — AI safety is setting up the same dynamic, with those lessons available in advance.</p>
@@ -1290,11 +1333,11 @@ pre[class*="language-diff-"] {
 	</div>
 		<div class="post-header__tags" role="group" aria-label="Post tags">
 				<a href="/blog-test/tags/accessibility/" class="chip-link">Accessibility</a>
-				<a href="/blog-test/tags/standards-governance/" class="chip-link">Standards-Governance</a>
-				<a href="/blog-test/tags/case-study/" class="chip-link">Case-Study</a>
-				<a href="/blog-test/tags/ethical-ai/" class="chip-link">Ethical-AI</a>
-				<a href="/blog-test/tags/inclusive-design/" class="chip-link">Inclusive-Design</a>
 				<a href="/blog-test/tags/ai-safety/" class="chip-link">AI-Safety</a>
+				<a href="/blog-test/tags/standards-governance/" class="chip-link">Standards-Governance</a>
+				<a href="/blog-test/tags/ethical-ai/" class="chip-link">Ethical-AI</a>
+				<a href="/blog-test/tags/case-study/" class="chip-link">Case-Study</a>
+				<a href="/blog-test/tags/inclusive-design/" class="chip-link">Inclusive-Design</a>
 				<a href="/blog-test/tags/policy-analysis/" class="chip-link">Policy-Analysis</a>
 				<a href="/blog-test/tags/government/" class="chip-link">Government</a>
 		</div>
@@ -1360,7 +1403,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/safe-on-paper/` was built on 2026-04-20T14:05:14.556Z -->
+		<!-- This page `/blog/safe-on-paper/` was built on 2026-05-06T09:21:01.439Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

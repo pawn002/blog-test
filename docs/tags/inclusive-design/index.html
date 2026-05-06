@@ -879,6 +879,48 @@ img.post-card__image {
 	width: 100%;
 }
 
+/* KaTeX display equations — allow horizontal scroll on narrow viewports
+ * so long equations don't force the page wider than the column. */
+.article .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
+}
+.article .katex-display:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Footnotes — markdown-it-footnote default markup, scoped to article context */
+.article .footnote-ref a,
+.article .footnote-ref a:visited {
+	font-size: 0.85em;
+	border-bottom: none;
+	padding: 0 0.1em;
+}
+.article .footnotes {
+	margin-top: var(--spacing-2xl);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+}
+.article .footnotes-sep {
+	border: none;
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	margin: var(--spacing-2xl) 0 var(--spacing-md);
+}
+.article .footnotes-list {
+	padding-left: 1.5rem;
+}
+.article .footnote-item p {
+	margin: 0 0 var(--spacing-xs);
+	line-height: var(--line-height-normal);
+}
+.article .footnote-backref {
+	margin-left: 0.25em;
+	text-decoration: none;
+	border-bottom: none;
+}
+
 /* Hero image — soften edges so the image flows into the page rather than jarring against it.
  * :has(picture) guards against applying image styles to text-only first paragraphs.
  * mask-image fade adapts to both light and dark backgrounds. */
@@ -924,7 +966,28 @@ img.post-card__image {
 
 <ul class="post-list" role="list">
 	<li>
-		<article class="post-card post-card--featured" aria-label="Candor by Design: When an Accessibility Blog Failed Its Own WCAG Contrast Audit">
+		<article class="post-card post-card--featured" aria-label="Hot Pink Passes WCAG. That&#39;s the Problem.">
+				<a class="post-card__image-link" href="/blog-test/blog/okca-algorithm/" tabindex="-1" aria-hidden="true">
+					<img class="post-card__image" src="/blog-test/img/okca_algorithm_hero.png" alt="" loading="lazy" decoding="async">
+				</a>
+			<div class="post-card__body">
+					<div class="post-card__tags">
+							<span class="post-card__tag">Accessibility</span>
+							<span class="post-card__tag">WCAG-Compliance</span>
+							<span class="post-card__tag">Standards-Governance</span>
+					</div>
+				<h2 class="post-card__title" id="hot-pink-passes-wcag-thats-the-problem">
+					<a href="/blog-test/blog/okca-algorithm/">Hot Pink Passes WCAG. That&#39;s the Problem.</a>
+				</h2>
+					<p class="post-card__excerpt">WCAG&#39;s contrast formula was built for 1999 display calibration, not legibility. Hot pink on near-black scores 6.6:1 and passes — and isn&#39;t readable. OKCA closes the gap at the algorithm layer with chroma compression, polarity-aware scaling, and a zero-false-pass guarantee verified across 1,249 production pairs.</p>
+				<div class="post-card__meta">
+					<time datetime="2026-05-06">May 2026</time>
+				</div>
+			</div>
+		</article>
+	</li>
+	<li>
+		<article class="post-card" aria-label="Candor by Design: When an Accessibility Blog Failed Its Own WCAG Contrast Audit">
 				<a class="post-card__image-link" href="/blog-test/blog/candor-design-system/" tabindex="-1" aria-hidden="true">
 					<img class="post-card__image" src="/blog-test/img/candor_design_system_hero.png" alt="" loading="lazy" decoding="async">
 				</a>
@@ -952,8 +1015,8 @@ img.post-card__image {
 			<div class="post-card__body">
 					<div class="post-card__tags">
 							<span class="post-card__tag">Accessibility</span>
+							<span class="post-card__tag">AI-Safety</span>
 							<span class="post-card__tag">Standards-Governance</span>
-							<span class="post-card__tag">Case-Study</span>
 					</div>
 				<h2 class="post-card__title" id="safe-on-paper-what-accessibility-standards-teach-ai-safety-governance">
 					<a href="/blog-test/blog/safe-on-paper/">Safe on Paper: What Accessibility Standards Teach AI Safety Governance</a>
@@ -1015,8 +1078,8 @@ img.post-card__image {
 			<div class="post-card__body">
 					<div class="post-card__tags">
 							<span class="post-card__tag">Prompt-Engineering</span>
-							<span class="post-card__tag">Portfolio</span>
 							<span class="post-card__tag">Case-Study</span>
+							<span class="post-card__tag">AI-Enablement</span>
 					</div>
 				<h2 class="post-card__title" id="the-p-f-i-d-framework-a-prompt-engineering-case-study">
 					<a href="/blog-test/blog/prompt-engineering-case-study/">The P+F+I+D Framework: A Prompt Engineering Case Study</a>
@@ -1035,9 +1098,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
-							<span class="post-card__tag">Data-Visualization</span>
 							<span class="post-card__tag">Accessibility</span>
+							<span class="post-card__tag">Product-Development</span>
+							<span class="post-card__tag">Design-Strategy</span>
 					</div>
 				<h2 class="post-card__title" id="contrast-chaser-zero-from-personal-frustration-to-product">
 					<a href="/blog-test/blog/contrast_chaser_zero/">Contrast Chaser Zero: From Personal Frustration to Product</a>
@@ -1056,9 +1119,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
 							<span class="post-card__tag">Design-Strategy</span>
 							<span class="post-card__tag">Cross-Functional</span>
+							<span class="post-card__tag">Design-Architecture</span>
 					</div>
 				<h2 class="post-card__title" id="working-with-creative-direction">
 					<a href="/blog-test/blog/working_with_creative_direction/">Working With Creative Direction</a>
@@ -1077,9 +1140,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
 							<span class="post-card__tag">Product-Development</span>
 							<span class="post-card__tag">Ethical-AI</span>
+							<span class="post-card__tag">Accessibility</span>
 					</div>
 				<h2 class="post-card__title" id="building-a-privacy-first-transcription-tool-with-claude-code">
 					<a href="/blog-test/blog/building_whisper_transcription_app/">Building a Privacy-First Transcription Tool with Claude Code</a>
@@ -1098,9 +1161,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
-							<span class="post-card__tag">Moral-Leadership</span>
 							<span class="post-card__tag">Ethical-AI</span>
+							<span class="post-card__tag">Moral-Leadership</span>
+							<span class="post-card__tag">Accessibility</span>
 					</div>
 				<h2 class="post-card__title" id="my-ethical-stance-as-an-ethical-systems-designer">
 					<a href="/blog-test/blog/my_ethical_stance/">My Ethical Stance as an Ethical Systems Designer</a>
@@ -1116,9 +1179,9 @@ img.post-card__image {
 		<article class="post-card" aria-label="Blog Accessibility Policy">
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
 							<span class="post-card__tag">Accessibility</span>
 							<span class="post-card__tag">WCAG-Compliance</span>
+							<span class="post-card__tag">Policy-Analysis</span>
 					</div>
 				<h2 class="post-card__title" id="blog-accessibility-policy">
 					<a href="/blog-test/blog/accessibility_policy/">Blog Accessibility Policy</a>
@@ -1153,7 +1216,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/inclusive-design/` was built on 2026-04-20T14:05:14.705Z -->
+		<!-- This page `/tags/inclusive-design/` was built on 2026-05-06T09:21:01.835Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

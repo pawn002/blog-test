@@ -5,11 +5,110 @@
   <subtitle>Design integration, accessibility advocacy, and ethical AI strategy</subtitle>
   <link href="https://pawn002.github.io/blog-test/feed/feed.xml" rel="self" />
   <link href="https://pawn002.github.io/blog-test/blog-public/" />
-  <updated>2026-04-16T00:00:00Z</updated>
+  <updated>2026-05-06T00:00:00Z</updated>
   <id>https://pawn002.github.io/blog-test/blog-public/</id>
   <author>
     <name>John Rioflorido</name>
   </author>
+  <entry>
+    <title>Hot Pink Passes WCAG. That&#39;s the Problem.</title>
+    <link href="https://pawn002.github.io/blog-test/blog/okca-algorithm/" />
+    <updated>2026-05-06T00:00:00Z</updated>
+    <id>https://pawn002.github.io/blog-test/blog/okca-algorithm/</id>
+    <content type="html">&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/AhBBHdnFg1-400.avif 400w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-800.avif 800w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-1536.avif 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/AhBBHdnFg1-400.webp 400w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-800.webp 800w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-1536.webp 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;img src=&quot;https://pawn002.github.io/blog-test/img/AhBBHdnFg1-400.png&quot; alt=&quot;A 1990s-style color calibration card centered on a deep navy field, with a single saturated hot-pink test patch at its visual center surrounded by muted reference patches in amber, burgundy, azure, cream, and teal — placing the post&#39;s exemplar failing color (hot pink) inside the kind of display-calibration instrument WCAG&#39;s contrast formula was originally designed for, not the legibility test it has come to serve as today.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; width=&quot;1536&quot; height=&quot;1024&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/AhBBHdnFg1-400.png 400w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-800.png 800w, https://pawn002.github.io/blog-test/img/AhBBHdnFg1-1536.png 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;div class=&quot;exec-summary&quot;&gt;
+&lt;h2 id=&quot;executive-summary&quot;&gt;Executive Summary&lt;/h2&gt;
+&lt;p&gt;WCAG 2.x&#39;s contrast formula was specified in 1999 for display calibration, not legibility. The math is achromatic and symmetric — properties that produce documented false passes for saturated chromatic text and erase the polarity distinctions designers treat as meaningful. Hot pink on near-black scores 6.6:1, a comfortable AA pass that isn&#39;t readable.&lt;/p&gt;
+&lt;p&gt;OKCA closes that gap at the algorithm layer. The interface stays intact (same 1–21 scale, same 4.5 and 7.0 thresholds), but the math underneath swaps in OKLCH L as the luminance input, applies a chroma-weighted penalty to the lighter element, and scales the final ratio asymmetrically by polarity. Hot pink on near-black drops to 3.7; the same-luminance neutral grey still passes.&lt;/p&gt;
+&lt;p&gt;OKCA is constrained by an FP = 0 invariant: it provably never approves a pair WCAG would reject. A 1,249-pair probe across light-on-dark, dark-on-light, and three production design systems (Tailwind, GOV.UK, USWDS) returns zero false passes and 111 intentional disagreements, all in the marginal zone where WCAG&#39;s 4.5 boundary is widely treated as too permissive. OKCA is on npm as &lt;code&gt;@pawn002/okca&lt;/code&gt;, MIT-licensed.&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;the-gap&quot;&gt;The Gap&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;#ff69b4&lt;/code&gt; on &lt;code&gt;#1a1a1a&lt;/code&gt; scores 6.6:1 under WCAG 2.x, a comfortable AA pass. Anyone who has run a real audit will tell you it isn&#39;t readable for users with moderate contrast sensitivity loss. The math passes; the experience doesn&#39;t.&lt;/p&gt;
+&lt;p&gt;The gap isn&#39;t a bug. The formula is doing exactly what it was specified to do. The problem is that it was never designed to predict legibility. It was designed for display calibration in 1999, and twenty-five years later it &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/safe-on-paper/&quot;&gt;underwrites nearly every accessibility ratio reported on the web&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I built OKCA to close the gap.&lt;/p&gt;
+&lt;p&gt;I&#39;ve spent over a decade building accessibility tooling inside a special corner of the federal government. &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/contrast_chaser_zero/&quot;&gt;Contrast Chaser&lt;/a&gt;, a browser tool I built, picked up grassroots adoption there. OKCA comes from the same problem space: designers and accessibility engineers running into pairs that pass WCAG but don&#39;t work in production. The difference is that OKCA attacks it at the algorithm layer rather than the tooling layer.&lt;/p&gt;
+&lt;h2 id=&quot;what-wcag-is-computing&quot;&gt;What WCAG Is Computing&lt;/h2&gt;
+&lt;p&gt;WCAG&#39;s contrast formula is a luminance ratio:&lt;/p&gt;
+&lt;p class=&quot;katex-block&quot;&gt;&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mtext&gt;ratio&lt;/mtext&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;msub&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;0.05&lt;/mn&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;msub&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msub&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mn&gt;0.05&lt;/mn&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;text{ratio} = &#92;frac{Y_1 + 0.05}{Y_2 + 0.05}
+&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6679em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord text&quot;&gt;&lt;span class=&quot;mord&quot;&gt;ratio&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.1963em;vertical-align:-0.836em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mopen nulldelimiter&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mfrac&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.3603em;&quot;&gt;&lt;span style=&quot;top:-2.314em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.3011em;&quot;&gt;&lt;span style=&quot;top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0.05&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.23em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;frac-line&quot; style=&quot;border-bottom-width:0.04em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.677em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.3011em;&quot;&gt;&lt;span style=&quot;top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0.05&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.836em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mclose nulldelimiter&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The luminance values &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6833em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; come from linearised sRGB per IEC 61966-2-1, the 1999 display-calibration spec. Two consequences fall out, and both are well documented.&lt;/p&gt;
+&lt;p&gt;The formula is achromatic. Any two foreground colors at the same &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6833em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; produce identical ratios regardless of hue or saturation. The neutral grey that matches hot pink&#39;s luminance is &lt;code&gt;#9f9f9f&lt;/code&gt; (&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;mo&gt;≈&lt;/mo&gt;&lt;mn&gt;0.347&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;Y &#92;approx 0.347&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6833em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;≈&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0.347&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;); on &lt;code&gt;#1a1a1a&lt;/code&gt; it scores the same 6.6:1. Practitioners don&#39;t treat the two pairs the same way. The formula can&#39;t tell them apart.&lt;/p&gt;
+&lt;p&gt;It&#39;s also symmetric. &lt;code&gt;ratio(A on B) = ratio(B on A)&lt;/code&gt;, so light-on-dark and dark-on-light score identically. But designers treat polarity as a meaningful input. Light mode and dark mode are different decisions, not interchangeable, and the formula discards that distinction.&lt;/p&gt;
+&lt;p&gt;One failure produces false passes for chromatic text. The other hides asymmetry that practitioners end up encoding by hand.&lt;/p&gt;
+&lt;h2 id=&quot;what-okca-does-instead&quot;&gt;What OKCA Does Instead&lt;/h2&gt;
+&lt;p&gt;OKCA changes the math underneath and leaves WCAG&#39;s interface intact: same scale ([1, 21]), same AA threshold (4.5), same AAA threshold (7.0). Designers don&#39;t have to relearn the numbers.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;OKLCH L as the luminance input.&lt;/strong&gt; OKCA reads the L channel from OKLCH, the perceptually uniform lightness from the Oklab color space. For neutral greys, &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mi&gt;L&lt;/mi&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;≈&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;Y&lt;/mi&gt;&lt;mtext&gt;WCAG&lt;/mtext&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;L^3 &#92;approx Y_{&#92;text{WCAG}}&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8141em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.8141em;&quot;&gt;&lt;span style=&quot;top:-3.063em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;≈&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8333em;vertical-align:-0.15em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.2222em;&quot;&gt;Y&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.3283em;&quot;&gt;&lt;span style=&quot;top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;&lt;span class=&quot;mord text mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;WCAG&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.15em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; holds to floating-point precision; the cube root inverts the perceptual transform back to linear luminance. So on the achromatic axis, OKCA and WCAG are reading the same numbers, just in a representation a designer can see directly in any modern color picker.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Chroma compression on the lighter element.&lt;/strong&gt; This is where the false-pass problem gets fixed. The lighter element&#39;s lightness is penalised by a chroma-weighted power exponent: more saturation, larger penalty.&lt;sup class=&quot;footnote-ref&quot;&gt;&lt;a href=&quot;https://pawn002.github.io/blog-test/blog/okca-algorithm/#fn1&quot; id=&quot;fnref1&quot;&gt;[1]&lt;/a&gt;&lt;/sup&gt; The exponent runs from 1.0 at fully achromatic up to 1.5 at fully saturated. Hot pink has Oklab chroma around 0.197, saturated enough to receive the full penalty. Its effective luminance proxy drops, the raw ratio falls with it, and OKCA scores hot pink on near-black at 3.7. Below AA. The same-luminance grey scores 5.4 and passes. The math now distinguishes what practitioners always could.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Polarity-aware scaling.&lt;/strong&gt; OKCA&#39;s final step applies a power curve that differs by polarity: light-on-dark caps at 21, dark-on-light at 20. Same shape, different ceiling. White on black scores 21.0; black on white scores 20.0. White on &lt;code&gt;#767676&lt;/code&gt;, the canonical WCAG AA boundary grey, scores 3.5 light-on-dark and 3.3 dark-on-light. Both fail AA. That matches how the pair gets treated in practice.&lt;/p&gt;
+&lt;h2 id=&quot;the-fp-0-invariant&quot;&gt;The FP = 0 Invariant&lt;/h2&gt;
+&lt;p&gt;A contrast algorithm intended for accessibility decisions has one hard constraint: it must never approve a pair that WCAG would reject. The reason is asymmetry. A false pass ships inaccessible text to production. A false failure just nudges a designer toward a safer choice.&lt;/p&gt;
+&lt;p&gt;OKCA enforces FP = 0 mathematically. Chroma compression can only reduce the lighter element&#39;s luminance proxy. The darker element receives no correction. Polarity scaling can only reduce the raw ratio further. Stack the inequalities and the result is unconditional: &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mtext&gt;OKCA&lt;/mtext&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mtext&gt;WCAG&lt;/mtext&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;&#92;text{OKCA} &#92;le &#92;text{WCAG}&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8193em;vertical-align:-0.136em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord text&quot;&gt;&lt;span class=&quot;mord&quot;&gt;OKCA&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;≤&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.6833em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord text&quot;&gt;&lt;span class=&quot;mord&quot;&gt;WCAG&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; for every input. The full proof is in the design doc.&lt;/p&gt;
+&lt;p&gt;In practice: a designer who trusts the OKCA number can never accidentally ship text that WCAG would reject.&lt;/p&gt;
+&lt;h2 id=&quot;what-the-probe-data-shows&quot;&gt;What the Probe Data Shows&lt;/h2&gt;
+&lt;p&gt;The FP = 0 proof rules out unsafe outputs. It doesn&#39;t show OKCA&#39;s numbers are calibrated — an algorithm that scored every pair at 1.0 would also satisfy FP = 0. The probe work tests calibration: does OKCA agree with WCAG where WCAG is right, and disagree only where practitioners would?&lt;/p&gt;
+&lt;p&gt;Three test batteries, 1,249 pairs total:&lt;/p&gt;
+&lt;div class=&quot;table-scroll&quot; tabindex=&quot;0&quot;&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Battery&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;Pairs&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;False passes&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;WCAG disagreements&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Light-on-dark&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;53&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dark-on-light&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;54&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Design systems&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;1,142&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;111&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;&lt;strong&gt;1,249&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;strong&gt;0&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;strong&gt;111&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;/div&gt;&lt;p&gt;The design systems battery pulls documented foreground/background pairs from Tailwind CSS v3.4 (46 disagreements), the GOV.UK Design System (15), and USWDS v3.x (50). These are production palettes maintained by teams that take accessibility seriously.&lt;/p&gt;
+&lt;p&gt;All 111 disagreements sit in the marginal zone, where OKCA scores below 4.5 and WCAG scores at or above it. They&#39;re intentional. WCAG&#39;s 4.5 boundary is widely &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/compliance_without_accommodation/&quot;&gt;treated as too permissive in production&lt;/a&gt;; white on &lt;code&gt;#767676&lt;/code&gt; clears the bar by definition, but in practice most teams avoid it. OKCA encodes that judgment into the math rather than leaving it to the designer&#39;s gut. Full enumeration with hex values is in &lt;code&gt;WCAG_DISAGREEMENTS.md&lt;/code&gt; in the repo.&lt;/p&gt;
+&lt;p&gt;Zero false passes across 1,249 pairs. The 111 disagreements come with the math.&lt;/p&gt;
+&lt;h2 id=&quot;what-okca-does-not-do&quot;&gt;What OKCA Does Not Do&lt;/h2&gt;
+&lt;p&gt;OKCA is just a contrast algorithm. It deliberately doesn&#39;t:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Model font size or weight.&lt;/strong&gt; OKCA outputs a single ratio per pair. Size-dependent thresholds (WCAG AA&#39;s 3 for large text, 4.5 for normal) are the caller&#39;s responsibility.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Patch WCAG&#39;s green-channel weighting.&lt;/strong&gt; Chroma compression is rotationally symmetric in &lt;em&gt;a&lt;/em&gt;/&lt;em&gt;b&lt;/em&gt; space. Hue-varying outcomes come from different hues reaching different chroma values at similar lightness, not from OKCA targeting specific hues.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Replace perceptual judgment.&lt;/strong&gt; A pair that scores 4.5 clears the threshold but may still be harsh, too low-contrast in context, or wrong for the brand. The number is a floor, not a recommendation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;whats-next&quot;&gt;What&#39;s Next&lt;/h2&gt;
+&lt;p&gt;OKCA is on npm as &lt;code&gt;@pawn002/okca&lt;/code&gt;, MIT-licensed. The repo is &lt;a href=&quot;https://github.com/pawn002/okca&quot;&gt;&lt;code&gt;pawn002/okca&lt;/code&gt;&lt;/a&gt;. The design document, including the formal FP = 0 proof, is at &lt;a href=&quot;https://github.com/pawn002/okca/blob/main/docs/OKCA_DESIGN.md&quot;&gt;&lt;code&gt;docs/OKCA_DESIGN.md&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;OKCA is one independent attempt to close WCAG 2.x&#39;s contrast gaps. The field is better off with more than one. It is clean-room work, derived from public specifications, and accepts hex codes and CSS &lt;code&gt;oklch()&lt;/code&gt;/&lt;code&gt;oklab()&lt;/code&gt; natively.&lt;/p&gt;
+&lt;p&gt;If you maintain a design system, run your palette through it. If you find a pair OKCA scores higher than WCAG, that&#39;s a false pass. Open an issue. It would be a bug, and I&#39;d want to know about it.&lt;/p&gt;
+&lt;hr class=&quot;footnotes-sep&quot;&gt;
+&lt;section class=&quot;footnotes&quot;&gt;
+&lt;ol class=&quot;footnotes-list&quot;&gt;
+&lt;li id=&quot;fn1&quot; class=&quot;footnote-item&quot;&gt;&lt;p&gt;Throughout this post I use &amp;quot;saturation&amp;quot; in the everyday sense, meaning how strong or colorful a hue appears to a viewer. OKCA&#39;s math operates on Oklab chroma, the absolute distance from neutral in &lt;em&gt;a&lt;/em&gt;/&lt;em&gt;b&lt;/em&gt; space. The two terms are closely related but not formally identical. &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/okca-algorithm/#fnref1&quot; class=&quot;footnote-backref&quot;&gt;↩︎&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</content>
+  </entry>
   <entry>
     <title>Candor by Design: When an Accessibility Blog Failed Its Own WCAG Contrast Audit</title>
     <link href="https://pawn002.github.io/blog-test/blog/candor-design-system/" />
@@ -924,42 +1023,6 @@ Collaborating with Claude Code accelerated development but created architectural
 &lt;li&gt;Resource link to Ethical Systems Design&lt;/li&gt;
 &lt;li&gt;Resource link to Using AI to Interrogate and Establish a Personal Ethical Stance&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Blog Organizational Disclaimer</title>
-    <link href="https://pawn002.github.io/blog-test/blog/organizational_disclaimer/" />
-    <updated>2025-10-21T00:00:00Z</updated>
-    <id>https://pawn002.github.io/blog-test/blog/organizational_disclaimer/</id>
-    <content type="html">&lt;h3 id=&quot;scope-of-personal-views&quot;&gt;Scope of Personal Views&lt;/h3&gt;
-&lt;p&gt;Documents linking to this post represent &lt;strong&gt;purely personal philosophical exploration&lt;/strong&gt; and do not reflect:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The current, past, or future official policies of any organization&lt;/li&gt;
-&lt;li&gt;Institutional perspectives of any employer or affiliated entity&lt;/li&gt;
-&lt;li&gt;Organizational decision-making frameworks or methodologies&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;intellectual-property-and-attribution&quot;&gt;Intellectual Property and Attribution&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Documents linking to this post are the sole intellectual property of the author&lt;/li&gt;
-&lt;li&gt;No statements within documents linking to this post should be construed as representative of any organizational stance&lt;/li&gt;
-&lt;li&gt;Any similarities to existing organizational practices in documents linking to this post are coincidental&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;professional-separation&quot;&gt;Professional Separation&lt;/h3&gt;
-&lt;p&gt;The views, methodologies, and ethical frameworks discussed in documents linking to this post are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Entirely personal intellectual work&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Not endorsed by any current or previous employers&lt;/li&gt;
-&lt;li&gt;Developed independently and without organizational input&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;binding-limitations&quot;&gt;Binding Limitations&lt;/h3&gt;
-&lt;p&gt;Under no circumstances should documents linking to this post be interpreted as:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Providing official guidance&lt;/li&gt;
-&lt;li&gt;Representing institutional perspectives&lt;/li&gt;
-&lt;li&gt;Creating any contractual or professional obligations&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;professional-integrity-statement&quot;&gt;Professional Integrity Statement&lt;/h3&gt;
-&lt;p&gt;The author affirms complete separation between personal philosophical exploration and professional responsibilities, maintaining &lt;strong&gt;strict boundaries between personal thought leadership and organizational practices&lt;/strong&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

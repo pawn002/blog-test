@@ -879,6 +879,48 @@ img.post-card__image {
 	width: 100%;
 }
 
+/* KaTeX display equations — allow horizontal scroll on narrow viewports
+ * so long equations don't force the page wider than the column. */
+.article .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
+}
+.article .katex-display:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Footnotes — markdown-it-footnote default markup, scoped to article context */
+.article .footnote-ref a,
+.article .footnote-ref a:visited {
+	font-size: 0.85em;
+	border-bottom: none;
+	padding: 0 0.1em;
+}
+.article .footnotes {
+	margin-top: var(--spacing-2xl);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+}
+.article .footnotes-sep {
+	border: none;
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	margin: var(--spacing-2xl) 0 var(--spacing-md);
+}
+.article .footnotes-list {
+	padding-left: 1.5rem;
+}
+.article .footnote-item p {
+	margin: 0 0 var(--spacing-xs);
+	line-height: var(--line-height-normal);
+}
+.article .footnote-backref {
+	margin-left: 0.25em;
+	text-decoration: none;
+	border-bottom: none;
+}
+
 /* Hero image — soften edges so the image flows into the page rather than jarring against it.
  * :has(picture) guards against applying image styles to text-only first paragraphs.
  * mask-image fade adapts to both light and dark backgrounds. */
@@ -930,9 +972,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
-							<span class="post-card__tag">Data-Visualization</span>
 							<span class="post-card__tag">Accessibility</span>
+							<span class="post-card__tag">Product-Development</span>
+							<span class="post-card__tag">Design-Strategy</span>
 					</div>
 				<h2 class="post-card__title" id="contrast-chaser-zero-from-personal-frustration-to-product">
 					<a href="/blog-test/blog/contrast_chaser_zero/">Contrast Chaser Zero: From Personal Frustration to Product</a>
@@ -951,9 +993,9 @@ img.post-card__image {
 				</a>
 			<div class="post-card__body">
 					<div class="post-card__tags">
-							<span class="post-card__tag">Portfolio</span>
 							<span class="post-card__tag">Product-Development</span>
 							<span class="post-card__tag">Ethical-AI</span>
+							<span class="post-card__tag">Accessibility</span>
 					</div>
 				<h2 class="post-card__title" id="building-a-privacy-first-transcription-tool-with-claude-code">
 					<a href="/blog-test/blog/building_whisper_transcription_app/">Building a Privacy-First Transcription Tool with Claude Code</a>
@@ -988,7 +1030,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/mission-alignment/` was built on 2026-04-20T14:05:14.774Z -->
+		<!-- This page `/tags/mission-alignment/` was built on 2026-05-06T09:21:02.020Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
