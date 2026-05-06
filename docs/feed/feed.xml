@@ -98,7 +98,7 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;whats-next&quot;&gt;What&#39;s Next&lt;/h2&gt;
 &lt;p&gt;OKCA is on npm as &lt;code&gt;@pawn002/okca&lt;/code&gt;, MIT-licensed. The repo is &lt;a href=&quot;https://github.com/pawn002/okca&quot;&gt;&lt;code&gt;pawn002/okca&lt;/code&gt;&lt;/a&gt;. The design document, including the formal FP = 0 proof, is at &lt;a href=&quot;https://github.com/pawn002/okca/blob/main/docs/OKCA_DESIGN.md&quot;&gt;&lt;code&gt;docs/OKCA_DESIGN.md&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;OKCA is one independent attempt to close WCAG 2.x&#39;s contrast gaps. The field is better off with more than one. It is clean-room work, derived from public specifications, and accepts hex codes and CSS &lt;code&gt;oklch()&lt;/code&gt;/&lt;code&gt;oklab()&lt;/code&gt; natively.&lt;/p&gt;
+&lt;p&gt;OKCA is one independent attempt to close WCAG 2.x&#39;s contrast gaps. It is clean-room work, derived from public specifications, and accepts hex codes and CSS &lt;code&gt;oklch()&lt;/code&gt;/&lt;code&gt;oklab()&lt;/code&gt; natively.&lt;/p&gt;
 &lt;p&gt;If you maintain a design system, run your palette through it. If you find a pair OKCA scores higher than WCAG, that&#39;s a false pass. Open an issue. It would be a bug, and I&#39;d want to know about it.&lt;/p&gt;
 &lt;hr class=&quot;footnotes-sep&quot;&gt;
 &lt;section class=&quot;footnotes&quot;&gt;
