@@ -5,11 +5,102 @@
   <subtitle>Design integration, accessibility advocacy, and ethical AI strategy</subtitle>
   <link href="https://pawn002.github.io/blog-test/feed/feed.xml" rel="self" />
   <link href="https://pawn002.github.io/blog-test/blog-public/" />
-  <updated>2026-05-06T00:00:00Z</updated>
+  <updated>2026-05-08T00:00:00Z</updated>
   <id>https://pawn002.github.io/blog-test/blog-public/</id>
   <author>
     <name>John Rioflorido</name>
   </author>
+  <entry>
+    <title>Where the Training Data Runs Out: Why Domain CLIs Need a Playbook</title>
+    <link href="https://pawn002.github.io/blog-test/blog/domain-cli-playbook/" />
+    <updated>2026-05-08T00:00:00Z</updated>
+    <id>https://pawn002.github.io/blog-test/blog/domain-cli-playbook/</id>
+    <content type="html">&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/JEWUnoGxmp-400.avif 400w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-800.avif 800w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-1536.avif 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/JEWUnoGxmp-400.webp 400w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-800.webp 800w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-1536.webp 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;img src=&quot;https://pawn002.github.io/blog-test/img/JEWUnoGxmp-400.png&quot; alt=&quot;A closed teal-azure circular loop on a deep navy field with a clear gap on its left edge — the agent&#39;s reasoning circuit, missing where domain expertise should be. An abstract burgundy figure on the left offers a small burgundy piece toward the gap; the piece bears a single stylized serif capital letterform in warm amber at its center, marking it as a deliberately authored artifact carrying practitioner judgment the model could not generate on its own.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; width=&quot;1536&quot; height=&quot;1024&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/JEWUnoGxmp-400.png 400w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-800.png 800w, https://pawn002.github.io/blog-test/img/JEWUnoGxmp-1536.png 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;div class=&quot;exec-summary&quot;&gt;
+&lt;h2 id=&quot;executive-summary&quot;&gt;Executive Summary&lt;/h2&gt;
+&lt;p&gt;The CLI-vs-MCP debate has converged on tools the model already knows: agents call &lt;code&gt;gh&lt;/code&gt;, &lt;code&gt;git&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, and the benchmarks confirm CLIs win on schema overhead, composability, and reliability. That case is closed. The harder case isn&#39;t — agents calling tools the model has no training on, where the binary delivers domain expertise the training data didn&#39;t carry.&lt;/p&gt;
+&lt;p&gt;A domain CLI paired with a workflow playbook puts practitioner judgment — the kind the model can&#39;t generate on its own — into the agent&#39;s loop. Two inversions follow: discoverability (the agent reaches for the CLI without prompt-engineering, the way it reaches for &lt;code&gt;git&lt;/code&gt;) and composition (the playbook composes workflows up front; the agent picks the right one rather than inventing the chain). A third effect compounds — the CLI surfaces problems whose solutions enable the next layer.&lt;/p&gt;
+&lt;p&gt;Wiring an accessibility CLI (CPQI) into an agent loop produced an unplanned five-product stack inside two months: OKCA on npm, the Candor design system at v3.0.0 within five weeks, and four downstream apps that build on the same foundation. Underneath the architecture is a governance question the transport debate sidesteps: whose expertise travels through your tool, who supplies the judgment encoded in it, who has authority to change it. Generic CLIs ducked that question because the expertise was diffuse. Domain CLIs surface it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;hook&quot;&gt;Hook&lt;/h2&gt;
+&lt;p&gt;I was building the back end for a tool I&#39;d been meaning to build for years — a color pair iterator, what I now call CPQI. Front-end-only &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/contrast_chaser_zero/&quot;&gt;Contrast Chaser&lt;/a&gt; had taken me as far as it could; the next move was a real backend, somewhere the accessibility logic could live where it could be tested, extended, and — the new wrinkle — called by an agent.&lt;/p&gt;
+&lt;p&gt;This was when MCP was peaking. I read the posts. I built the server.&lt;/p&gt;
+&lt;p&gt;And the rabbit hole opened up. It was an NPM module. Then I had to choose a transport. Then the streaming connection kept dropping. Then I had to figure out auth. MCP became its own product before it became a useful tool. I shipped it anyway. It worked.&lt;/p&gt;
+&lt;p&gt;What I couldn&#39;t fix was Claude Code never &lt;em&gt;reaching&lt;/em&gt; for it. The token burn was real — I could ration around that — but the part that nagged was that the model, dropped into a session, would do accessibility checks the wrong way unless I nudged it toward my server. Putting &amp;quot;use the MCP server for accessibility&amp;quot; in CLAUDE.md helped. It also felt like a hack. The instinct wasn&#39;t there.&lt;/p&gt;
+&lt;p&gt;Around then, the CLI-vs-MCP debate hit critical mass and I tried the other path. Wrote the documentation. Wrote a workflow playbook alongside the binary — explicit workflows for the tasks I expected an agent to need, such as building a palette from a hero color or generating dark-mode equivalents. Each workflow names the situation, gives the reasoning, lays out the command chain. The first thing I noticed wasn&#39;t the token reduction everyone writes about — it was that the agent always reached for the CLI without being told. The second thing I noticed was that the playbook actually got read. I&#39;d expected to have to babysit the agent through the workflows. Instead it picked the right one without prompting and chained the steps with a fluency I hadn&#39;t budgeted for.&lt;/p&gt;
+&lt;p&gt;The CLI vs MCP debate has been written to death since August 2025. Mario Zechner&#39;s benchmarks circulate everywhere, &amp;quot;MCP is dead, long live the CLI&amp;quot; was on Hacker News for two days, and at this point any senior engineer can quote the schema-overhead numbers from memory. I&#39;ll recap it briefly so the pivot has somewhere to stand.&lt;/p&gt;
+&lt;p&gt;I want to talk about the case the debate has barely covered.&lt;/p&gt;
+&lt;h2 id=&quot;the-settled-part&quot;&gt;The Settled Part&lt;/h2&gt;
+&lt;p&gt;The case for CLIs over MCP for agentic work, when it applies, is closed. It boils down to four points:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Schema overhead.&lt;/strong&gt; A typical MCP server pushes its full tool catalogue into the agent&#39;s context on initialization. The Atlassian MCP server is around 73 tools and roughly 40% of a 200K context budget before the agent does anything. The GitHub MCP server is 93 tools at about 55,000 tokens. CLI commands cost zero up front because the model already knows them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Model familiarity.&lt;/strong&gt; Frontier models are trained on billions of lines of terminal interaction. They know &lt;code&gt;gh&lt;/code&gt;, &lt;code&gt;git&lt;/code&gt;, &lt;code&gt;docker&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;jq&lt;/code&gt; the way a senior engineer does. No schema needed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Composability.&lt;/strong&gt; Shell pipes compose in one runtime call. MCP can compose too — the agent chains tool calls in sequence — but each step costs a model turn. A five-step pipeline is five turns; a shell pipe is one.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Reliability.&lt;/strong&gt; The benchmarks consistently show higher task-completion rates with CLI transports for the same model.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This applies cleanly to the cases the prior posts cover: agents calling tools the model already understands. The existing CLI wins; the debate is over.&lt;/p&gt;
+&lt;p&gt;The case I am writing about is different.&lt;/p&gt;
+&lt;h2 id=&quot;the-case-nobody-is-writing-about&quot;&gt;The Case Nobody Is Writing About&lt;/h2&gt;
+&lt;p&gt;What happens when the agent calls a tool the model has &lt;em&gt;no training on&lt;/em&gt;?&lt;/p&gt;
+&lt;p&gt;Frontier models know &lt;code&gt;gh&lt;/code&gt; because GitHub Actions logs and Stack Overflow answers are everywhere in the training data. They don&#39;t know how to evaluate whether a foreground/background pair is readable for a user with moderate contrast sensitivity loss. They know the WCAG 2 contrast formula because it&#39;s documented in 2,000 blog posts. They know critiques of the formula exist. What they don&#39;t know is how to act on them: which competing algorithm to trust for which text size, in which context, against which design intent. Picking that requires practitioner judgment the training data doesn&#39;t carry.&lt;/p&gt;
+&lt;p&gt;When I wired CPQI&#39;s accessibility back end into an agent loop, I wasn&#39;t connecting it to a tool the model already understood. I was injecting expertise the model didn&#39;t have.&lt;/p&gt;
+&lt;p&gt;That changes the question. The benchmarks everyone cites measure how to wrap tools the model already knows. The domain-specific question is about how to deliver &lt;em&gt;new judgment&lt;/em&gt; into the agent&#39;s loop. The tradeoffs invert.&lt;/p&gt;
+&lt;h2 id=&quot;what-inverts&quot;&gt;What Inverts&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Discoverability inverts.&lt;/strong&gt; Bash binaries are reachable by default — the model knows &lt;code&gt;gh&lt;/code&gt; is callable because the model knows what &lt;code&gt;gh&lt;/code&gt; is. An MCP server is not reachable by default. The model has to be told it exists, told what it does, and reminded to use it during the actual task. CLAUDE.md instructions are a workaround — agents shouldn&#39;t need sticky notes. Once I had a CLI binary, the prompt-engineering disappeared. The agent reached for it the way it reaches for &lt;code&gt;git&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The playbook composes; the agent picks.&lt;/strong&gt; MCP&#39;s mental model is a catalog of atomic operations — contrast check, color conversion, gamut probe — each a discrete tool the agent can call. The agent&#39;s job in that model is to invent the right combination. A CLI plus an agent playbook flips that. CPQI&#39;s playbook does the composing up front; the agent&#39;s task changes from inventing a combination of atomic tools to picking the right documented workflow and running it. The judgment about &lt;em&gt;when&lt;/em&gt; to use &lt;em&gt;what&lt;/em&gt; lives in prose the agent reads. That costs flexibility and buys reliability — and for domain expertise the model lacks, reliability is the trade you want.&lt;/p&gt;
+&lt;p&gt;The playbook is also the part of the tool that&#39;s hardest to reproduce. The algorithm is a number. The CLI is a binary. The playbook is the encoded judgment about &lt;em&gt;how the work gets done&lt;/em&gt; — which workflow fits which situation, which order of operations protects the user, which shortcut to refuse. Shipping the binary without the playbook would be like shipping a power tool without the manual.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Capability stack compounds.&lt;/strong&gt; Not an inversion — the dividend the inversions paid, and the one that surprised me. Once the CLI was reliable, it surfaced the next problem — the existing perceptual contrast algorithms (bPCA, APCA) had license terms ruling out closed-source commercial use, which meant I couldn&#39;t ship them inside a CLI I wanted to monetize. So I built &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/okca-algorithm/&quot;&gt;OKCA&lt;/a&gt;. OKCA inside the CLI then made design-token decisions I couldn&#39;t have made with either tool alone. Those decisions made a design system feasible at a velocity I hadn&#39;t planned for. The CLI was supposed to be the destination. It turned out to be the first node in a stack where each layer reduced the work of the next.&lt;/p&gt;
+&lt;h2 id=&quot;receipts&quot;&gt;Receipts&lt;/h2&gt;
+&lt;p&gt;OKCA shipped on npm 2026-03-15. Eight days later, I committed &lt;a href=&quot;https://pawn002.github.io/blog-test/blog/candor-design-system/&quot;&gt;Candor&lt;/a&gt; v1.0.0 — a 26-component design system with a published accessibility conformance statement against WCAG 2.1 AA, validated by CPQI CLI against three contrast algorithms in parallel. Five weeks after OKCA, Candor 3.0.0 shipped. I wasn&#39;t trying to build a design system this fast — the stack made each step short.&lt;/p&gt;
+&lt;p&gt;The decision that anchored the system: a three-tier OKCA contrast model for text at 14px and below.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Reading text: 9.5 regular / 6.5 bold (Tier 1)&lt;/li&gt;
+&lt;li&gt;Functional UI: 6.5 / 4.5 (Tier 2)&lt;/li&gt;
+&lt;li&gt;Supplementary text whose meaning is also redundantly coded: 4.5 / 4.5 (Tier 3)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Passing OKCA also passes WCAG, so there&#39;s no false-pass surface to worry about. I&#39;d been circling that tier system for years. With the CLI calling OKCA in the loop, it took an afternoon. The result is more coherent and more implementable than I could have anticipated, because the agent could test every combination against the algorithm before I committed to a number.&lt;/p&gt;
+&lt;p&gt;Without the integration, that decision would have been an essay. With it, it&#39;s a tool the agent uses to validate every token pair Candor ships.&lt;/p&gt;
+&lt;p&gt;Four downstream products run on the same stack:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;dev-den v0.4.0&lt;/strong&gt; — full Candor adoption, Phosphor icons, button hierarchy enforced from the design system rather than reasserted per app.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://pawn002.github.io/color-pair-quick-iterator/&quot;&gt;Color Pair Quick Iterator&lt;/a&gt;&lt;/strong&gt; — its own accessibility overhaul ran through the CPQI CLI it spawned. Modal patterns and a screen-reader audit landed in two days.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://pawn002.github.io/blog-test/blog/building_whisper_transcription_app/&quot;&gt;whisper-electron&lt;/a&gt; v1.1.5&lt;/strong&gt; — Candor-driven UI, navy primary CTAs validated against the tier system, native overlay controls.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The blog you&#39;re reading this on&lt;/strong&gt; — full visual relaunch April 2026; every color pair OKCA-verified before merge.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That&#39;s five products on a foundation that didn&#39;t exist two months ago.&lt;/p&gt;
+&lt;p&gt;cpqi-cli and dev-den are still in private development. Release details when they&#39;re ready.&lt;/p&gt;
+&lt;h2 id=&quot;the-proprietary-choice&quot;&gt;The Proprietary Choice&lt;/h2&gt;
+&lt;p&gt;Most &amp;quot;build a CLI for your agent&amp;quot; posts assume the CLI is open source. Mine is not. The choice has a specific origin.&lt;/p&gt;
+&lt;p&gt;I went looking for an existing perceptual contrast algorithm to bake into the CLI — the one decision that would let the tool make accessibility calls a frontier model can&#39;t make on its own. I found two candidates that practitioners take seriously: bPCA and APCA, both Andrew Somers&#39; work. I read the licenses. Both have terms designed to keep the algorithms open — a defensible IP choice. It just didn&#39;t fit my goal of shipping a closed, monetizable tool. The choice was to open-source the CLI, license a third-party algorithm in a way that didn&#39;t make sense at this stage, or build my own algorithm. I built my own — OKCA, OKLCH-derived and independent of APCA.&lt;/p&gt;
+&lt;p&gt;Then I split the stack. OKCA shipped on npm under MIT — the algorithm is for the world; the goal there is adoption, eventually a path to W3C / AGWG. The CLI that wraps OKCA stays closed.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The algorithm earns trust by being open. People can read it, test it, point at false passes, fork it. That&#39;s how a contrast algorithm becomes credible.&lt;/li&gt;
+&lt;li&gt;The CLI earns trust by being judged on its output. The agentic interface, the editorial verdict layer, the tier guidance, the integration with downstream design tokens — that&#39;s a decade of practitioner judgment, and it&#39;s the part that compounds.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Open algorithm, closed tool.&lt;/p&gt;
+&lt;h2 id=&quot;what-this-opens&quot;&gt;What This Opens&lt;/h2&gt;
+&lt;p&gt;A user with moderate contrast sensitivity loss isn&#39;t well-represented in the data the model was trained on. The judgment about what works for that user lives in a different population — practitioners who have spent years making accessibility calls on their behalf. The CLI moves that practitioner judgment into the agent&#39;s loop. The playbook documents the workflows. OKCA encodes the perceptual call. Each layer is a route by which a perspective the model lacks gets a seat at the agent&#39;s reasoning.&lt;/p&gt;
+&lt;p&gt;The MCP-vs-CLI debate is a transport question. The domain-CLI question is a governance one.&lt;/p&gt;
+&lt;p&gt;Whose expertise travels through your agent? Who supplies the judgment your tool encodes? Who has authority to change it? Who audits it? When the agent makes an accessibility call on behalf of a user, what&#39;s the chain of accountability that ends in a person?&lt;/p&gt;
+&lt;p&gt;Generic CLIs ducked this question because the expertise was diffuse — the model picked up &lt;code&gt;git&lt;/code&gt; from a million GitHub repos, no single author owns it. Domain CLIs surface the question because somebody chose, on purpose, what the tool says.&lt;/p&gt;
+&lt;p&gt;Zoom out. The model&#39;s priors come from a small group of trainers — a narrow slice of the population the model will eventually serve. Tools the agent reaches for can carry perspective the trainer pool didn&#39;t. (That holds for MCPs too — the alignment argument doesn&#39;t depend on which transport you pick.) That&#39;s not the whole alignment problem, not even most of it. But it is a layer where someone outside the trainer pool can put their judgment in the loop, deliberately. The work ahead is uphill.&lt;/p&gt;
+&lt;h2 id=&quot;close&quot;&gt;Close&lt;/h2&gt;
+&lt;p&gt;The answer to &amp;quot;CLI or MCP&amp;quot; depends on what you&#39;re moving through the agent.&lt;/p&gt;
+&lt;p&gt;If the agent needs a tool the model already knows — &lt;code&gt;gh&lt;/code&gt;, &lt;code&gt;git&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;jq&lt;/code&gt; — let it use that tool directly. Don&#39;t wrap it in MCP. The benchmarks back this; the prior posts have it covered.&lt;/p&gt;
+&lt;p&gt;If the agent needs expertise the model doesn&#39;t have — build a domain CLI and write it a playbook. The binary handles invocation; the playbook handles composition.&lt;/p&gt;
+&lt;p&gt;The architecture isn&#39;t new — the case is.&lt;/p&gt;
+&lt;p&gt;So: whose voice is in the layer you&#39;re building? I&#39;d like to hear how you&#39;re thinking about it. The most useful thing you could leave me through &lt;a href=&quot;https://pawn002.github.io/blog-test/about/#contact-information&quot;&gt;the about page&lt;/a&gt; is a &lt;em&gt;have you considered&lt;/em&gt; — something that pushes past where the argument lands today. This is work I&#39;d rather do in conversation than alone.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Hot Pink Passes WCAG. That&#39;s the Problem.</title>
     <link href="https://pawn002.github.io/blog-test/blog/okca-algorithm/" />
@@ -947,82 +1038,7 @@ Collaborating with Claude Code accelerated development but created architectural
 &lt;h2 id=&quot;get-involved&quot;&gt;Get Involved&lt;/h2&gt;
 &lt;p&gt;The Whisper Transcription App is available now on &lt;a href=&quot;https://github.com/pawn002/whisper-electron-app&quot;&gt;GitHub&lt;/a&gt;. While building the app requires some technical knowledge, anyone should be able to run it in dev mode with the &lt;a href=&quot;https://github.com/pawn002/whisper-electron-app/tree/main/docs&quot;&gt;robust documentation provided&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In an age where every innovation seems to come with strings attached, here&#39;s one that&#39;s genuinely free—in every sense of the word.&lt;/p&gt;
-&lt;p&gt;If you&#39;re building toward inclusive outcomes, ethical defaults, or systems that respect human dignity—I&#39;d love to hear from you. This is exactly the kind of conversation I want to be part of.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>My Ethical Stance as an Ethical Systems Designer</title>
-    <link href="https://pawn002.github.io/blog-test/blog/my_ethical_stance/" />
-    <updated>2025-10-22T00:00:00Z</updated>
-    <id>https://pawn002.github.io/blog-test/blog/my_ethical_stance/</id>
-    <content type="html">&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/F6kNVcFFAt-400.avif 400w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-800.avif 800w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-1536.avif 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/F6kNVcFFAt-400.webp 400w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-800.webp 800w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-1536.webp 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;img src=&quot;https://pawn002.github.io/blog-test/img/F6kNVcFFAt-400.png&quot; alt=&quot;Abstract network visualization showing interconnected nodes and pathways in blues, grays, and warm accents, representing ethical decision-making frameworks and systems design&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; width=&quot;1536&quot; height=&quot;1024&quot; srcset=&quot;https://pawn002.github.io/blog-test/img/F6kNVcFFAt-400.png 400w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-800.png 800w, https://pawn002.github.io/blog-test/img/F6kNVcFFAt-1536.png 1536w&quot; sizes=&quot;100vw&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
-&lt;div class=&quot;min-text&quot;&gt;
-&lt;p&gt;&lt;strong&gt;Disclaimer:&lt;/strong&gt; Before proceeding, please be sure to read this post&#39;s
-&lt;a href=&quot;https://pawn002.github.io/blog-test/blog/legal_disclaimer/&quot;&gt;Legal Disclaimer&lt;/a&gt;, and
-&lt;a href=&quot;https://pawn002.github.io/blog-test/blog/organizational_disclaimer&quot;&gt;Organizational Disclaimer&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&quot;exec-summary&quot;&gt;
-&lt;h2 id=&quot;executive-summary&quot;&gt;Executive Summary&lt;/h2&gt;
-&lt;p&gt;Leading as an Ethical Systems Designer and modeling Applied Philosophy in Design, I cultivate an ethic that focuses on outcomes while remaining humble on measuring qualitative value. This approach enables me to build and lead cross-disciplinary teams that turn accessible, ethically-grounded design and systems thinking into faster iteration, and safer products. Along the way, I provide decision infrastructure that lets decision makers quickly make defensible trade-offs while also multiplying organizational talent so organizations can retain cross-functional practitioners that ship responsibly without slowing innovation.&lt;/p&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;ethical-systems-design&quot;&gt;Ethical Systems Design&lt;/h2&gt;
-&lt;p&gt;Ethical systems design is like most design, in that you are producing some artifact within a body of constraints guided by requirements.&lt;/p&gt;
-&lt;p&gt;While traditional design disciplines work with tangible primitives like color, shape, or material, ethical systems design operates with more abstract primitives: values, judgments, and nuanced ethical frameworks that shape decision-making infrastructures.&lt;/p&gt;
-&lt;p&gt;Bridging between traditional and ethical systems designers, both have a sensibility or taste in how they use design primitives to create a design. Whereas a traditional designer can be said to have a distinctive artistic style, an ethical systems designer has an ethical stance that informs their creations.&lt;/p&gt;
-&lt;h2 id=&quot;my-ethical-stance&quot;&gt;My Ethical Stance&lt;/h2&gt;
-&lt;p&gt;I am a pragmatic consequentialist who prioritizes outcomes while preserving intellectual modesty about measuring qualitative value. I treat formal ethical frameworks as negotiated social contracts rather than absolute constraints and recognize individuals may have to exercise personal moral discretion when those contracts diverge from their priorities.&lt;/p&gt;
-&lt;h3 id=&quot;core-commitments&quot;&gt;Core Commitments&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Outcome orientation: Consequences determine moral weight.&lt;/li&gt;
-&lt;li&gt;Practical agreement-based approach: I rely on agreed frameworks with peers as defaults for coordination.&lt;/li&gt;
-&lt;li&gt;Relational adjustment: I prefer to renegotiate or partner with affected parties when deviating from promises or rules.&lt;/li&gt;
-&lt;li&gt;Agency respect: I give stakeholders the power to accept or reject policy choices that affect them.&lt;/li&gt;
-&lt;li&gt;Moral pluralism: I accept that personal morality may diverge from collective ethics and that both have roles.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;practical-strengths&quot;&gt;Practical Strengths&lt;/h2&gt;
-&lt;p&gt;My ethical stance:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Maximizes responsiveness to real harms and benefits.&lt;/li&gt;
-&lt;li&gt;Encourages transparent negotiation with stakeholders rather than stealthy rule-breaking.&lt;/li&gt;
-&lt;li&gt;Reduces rigid absolutism, enabling flexible solutions across complex, contested cases.&lt;/li&gt;
-&lt;li&gt;Centers consent and agency when implementing consequential trade-offs.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;key-risks-and-vulnerabilities&quot;&gt;Key Risks and Vulnerabilities&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Potential for selective exception-making where personal priorities justify disproportionate deviations.&lt;/li&gt;
-&lt;li&gt;Reliance on partner consent can be coercive if power imbalances exist or choices are constrained.&lt;/li&gt;
-&lt;li&gt;Difficulty aggregating qualitative goods may produce inconsistency across similar cases.&lt;/li&gt;
-&lt;li&gt;Erosion of Institutional trust if negotiated exceptions become routine rather than exceptional.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;norms-and-safeguards-that-align-with-my-ethical-stance&quot;&gt;Norms and Safeguards That Align With My Ethical Stance&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Implement clear, participatory procedures for renegotiating obligations with affected parties.&lt;/li&gt;
-&lt;li&gt;Require transparency and documentation when promises or rules are modified for consequential reasons.&lt;/li&gt;
-&lt;li&gt;Build independent review or arbitration for cases where power imbalances could distort consent.&lt;/li&gt;
-&lt;li&gt;Use iterative, evidence-based evaluation to learn how qualitative outcomes actually track with decisions.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;wrapping-up&quot;&gt;Wrapping Up&lt;/h2&gt;
-&lt;p&gt;My approach to ethical systems design is not a fixed destination but an ongoing journey of critical reflection and adaptive learning. Ethical leadership demands continuous recalibration - a dynamic process of understanding complex human systems while remaining committed to core principles of harm reduction, stakeholder empowerment, and principled flexibility.&lt;/p&gt;
-&lt;p&gt;The measure of an ethical framework is not its theoretical perfection, but its capacity to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Respond meaningfully to emerging challenges&lt;/li&gt;
-&lt;li&gt;Preserve human agency and dignity&lt;/li&gt;
-&lt;li&gt;Create sustainable and just outcomes across diverse contexts&lt;/li&gt;
-&lt;li&gt;Remain open to critique and refinement&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;As technological and social landscapes rapidly transform, ethical systems design must embrace intellectual modesty as its most powerful tool. This means cultivating:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Persistent curiosity about unintended consequences&lt;/li&gt;
-&lt;li&gt;Genuine openness to perspectives beyond our immediate understanding&lt;/li&gt;
-&lt;li&gt;Systematic mechanisms for ongoing evaluation and course correction&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Ultimately, my ethical stance is less about achieving moral absolutism and more about creating adaptive, resilient decision infrastructures that can navigate complexity with integrity, empathy, and pragmatic wisdom.&lt;/p&gt;
-&lt;h2 id=&quot;future-updates&quot;&gt;Future Updates&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Resource link to Ethical Systems Design&lt;/li&gt;
-&lt;li&gt;Resource link to Using AI to Interrogate and Establish a Personal Ethical Stance&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;If you&#39;re building toward inclusive outcomes, ethical defaults, or systems that respect human dignity—I&#39;d love to hear from you. This is exactly the kind of conversation I want to be part of. &lt;a href=&quot;https://pawn002.github.io/blog-test/about/#contact-information&quot;&gt;The about page&lt;/a&gt; lists ways to reach me.&lt;/p&gt;
 </content>
   </entry>
 </feed>
