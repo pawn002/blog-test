@@ -192,6 +192,7 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;whats-next&quot;&gt;What&#39;s Next&lt;/h2&gt;
 &lt;p&gt;OKCA is on npm as &lt;code&gt;@pawn002/okca&lt;/code&gt;, MIT-licensed. The repo is &lt;a href=&quot;https://github.com/pawn002/okca&quot;&gt;&lt;code&gt;pawn002/okca&lt;/code&gt;&lt;/a&gt;. The design document, including the FP = 0 analysis (by-construction on the grey axis plus gamut verification), is at &lt;a href=&quot;https://github.com/pawn002/okca/blob/main/docs/OKCA_DESIGN.md&quot;&gt;&lt;code&gt;docs/OKCA_DESIGN.md&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Try it in one line.&lt;/strong&gt; No install required — &lt;code&gt;npx klar-cli contrast &amp;quot;#ff69b4&amp;quot; &amp;quot;#1a1a1a&amp;quot;&lt;/code&gt; prints &lt;code&gt;Contrast (OKCA): 3.7&lt;/code&gt;, the same hot-pink-on-near-black pair from the opening. &lt;code&gt;klar&lt;/code&gt; is an MIT CLI that uses OKCA for its contrast engine.&lt;/p&gt;
 &lt;p&gt;OKCA is one independent attempt to close WCAG 2.x&#39;s contrast gaps. It is clean-room work, derived from public specifications, and accepts hex codes and CSS &lt;code&gt;oklch()&lt;/code&gt;/&lt;code&gt;oklab()&lt;/code&gt; natively.&lt;/p&gt;
 &lt;p&gt;If you maintain a design system, run your palette through it. If you find an sRGB pair OKCA scores higher than WCAG, that&#39;s a false pass. Open an issue. It would be a bug, and I&#39;d want to know about it — it&#39;s a property I verify, not a theorem I assume, so the edge cases are exactly what I want.&lt;/p&gt;
 &lt;hr class=&quot;footnotes-sep&quot;&gt;
