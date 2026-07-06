@@ -1,0 +1,32 @@
+# pawn002 Blog
+
+> Cross disciplinary writing bringing together technology, art, and life.
+
+Personal blog by John Rioflorido, focused on accessibility advocacy, ethical AI, and inclusive design.
+
+## Posts
+
+- [Where the Training Data Runs Out: Why Domain CLIs Need a Playbook](/blog-test/blog/domain-cli-playbook/): The CLI-vs-MCP debate has covered tools the model already knows. It hasn't covered the harder case: agents needing domain expertise the model lacks. A domain CLI paired with a workflow playbook puts practitioner judgment — the kind the model can't generate on its own — into the agent's loop. The architecture is also a governance question: whose expertise travels through your tool.
+- [Hot Pink Passes WCAG. That's the Problem.](/blog-test/blog/okca-algorithm/): WCAG's contrast formula was built for 1999 display calibration, not legibility. Hot pink on near-black scores 6.6:1 and passes — and isn't readable. OKCA closes the gap at the algorithm layer with chroma compression, polarity-aware scaling, and a zero-false-pass invariant — proven on the grey axis and verified across 1,249 production pairs and the sRGB gamut.
+- [Candor by Design: When an Accessibility Blog Failed Its Own WCAG Contrast Audit](/blog-test/blog/candor-design-system/): A blog advocating for accessible design couldn't pass its own dark-mode contrast audit. The fix wasn't a CSS patch — it was a design system grounded in WCAG compliance, OKLCH color science, and inclusive design.
+- [Safe on Paper: What Accessibility Standards Teach AI Safety Governance](/blog-test/blog/safe-on-paper/): Standards calcify. Accessibility governance spent 25 years learning what happens when compliance diverges from outcomes — AI safety is setting up the same dynamic, with those lessons available in advance.
+- [Accessible AI: Why LLM Outputs Fail Users with Disabilities (Prompt Engineering the System, Not the User)](/blog-test/blog/accessible_ai_llm_outputs/): LLMs produce technically-valid outputs that fail to serve disabled users. Context is the intervention - examining prompt engineering patterns that shift burden from users to systems.
+- [Compliance without Accommodation: The Unfortunate Circumstance of Existing Accessibility Guidance](/blog-test/blog/compliance_without_accommodation/): How WCAG's legal codification has created a paradox in digital accessibility governance, where organizations face risk when adopting better solutions—leaving disabled users underserved despite apparent compliance.
+- [The P+F+I+D Framework: A Prompt Engineering Case Study](/blog-test/blog/prompt-engineering-case-study/): A case study documenting the evolution from 0/10 to 9.5/10 prompt engineering skill through the P+F+I+D framework, featuring real prompts, metrics, and the CLAUDE.md breakthrough.
+- [Contrast Chaser Zero: From Personal Frustration to Product](/blog-test/blog/contrast_chaser_zero/): How applying product development fundamentals transformed a workflow problem into an accessibility tool adopted across government agencies.
+- [Working With Creative Direction](/blog-test/blog/working_with_creative_direction/): How listening, shared constraints, and translation between disciplines transforms the relationship between creative vision and technical reality.
+- [Building a Privacy-First Transcription Tool with Claude Code](/blog-test/blog/building_whisper_transcription_app/): How I used AI to build an offline transcription app that protects user privacy—and what it reveals about the democratization of software development.
+- [My Ethical Stance as an Ethical Systems Designer](/blog-test/blog/my_ethical_stance/): Personal ethical stance.
+- [Good Day to All!](/blog-test/blog/firstpost/): First post on new blog site.
+
+## Pages
+
+- [About](/blog-test/about/): Author bio and background.
+
+## Policies
+
+- [Blog Organizational Disclaimer](/blog-test/blog/organizational_disclaimer/)
+- [Blog Accessibility Policy](/blog-test/blog/accessibility_policy/)
+- [Blog Privacy Policy](/blog-test/blog/privacy_policy/)
+- [Blog Post Policy](/blog-test/blog/post_policy/)
+- [Blog Legal Disclaimer](/blog-test/blog/legal_disclaimer/)
