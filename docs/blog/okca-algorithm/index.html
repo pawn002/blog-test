@@ -1451,9 +1451,7 @@ pre[class*="language-diff-"] {
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>This post has been corrected twice, and the second correction supersedes the first.</p>
-<p><strong>2026-06-09.</strong> A gamut stress-test run <em>after</em> this post and the package were published showed the original framing (&quot;enforced mathematically… unconditional for every input&quot;) overstated the guarantee. FP = 0 was restated as provable by construction on the achromatic (grey) axis, and a calibration property verified across the gamut elsewhere.</p>
-<p><strong>2026-08-24.</strong> OKCA v2.0.0 (2026-07-26) made FP = 0 provable by construction across all of sRGB, so the 2026-06-09 hedge now <em>understates</em> it; the text above is back to a proof claim, on stronger footing. The same release recalibrated the algorithm, which moved every anchor figure in this post: hot pink on near-black 3.7 → 3.6, its grey control 5.4 → 5.8, the light-on-dark cap 21 → 20.9, white on black 21.0 → 20.9, white on <code>#767676</code> 3.5 → 3.9 light-on-dark and 3.3 → 3.7 dark-on-light, the chroma-compression exponent ceiling 1.5 → 1.65, and the WCAG disagreement count 111 → 97. v2.0.3 also retracted a claim this post carried — that the marginal pairs are ones a designer would not call comfortable — after a threshold experiment showed that judgment inverts with display brightness; the disagreement section now argues from variance instead. The zero-false-pass result itself has never changed. Original wording available on request. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><strong>2026-06-09</strong> — the original framing of the FP = 0 guarantee (&quot;enforced mathematically… unconditional for every input&quot;) overstated it, and the claim was narrowed. <strong>2026-08-24</strong> — OKCA v2.0.0 made FP = 0 provable by construction across sRGB, so the narrowed claim now understates it; the same recalibration moved every anchor figure in this post. v2.0.3 separately retracted the argument that the marginal pairs here are ones practitioners reject on sight, after a threshold experiment found that judgment inverts with display brightness — the probe section now argues from variance. The zero-false-pass result itself has never changed. Earlier wording available <a href="/blog-test/about/#contact-information">on request</a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p>Throughout this post I use &quot;saturation&quot; in the everyday sense, meaning how strong or colorful a hue appears to a viewer. OKCA's math operates on Oklab chroma, the absolute distance from neutral in <em>a</em>/<em>b</em> space. The two terms are closely related but not formally identical. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
@@ -1481,7 +1479,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/okca-algorithm/` was built on 2026-08-24T23:43:01.534Z -->
+		<!-- This page `/blog/okca-algorithm/` was built on 2026-08-24T23:56:30.667Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
