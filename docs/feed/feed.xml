@@ -2,7 +2,7 @@
 <?xml-stylesheet href="pretty-atom-feed.xsl" type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <title>pawn002&#39;s Blog</title>
-  <subtitle>Design integration, accessibility advocacy, and ethical AI strategy</subtitle>
+  <subtitle>AI evaluation and accessibility: why safe AI requires accessible AI</subtitle>
   <link href="https://pawn002.github.io/blog-test/feed/feed.xml" rel="self" />
   <link href="https://pawn002.github.io/blog-test/" />
   <updated>2026-10-07T00:00:00Z</updated>

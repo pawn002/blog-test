@@ -1,6 +1,6 @@
 # pawn002 Blog
 
-> Cross disciplinary writing bringing together technology, art, and life.
+> Writing on AI evaluation and accessibility by John Rioflorido, a design technologist. Safe AI requires accessible AI.
 
 Personal blog by John Rioflorido, focused on accessibility advocacy, ethical AI, and inclusive design.
 
