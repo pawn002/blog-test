@@ -1371,6 +1371,9 @@ pre[class*="language-diff-"] {
 
 <div class="article article--font-reading">
 	<p><picture><source type="image/avif" srcset="/blog-test/img/JEWUnoGxmp-400.avif 400w, /blog-test/img/JEWUnoGxmp-800.avif 800w, /blog-test/img/JEWUnoGxmp-1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/JEWUnoGxmp-400.webp 400w, /blog-test/img/JEWUnoGxmp-800.webp 800w, /blog-test/img/JEWUnoGxmp-1536.webp 1536w" sizes="100vw"><img src="/blog-test/img/JEWUnoGxmp-400.png" alt="A closed teal-azure circular loop on a deep navy field with a clear gap on its left edge — the agent's reasoning circuit, missing where domain expertise should be. An abstract burgundy figure on the left offers a small burgundy piece toward the gap; the piece bears a single stylized serif capital letterform in warm amber at its center, marking it as a deliberately authored artifact carrying practitioner judgment the model could not generate on its own." loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/JEWUnoGxmp-400.png 400w, /blog-test/img/JEWUnoGxmp-800.png 800w, /blog-test/img/JEWUnoGxmp-1536.png 1536w" sizes="100vw"></picture></p>
+<blockquote>
+<p><em>Update, 7 October 2026:</em> This post says the playbook &quot;actually got read.&quot; A pre-registered eval of 222 Claude Code trials found it wasn't: agents pointed to the playbook from <code>CLAUDE.md</code> opened it 0 times in 69, while the same guidance as an Agent Skill loaded 69 times in 69. The design, LLM-as-a-judge calibration and transcripts are in <a href="https://pawn002.github.io/blog-public/blog/skill-vs-playbook/">Written but Unread: Do AI Agents Read CLAUDE.md?</a>.</p>
+</blockquote>
 <div class="exec-summary">
 <h2 id="executive-summary">Executive Summary</h2>
 <p>The CLI-vs-MCP debate has converged on tools the model already knows: agents call <code>gh</code>, <code>git</code>, <code>kubectl</code>, and the benchmarks confirm CLIs win on schema overhead, composability, and reliability. That case is closed. The harder case isn't — agents calling tools the model has no training on, where the binary delivers domain expertise the training data didn't carry.</p>
@@ -1426,13 +1429,13 @@ pre[class*="language-diff-"] {
 <p>Without the integration, that decision would have been an essay. With it, it's a tool the agent uses to validate every token pair Candor ships.</p>
 <p>Four downstream products run on the same stack:</p>
 <ul>
-<li><strong>dev-den v0.4.0</strong> — full Candor adoption, Phosphor icons, button hierarchy enforced from the design system rather than reasserted per app.</li>
+<li><strong>dev-den v0.4.0</strong> — Candor tokens, Phosphor icons, button hierarchy enforced from the design system rather than reasserted per app.</li>
 <li><strong><a href="https://pawn002.github.io/color-pair-quick-iterator/">Color Pair Quick Iterator</a></strong> — its own accessibility overhaul ran through the CPQI CLI it spawned. Modal patterns and a screen-reader audit landed in two days.</li>
 <li><strong><a href="/blog-test/blog/building_whisper_transcription_app/">whisper-electron</a> v1.1.5</strong> — Candor-driven UI, navy primary CTAs validated against the tier system, native overlay controls.</li>
 <li><strong>The blog you're reading this on</strong> — full visual relaunch April 2026; every color pair OKCA-verified before merge.</li>
 </ul>
 <p>That's five products on a foundation that didn't exist two months ago.</p>
-<p>cpqi-cli and dev-den are still in private development. Release details when they're ready.</p>
+<p>The CPQI CLI has since shipped as <a href="https://github.com/pawn002/klar">klar</a>, open source on npm. dev-den is still in private development.</p>
 <h2 id="the-proprietary-choice">The Proprietary Choice</h2>
 <p>Most &quot;build a CLI for your agent&quot; posts assume the CLI is open source. Mine is not. The choice has a specific origin.</p>
 <p>I went looking for an existing perceptual contrast algorithm to bake into the CLI — the one decision that would let the tool make accessibility calls a frontier model can't make on its own. I found two candidates that practitioners take seriously: bPCA and APCA, both Andrew Somers' work. I read the licenses. Both have terms designed to keep the algorithms open — a defensible IP choice. It just didn't fit my goal of shipping a closed, monetizable tool. The choice was to open-source the CLI, license a third-party algorithm in a way that didn't make sense at this stage, or build my own algorithm. I built my own — OKCA, OKLCH-derived and independent of APCA.</p>
@@ -1476,7 +1479,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/domain-cli-playbook/` was built on 2026-10-06T09:58:55.348Z -->
+		<!-- This page `/blog/domain-cli-playbook/` was built on 2026-10-07T12:06:03.623Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
