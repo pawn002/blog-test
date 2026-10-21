@@ -893,6 +893,288 @@ img.post-card__image {
 	width: 100%;
 }
 
+/* Swatch comparison table — colour samples with their measured figures as real text.
+ * Swatch colours are set inline per cell; everything around them uses blog tokens. */
+.swatch-table {
+	margin: var(--spacing-xl) 0;
+}
+.swatch-table table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+.article .swatch-table caption {
+	caption-side: bottom;
+	text-align: left;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.article .swatch-table th,
+.article .swatch-table td {
+	padding: var(--spacing-xs);
+	vertical-align: top;
+	text-align: left;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+}
+.swatch-table thead th {
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table thead td:first-child {
+	width: 22%;
+}
+.swatch-table tbody th {
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table tbody th span {
+	display: block;
+	font-weight: normal;
+	color: var(--color-text-subtle);
+}
+.swatch-table__sample {
+	display: block;
+	padding: var(--spacing-md) var(--spacing-sm);
+	margin-bottom: var(--spacing-xs);
+	border-radius: var(--radius-md);
+	font-size: var(--font-size-base);
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table__fig {
+	display: block;
+	white-space: nowrap;
+}
+@media (max-width: 30rem) {
+	.article .swatch-table th,
+	.article .swatch-table td {
+		padding: var(--spacing-xs) 2px;
+	}
+	.swatch-table thead td:first-child {
+		width: 19%;
+	}
+	.swatch-table__sample {
+		padding: var(--spacing-sm) var(--spacing-xs);
+		text-align: center;
+	}
+}
+
+/* Lightness chart — inline SVG; mark fills are data (literal colours), all ink is tokens */
+.lightness-chart {
+	margin: var(--spacing-xl) 0;
+}
+.lightness-chart svg {
+	display: block;
+	width: 100%;
+	max-width: 28rem;
+	height: auto;
+	margin: 0 auto var(--spacing-sm);
+}
+.lightness-chart .t {
+	fill: var(--color-text-default);
+	font-family: var(--font-family-base);
+	font-size: 13px;
+}
+.lightness-chart .h {
+	font-weight: var(--font-weight-semibold);
+}
+.lightness-chart .s {
+	fill: var(--color-text-subtle);
+}
+.lightness-chart .ax {
+	stroke: var(--color-border-strong);
+	stroke-width: 1;
+}
+.lightness-chart .cn {
+	stroke: var(--color-text-subtle);
+	stroke-width: 1.5;
+}
+.lightness-chart .m > :not(title) {
+	stroke: var(--color-text-default);
+	stroke-width: 1.25;
+}
+.article .lightness-chart figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: var(--radius-md);
+}
+.lightness-chart details {
+	margin-top: var(--spacing-sm);
+	font-size: var(--font-size-sm);
+}
+
+/* Chroma chart — extends .lightness-chart; curves told apart by line style, not colour */
+.chroma-chart svg {
+	max-width: 32rem;
+}
+.chroma-chart .ln {
+	fill: none;
+	stroke: var(--color-text-default);
+	stroke-width: 2;
+}
+.chroma-chart .dash {
+	stroke-dasharray: 6 4;
+}
+.chroma-chart .hand,
+.chroma-chart .m > .hand {
+	fill: none;
+	stroke: var(--color-text-subtle);
+	stroke-width: 1.5;
+}
+
+/* Interface mock — fixed light and dark screens; each sets its own --mock-* colours inline */
+.ui-mock {
+	margin: var(--spacing-xl) 0;
+}
+.ui-mock__pair {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-sm);
+}
+@media (min-width: 40rem) {
+	.ui-mock__pair {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+.ui-mock__screen {
+	background: var(--mock-p);
+	color: var(--mock-t);
+	border: 1px solid var(--mock-b);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-sm);
+	font-family: var(--font-family-base);
+	font-size: 0.8rem;
+	line-height: 1.35;
+}
+.article .ui-mock__theme {
+	margin: 0 0 var(--spacing-xs);
+	font-weight: var(--font-weight-semibold);
+	font-size: 0.8rem;
+}
+.ui-mock__body {
+	display: grid;
+	grid-template-columns: 34% 1fr;
+	gap: var(--spacing-sm);
+}
+.ui-mock__nav,
+.ui-mock__lead,
+.ui-mock__card {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	border: 1px solid var(--mock-b);
+	border-radius: var(--radius-sm);
+	padding: var(--spacing-xs) var(--spacing-sm);
+}
+.ui-mock__nav {
+	background: var(--mock-r);
+	color: var(--mock-tss);
+}
+.ui-mock__main {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+.ui-mock__lead {
+	background: var(--mock-f);
+}
+.ui-mock__lead > span:not(.ui-mock__tag) {
+	color: var(--mock-ts);
+}
+.ui-mock__card {
+	background: var(--mock-s);
+}
+.ui-mock__tag {
+	font-family: var(--font-family-mono);
+	font-size: 0.7rem;
+	color: var(--mock-tss);
+	white-space: nowrap;
+}
+.ui-mock__lead .ui-mock__tag,
+.ui-mock__tag--page {
+	color: var(--mock-ts);
+}
+.article .ui-mock figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: var(--radius-md);
+	margin-top: var(--spacing-sm);
+}
+
+/* A wide table scrolls inside its own region instead of widening the page */
+.table-scroll {
+	overflow-x: auto;
+}
+.table-scroll:focus-visible {
+	outline: 2px solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Painting figure — image with an outline layer marking sampled patches.
+ * Chips carry their own opaque background so their contrast never depends on the image. */
+.painting-figure {
+	margin: var(--spacing-xl) 0;
+}
+.painting-figure__frame {
+	position: relative;
+	line-height: 0;
+}
+.painting-figure__frame picture,
+.painting-figure__frame img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.painting-figure__frame svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+.painting-figure__frame rect {
+	fill: none;
+	vector-effect: non-scaling-stroke;
+}
+.painting-figure__frame .halo {
+	stroke: oklch(1 0 0);
+	stroke-width: 4;
+}
+.painting-figure__frame .line {
+	stroke: oklch(0.2 0 0);
+	stroke-width: 2;
+}
+.painting-figure__chip {
+	position: absolute;
+	padding: 2px 6px;
+	border-radius: var(--radius-sm);
+	background: oklch(0.2 0 0);
+	color: oklch(1 0 0);
+	font-family: var(--font-family-base);
+	font-size: 0.75rem;
+	line-height: 1.4;
+	white-space: nowrap;
+}
+.article .painting-figure figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
 /* KaTeX display equations — allow horizontal scroll on narrow viewports
  * so long equations don't force the page wider than the column. */
 .article .katex-display {
@@ -1023,7 +1305,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/ecosystem-design/` was built on 2026-10-09T00:47:09.372Z -->
+		<!-- This page `/tags/ecosystem-design/` was built on 2026-10-21T00:17:00.002Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
