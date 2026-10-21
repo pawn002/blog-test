@@ -1751,77 +1751,7 @@ const ramp =
 <p>The tinted page cost some contrast. Candor's contrast audit re-checks every recorded figure against the current values, and it re-measured forty-seven. Most fell by 0.2 to 0.5, and the lowest, subtle text, sits at 4.8 against a floor of 4.5. My first pass broke two control borders on dark raised surfaces (2.9 against a floor of 3.0), so I moved step 800 to a lightness of 0.30.</p>
 <h2 id="what-it-means-for-anyone-using-candor">What It Means for Anyone Using Candor</h2>
 <p>Semantic token names did not change. A component styled with <code>--color-text-subtle</code> or <code>--color-bg-surface</code> picks up the new values with no edits.</p>
-<p>Grey primitive names did change meaning. Eight 5.x names now resolve to a different colour, six of them to a different lightness: <code>--gray-700</code> was a lightness of 0.32 and is now 0.40, for example. Anyone who referenced a primitive directly should check the migration table.</p>
-<div class="table-scroll" tabindex="0">
-<table>
-<thead>
-<tr>
-<th>5.x primitive</th>
-<th>5.x lightness</th>
-<th>Use now for the same colour</th>
-<th>What the old name means now</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--gray-50</code></td>
-<td>0.97</td>
-<td><code>--gray-25</code> (0.985)</td>
-<td>removed</td>
-</tr>
-<tr>
-<td><code>--gray-200</code></td>
-<td>0.88, faintly warm</td>
-<td><code>--gray-200</code></td>
-<td>pure neutral</td>
-</tr>
-<tr>
-<td><code>--gray-500</code></td>
-<td>0.56</td>
-<td><code>--gray-550</code></td>
-<td>0.62</td>
-</tr>
-<tr>
-<td><code>--gray-600</code></td>
-<td>0.46</td>
-<td><code>--gray-650</code> (0.44)</td>
-<td>0.50</td>
-</tr>
-<tr>
-<td><code>--gray-700</code></td>
-<td>0.32</td>
-<td><code>--gray-800</code> (0.30)</td>
-<td>0.40</td>
-</tr>
-<tr>
-<td><code>--gray-800</code></td>
-<td>0.24, cool</td>
-<td><code>--gray-cool-850</code></td>
-<td>neutral 0.30</td>
-</tr>
-<tr>
-<td><code>--gray-900</code></td>
-<td>0.16, cool</td>
-<td><code>--gray-cool-900</code></td>
-<td>neutral 0.16</td>
-</tr>
-<tr>
-<td><code>--gray-cool-600</code></td>
-<td>0.46</td>
-<td><code>--gray-cool-650</code> (0.44)</td>
-<td>0.50</td>
-</tr>
-<tr>
-<td><code>--gray-cool-700</code></td>
-<td>0.32</td>
-<td><code>--gray-cool-800</code> (0.30)</td>
-<td>0.40</td>
-</tr>
-</tbody>
-</table>
-
-</div><p><code>--gray-0</code>, <code>--gray-100</code>, <code>--gray-300</code> and <code>--gray-400</code> are unchanged.</p>
-<p>The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--before-and-after">before-and-after story</a> shows the same comparison with swatches. Its 6.0 values are read straight from the token source, so it stays accurate as the ramps evolve. The <a href="https://github.com/pawn002/candor/blob/main/docs/BREAKING-CHANGES.md#v600">migration notes</a> cover the rest.</p>
+<p>Grey primitive names did change meaning. Eight 5.x names now resolve to a different colour, six of them to a different lightness: <code>--gray-700</code> was a lightness of 0.32 and is now 0.40, for example. Anyone who referenced a primitive directly should check the <a href="https://github.com/pawn002/candor/blob/main/docs/BREAKING-CHANGES.md#grey-primitives-re-stepped-into-three-ramps-318">migration table in Candor's breaking-changes notes</a>, which maps each old name to the step that holds its colour now. The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--before-and-after">before-and-after story</a> shows the same mapping with swatches, read straight from the token source.</p>
 <h2 id="lessons">Lessons</h2>
 <p><strong>A set of correct values is not yet a system.</strong> Every old grey passed its audit. What the set lacked was a rule a person could predict from, which is what lets the next decision be easy and consistent.</p>
 <p><strong>Let a curve hold the eye's calls.</strong> A designer's eye is still the judge of whether a ramp reads as one family. Fitting a curve to those judgements kept them and made the ramp easy to extend.</p>
@@ -1857,7 +1787,7 @@ const ramp =
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/candor-grey-ramps/` was built on 2026-10-21T01:27:58.124Z -->
+		<!-- This page `/blog/candor-grey-ramps/` was built on 2026-10-21T01:31:10.153Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
