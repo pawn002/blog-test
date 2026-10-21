@@ -1112,8 +1112,7 @@ img.post-card__image {
 	word-break: normal;
 	white-space: pre;
 }
-.article .code-compare figcaption,
-.article .ramp-table caption {
+.article .code-compare figcaption {
 	font-style: normal;
 	font-size: var(--font-size-sm);
 	line-height: var(--line-height-normal);
@@ -1128,122 +1127,8 @@ img.post-card__image {
 /* Code inside captions, data tables and figure panels: Candor's rule, never below 14px */
 .article figcaption code,
 .article caption code,
-.article figure table code,
-.article .ui-mock code {
+.article figure table code {
 	font-size: max(0.9em, var(--font-size-sm));
-}
-
-/* Ramp table — one row per step; swatches are decorative, every value is text */
-.ramp-table {
-	margin: var(--spacing-xl) 0;
-}
-.ramp-table table {
-	width: 100%;
-	border-collapse: collapse;
-}
-.ramp-table caption {
-	caption-side: bottom;
-}
-.article .ramp-table th,
-.article .ramp-table td {
-	padding: 4px 3px;
-	font-size: var(--font-size-sm);
-	text-align: left;
-	vertical-align: middle;
-}
-.ramp-table td span:not(.ramp-table__swatch) {
-	vertical-align: middle;
-}
-.ramp-table__swatch {
-	display: block;
-	width: 1.75rem;
-	height: 1.25rem;
-	margin-bottom: 2px;
-	border-radius: var(--radius-sm);
-	box-shadow: inset 0 0 0 1px var(--color-border-strong);
-}
-
-/* Interface mock — fixed light and dark screens; each sets its own --mock-* colours inline */
-.ui-mock {
-	margin: var(--spacing-xl) 0;
-}
-.ui-mock__pair {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--spacing-sm);
-}
-@media (min-width: 40rem) {
-	.ui-mock__pair {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-.ui-mock__screen {
-	background: var(--mock-p);
-	color: var(--mock-t);
-	border: 1px solid var(--mock-b);
-	border-radius: var(--radius-md);
-	padding: var(--spacing-sm);
-	font-family: var(--font-family-base);
-	font-size: var(--font-size-sm);
-	line-height: 1.35;
-}
-.article .ui-mock__theme {
-	margin: 0 0 var(--spacing-xs);
-	font-weight: var(--font-weight-semibold);
-	font-size: var(--font-size-sm);
-}
-.ui-mock__body {
-	display: grid;
-	grid-template-columns: 34% 1fr;
-	gap: var(--spacing-sm);
-}
-.ui-mock__nav,
-.ui-mock__lead,
-.ui-mock__card {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-	border: 1px solid var(--mock-b);
-	border-radius: var(--radius-sm);
-	padding: var(--spacing-xs) var(--spacing-sm);
-}
-.ui-mock__nav {
-	background: var(--mock-r);
-	color: var(--mock-tss);
-}
-.ui-mock__main {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xs);
-}
-.ui-mock__lead {
-	background: var(--mock-f);
-}
-.ui-mock__lead > span:not(.ui-mock__tag) {
-	color: var(--mock-ts);
-}
-.ui-mock__card {
-	background: var(--mock-s);
-}
-.ui-mock__tag {
-	font-family: var(--font-family-mono);
-	font-size: var(--font-size-sm);
-	color: var(--mock-tss);
-	white-space: nowrap;
-}
-.ui-mock__lead .ui-mock__tag,
-.ui-mock__tag--page {
-	color: var(--mock-ts);
-}
-.article .ui-mock figcaption {
-	font-style: normal;
-	font-size: var(--font-size-sm);
-	line-height: var(--line-height-normal);
-	color: var(--color-text-subtle-on-surface);
-	background: var(--color-bg-surface);
-	padding: var(--spacing-sm);
-	border-radius: var(--radius-md);
-	margin-top: var(--spacing-sm);
 }
 
 /* A wide table scrolls inside its own region instead of widening the page */
@@ -1807,29 +1692,7 @@ const ramp =
 <p>The problem was what those values did not give a designer or a developer. A primitive's name did not predict its colour: <code>--gray-800</code> was cool, <code>--gray-700</code> next to it was not. Choosing a warmer grey meant choosing a different lightness too, which moved contrast. And a new token had nowhere obvious to land, so the next one would likely become another one-off.</p>
 <h2 id="three-ramps-one-scale">Three Ramps, One Scale</h2>
 <p>The new greys are three ramps: neutral <code>--gray-*</code>, cool <code>--gray-cool-*</code> (hue 248.99, the navy undertone) and warm <code>--gray-warm-*</code> (hue 69, opposite cool on the hue wheel). All three share the same 14 steps: 0, 25, 100, 200, 300, 400, 500, 550, 600, 650, 700, 800, 850 and 900.</p>
-<div class="ramp-table">
-<table>
-<caption>Candor 6.0's three grey ramps. Each row is one step: its neutral, cool and warm versions share a lightness (L, in OKLCH) and differ only in temperature. C is chroma, the amount of tint, which is zero for neutral and follows the curve described below for cool and warm. Step 0, pure white, exists only in the neutral ramp.</caption>
-<thead><tr><th scope="col">Step</th><th scope="col">L</th><th scope="col">Neutral</th><th scope="col">Cool</th><th scope="col">Warm</th></tr></thead>
-<tbody>
-<tr><th scope="row">0</th><td>1</td><td><span class="ramp-table__swatch" style="background: oklch(1 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span>neutral only</span></td><td><span>neutral only</span></td></tr>
-<tr><th scope="row">25</th><td>0.985</td><td><span class="ramp-table__swatch" style="background: oklch(0.985 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.985 0.006 248.99)" aria-hidden="true"></span><span>C 0.006</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.985 0.005 69)" aria-hidden="true"></span><span>C 0.005</span></td></tr>
-<tr><th scope="row">100</th><td>0.91</td><td><span class="ramp-table__swatch" style="background: oklch(0.91 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.91 0.013 248.99)" aria-hidden="true"></span><span>C 0.013</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.91 0.01 69)" aria-hidden="true"></span><span>C 0.01</span></td></tr>
-<tr><th scope="row">200</th><td>0.88</td><td><span class="ramp-table__swatch" style="background: oklch(0.88 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.88 0.014 248.99)" aria-hidden="true"></span><span>C 0.014</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.88 0.011 69)" aria-hidden="true"></span><span>C 0.011</span></td></tr>
-<tr><th scope="row">300</th><td>0.81</td><td><span class="ramp-table__swatch" style="background: oklch(0.81 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.81 0.018 248.99)" aria-hidden="true"></span><span>C 0.018</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.81 0.014 69)" aria-hidden="true"></span><span>C 0.014</span></td></tr>
-<tr><th scope="row">400</th><td>0.71</td><td><span class="ramp-table__swatch" style="background: oklch(0.71 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.71 0.021 248.99)" aria-hidden="true"></span><span>C 0.021</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.71 0.015 69)" aria-hidden="true"></span><span>C 0.015</span></td></tr>
-<tr><th scope="row">500</th><td>0.62</td><td><span class="ramp-table__swatch" style="background: oklch(0.62 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.62 0.023 248.99)" aria-hidden="true"></span><span>C 0.023</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.62 0.016 69)" aria-hidden="true"></span><span>C 0.016</span></td></tr>
-<tr><th scope="row">550</th><td>0.56</td><td><span class="ramp-table__swatch" style="background: oklch(0.56 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.56 0.024 248.99)" aria-hidden="true"></span><span>C 0.024</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.56 0.017 69)" aria-hidden="true"></span><span>C 0.017</span></td></tr>
-<tr><th scope="row">600</th><td>0.5</td><td><span class="ramp-table__swatch" style="background: oklch(0.5 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.5 0.025 248.99)" aria-hidden="true"></span><span>C 0.025</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.5 0.017 69)" aria-hidden="true"></span><span>C 0.017</span></td></tr>
-<tr><th scope="row">650</th><td>0.44</td><td><span class="ramp-table__swatch" style="background: oklch(0.44 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.44 0.025 248.99)" aria-hidden="true"></span><span>C 0.025</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.44 0.017 69)" aria-hidden="true"></span><span>C 0.017</span></td></tr>
-<tr><th scope="row">700</th><td>0.4</td><td><span class="ramp-table__swatch" style="background: oklch(0.4 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.4 0.026 248.99)" aria-hidden="true"></span><span>C 0.026</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.4 0.017 69)" aria-hidden="true"></span><span>C 0.017</span></td></tr>
-<tr><th scope="row">800</th><td>0.3</td><td><span class="ramp-table__swatch" style="background: oklch(0.3 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.3 0.026 248.99)" aria-hidden="true"></span><span>C 0.026</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.3 0.016 69)" aria-hidden="true"></span><span>C 0.016</span></td></tr>
-<tr><th scope="row">850</th><td>0.24</td><td><span class="ramp-table__swatch" style="background: oklch(0.24 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.24 0.026 248.99)" aria-hidden="true"></span><span>C 0.026</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.24 0.015 69)" aria-hidden="true"></span><span>C 0.015</span></td></tr>
-<tr><th scope="row">900</th><td>0.16</td><td><span class="ramp-table__swatch" style="background: oklch(0.16 0 0)" aria-hidden="true"></span><span>C 0</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.16 0.025 248.99)" aria-hidden="true"></span><span>C 0.025</span></td><td><span class="ramp-table__swatch" style="background: oklch(0.16 0.013 69)" aria-hidden="true"></span><span>C 0.013</span></td></tr>
-</tbody>
-</table>
-</div>
-<p>Read the table by rows. A step number means the same lightness in every ramp, so <code>--gray-cool-300</code> and <code>--gray-warm-300</code> have the same lightness and differ only in temperature. Moving a surface from cool to warm is now a decision about temperature alone, and its contrast against text barely moves. That independence is also what lets temperature rank surfaces, which a later section covers.</p>
+<p>The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--ramps">6.0 ramps story</a> in Candor's Storybook lays them out side by side, one row per step. A step number means the same lightness in every ramp, so <code>--gray-cool-300</code> and <code>--gray-warm-300</code> have the same lightness and differ only in temperature. Moving a surface from cool to warm is now a decision about temperature alone, and its contrast against text barely moves. That independence is also what lets temperature rank surfaces, which a later section covers.</p>
 <div class="swatch-table">
 <table>
 <caption>The same body text on the neutral, cool and warm versions of one step, in each theme. The tints differ from neutral by a ΔE of 5 to 8, enough to see, and contrast is identical across each row. Row labels give the text step, then the background step. Figures measured with klar: OKCA first, then WCAG 2.</caption>
@@ -1846,12 +1709,7 @@ const ramp =
 </tbody>
 </table>
 </div>
-<p>I spaced the steps unevenly on purpose. Steps 550, 600 and 650 are there because subtle text and borders need those exact lightnesses to clear their contrast floors. Putting the steps where Candor's own tokens needed them is what let every grey semantic token name a step, so none of them is a one-off any more. Pure white belongs to the neutral ramp alone; the tinted ramps start at 25.</p>
-<figure class="lightness-chart">
-<ul class="chart-legend"><li><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"></circle></svg>neutral</li><li><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="2"></rect></svg>cool</li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1 L15 8 L8 15 L1 8 Z"></path></svg>warm</li></ul><svg viewBox="0 0 300 640" role="img" aria-labelledby="gl-title gl-desc"><title id="gl-title">Candor greys by lightness, 5.x and 6.0</title><desc id="gl-desc">Three columns on one lightness axis, white at the top and black at the bottom: the 5.x ramp steps, the ten 5.x greys in use that sat on no ramp, and the fourteen 6.0 steps. Lines join each off-ramp grey to the 6.0 step it uses now. Seven land at exactly their old lightness; three move to the nearest step. The data table after the chart lists every value.</desc><text x="92" y="20" text-anchor="middle" class="t h">5.x ramp</text><text x="92" y="39" text-anchor="middle" class="t h">steps</text><text x="170" y="20" text-anchor="middle" class="t h">Off-ramp</text><text x="170" y="39" text-anchor="middle" class="t h">5.x greys</text><text x="240" y="20" text-anchor="middle" class="t h">6.0</text><text x="240" y="39" text-anchor="middle" class="t h">steps</text><line x1="38" y1="76.0" x2="38" y2="616.0" class="ax"></line><line x1="34" y1="76.0" x2="38" y2="76.0" class="ax"></line><text x="31" y="81.0" text-anchor="end" class="t s">1.0</text><line x1="34" y1="201.6" x2="38" y2="201.6" class="ax"></line><text x="31" y="206.6" text-anchor="end" class="t s">0.8</text><line x1="34" y1="327.2" x2="38" y2="327.2" class="ax"></line><text x="31" y="332.2" text-anchor="end" class="t s">0.6</text><line x1="34" y1="452.7" x2="38" y2="452.7" class="ax"></line><text x="31" y="457.7" text-anchor="end" class="t s">0.4</text><line x1="34" y1="578.3" x2="38" y2="578.3" class="ax"></line><text x="31" y="583.3" text-anchor="end" class="t s">0.2</text><line x1="178.0" y1="390.0" x2="220.0" y2="390.0" class="cn"></line><line x1="178.0" y1="427.6" x2="220.0" y2="427.6" class="cn"></line><line x1="178.0" y1="371.1" x2="220.0" y2="390.0" class="cn"></line><line x1="178.0" y1="233.0" x2="220.0" y2="195.3" class="cn"></line><line x1="178.0" y1="515.5" x2="220.0" y2="515.5" class="cn"></line><line x1="170.0" y1="452.7" x2="220.0" y2="452.7" class="cn"></line><line x1="178.0" y1="151.3" x2="220.0" y2="151.3" class="cn"></line><line x1="186.0" y1="452.7" x2="220.0" y2="452.7" class="cn"></line><line x1="178.0" y1="170.2" x2="220.0" y2="151.3" class="cn"></line><line x1="178.0" y1="314.6" x2="220.0" y2="314.6" class="cn"></line><g class="m"><title>5.x --gray-0: oklch(1 0 0), neutral</title><circle cx="92.0" cy="76.0" r="7" fill="oklch(1 0 0)"></circle></g><text x="79" y="81.0" text-anchor="end" class="t s">0</text><g class="m"><title>5.x --gray-50: oklch(0.97 0 0), neutral</title><circle cx="92.0" cy="94.8" r="7" fill="oklch(0.97 0 0)"></circle></g><text x="79" y="99.8" text-anchor="end" class="t s">50</text><g class="m"><title>5.x --gray-100: oklch(0.91 0 0), neutral</title><circle cx="92.0" cy="132.5" r="7" fill="oklch(0.91 0 0)"></circle></g><text x="79" y="137.5" text-anchor="end" class="t s">100</text><g class="m"><title>5.x --gray-200: oklch(0.88 0.005 17.2), warm</title><path d="M92.0 143.3 L100.0 151.3 L92.0 159.3 L84.0 151.3 Z" fill="oklch(0.88 0.005 17.2)"></path></g><text x="79" y="156.3" text-anchor="end" class="t s">200</text><g class="m"><title>5.x --gray-300: oklch(0.81 0 0), neutral</title><circle cx="92.0" cy="195.3" r="7" fill="oklch(0.81 0 0)"></circle></g><text x="79" y="200.3" text-anchor="end" class="t s">300</text><g class="m"><title>5.x --gray-400: oklch(0.71 0 0), neutral</title><circle cx="92.0" cy="258.1" r="7" fill="oklch(0.71 0 0)"></circle></g><text x="79" y="263.1" text-anchor="end" class="t s">400</text><g class="m"><title>5.x --gray-500: oklch(0.56 0 0), neutral</title><circle cx="92.0" cy="352.3" r="7" fill="oklch(0.56 0 0)"></circle></g><text x="79" y="357.3" text-anchor="end" class="t s">500</text><g class="m"><title>5.x --gray-600: oklch(0.46 0 0), neutral</title><circle cx="83.0" cy="415.1" r="7" fill="oklch(0.46 0 0)"></circle></g><text x="70" y="420.1" text-anchor="end" class="t s">600</text><g class="m"><title>5.x --gray-cool-600: oklch(0.46 0.03 248.99), cool</title><rect x="94.5" y="408.6" width="13" height="13" rx="2" fill="oklch(0.46 0.03 248.99)"></rect></g><g class="m"><title>5.x --gray-700: oklch(0.32 0 0), neutral</title><circle cx="83.0" cy="503.0" r="7" fill="oklch(0.32 0 0)"></circle></g><text x="70" y="508.0" text-anchor="end" class="t s">700</text><g class="m"><title>5.x --gray-cool-700: oklch(0.32 0.03 248.99), cool</title><rect x="94.5" y="496.5" width="13" height="13" rx="2" fill="oklch(0.32 0.03 248.99)"></rect></g><g class="m"><title>5.x --gray-800: oklch(0.24 0.03 248.99), cool</title><rect x="85.5" y="546.7" width="13" height="13" rx="2" fill="oklch(0.24 0.03 248.99)"></rect></g><text x="79" y="558.2" text-anchor="end" class="t s">800</text><g class="m"><title>5.x --gray-900: oklch(0.16 0.02 248.99), cool</title><rect x="85.5" y="596.9" width="13" height="13" rx="2" fill="oklch(0.16 0.02 248.99)"></rect></g><text x="79" y="608.4" text-anchor="end" class="t s">900</text><g class="m"><title>5.x --color-text-subtle (light): oklch(0.5 0 0), neutral; now --gray-600</title><circle cx="170.0" cy="390.0" r="7" fill="oklch(0.5 0 0)"></circle></g><g class="m"><title>5.x --color-text-subtle-on-surface (light): oklch(0.44 0 0), neutral; now --gray-650</title><circle cx="170.0" cy="427.6" r="7" fill="oklch(0.44 0 0)"></circle></g><g class="m"><title>5.x --color-border-control (light): oklch(0.53 0 0), neutral; now --gray-600</title><circle cx="170.0" cy="371.1" r="7" fill="oklch(0.53 0 0)"></circle></g><g class="m"><title>5.x --color-text-subtle-on-inverse (light): oklch(0.75 0.02 245), cool; now --gray-300</title><rect x="163.5" y="226.5" width="13" height="13" rx="2" fill="oklch(0.75 0.02 245)"></rect></g><g class="m"><title>5.x --color-bg-elevated (dark): oklch(0.3 0.02 248), cool; now --gray-cool-800</title><rect x="163.5" y="509.0" width="13" height="13" rx="2" fill="oklch(0.3 0.02 248)"></rect></g><g class="m"><title>5.x --color-bg-muted (dark): oklch(0.4 0.03 248.99), cool; now --gray-cool-700</title><rect x="155.5" y="446.2" width="13" height="13" rx="2" fill="oklch(0.4 0.03 248.99)"></rect></g><g class="m"><title>5.x --color-text-default (dark): oklch(0.88 0.01 248), cool; now --gray-200</title><rect x="163.5" y="144.8" width="13" height="13" rx="2" fill="oklch(0.88 0.01 248)"></rect></g><g class="m"><title>5.x --color-text-subtle-on-inverse (dark): oklch(0.4 0 0), neutral; now --gray-700</title><circle cx="178.0" cy="452.7" r="7" fill="oklch(0.4 0 0)"></circle></g><g class="m"><title>5.x --color-border-on-inverse (dark): oklch(0.85 0 0), neutral; now --gray-200</title><circle cx="170.0" cy="170.2" r="7" fill="oklch(0.85 0 0)"></circle></g><g class="m"><title>5.x --color-border-control (dark): oklch(0.62 0 0), neutral; now --gray-500</title><circle cx="170.0" cy="314.6" r="7" fill="oklch(0.62 0 0)"></circle></g><g class="m"><title>6.0 step 0: lightness 1 in every ramp</title><rect x="223" y="71.0" width="9" height="10" rx="2" fill="oklch(1 0 0)"></rect></g><text x="218" y="81.0" text-anchor="end" class="t s">0</text><g class="m"><title>6.0 step 25: lightness 0.985 in every ramp</title><rect x="223" y="80.4" width="9" height="10" rx="2" fill="oklch(0.985 0 0)"></rect><rect x="232" y="80.4" width="9" height="10" rx="2" fill="oklch(0.985 0.006 248.99)"></rect><rect x="241" y="80.4" width="9" height="10" rx="2" fill="oklch(0.985 0.005 69)"></rect></g><text x="255" y="90.4" class="t s">25</text><g class="m"><title>6.0 step 100: lightness 0.91 in every ramp</title><rect x="223" y="127.5" width="9" height="10" rx="2" fill="oklch(0.91 0 0)"></rect><rect x="232" y="127.5" width="9" height="10" rx="2" fill="oklch(0.91 0.013 248.99)"></rect><rect x="241" y="127.5" width="9" height="10" rx="2" fill="oklch(0.91 0.01 69)"></rect></g><text x="255" y="137.5" class="t s">100</text><g class="m"><title>6.0 step 200: lightness 0.88 in every ramp</title><rect x="223" y="146.3" width="9" height="10" rx="2" fill="oklch(0.88 0 0)"></rect><rect x="232" y="146.3" width="9" height="10" rx="2" fill="oklch(0.88 0.014 248.99)"></rect><rect x="241" y="146.3" width="9" height="10" rx="2" fill="oklch(0.88 0.011 69)"></rect></g><text x="255" y="156.3" class="t s">200</text><g class="m"><title>6.0 step 300: lightness 0.81 in every ramp</title><rect x="223" y="190.3" width="9" height="10" rx="2" fill="oklch(0.81 0 0)"></rect><rect x="232" y="190.3" width="9" height="10" rx="2" fill="oklch(0.81 0.018 248.99)"></rect><rect x="241" y="190.3" width="9" height="10" rx="2" fill="oklch(0.81 0.014 69)"></rect></g><text x="255" y="200.3" class="t s">300</text><g class="m"><title>6.0 step 400: lightness 0.71 in every ramp</title><rect x="223" y="253.1" width="9" height="10" rx="2" fill="oklch(0.71 0 0)"></rect><rect x="232" y="253.1" width="9" height="10" rx="2" fill="oklch(0.71 0.021 248.99)"></rect><rect x="241" y="253.1" width="9" height="10" rx="2" fill="oklch(0.71 0.015 69)"></rect></g><text x="255" y="263.1" class="t s">400</text><g class="m"><title>6.0 step 500: lightness 0.62 in every ramp</title><rect x="223" y="309.6" width="9" height="10" rx="2" fill="oklch(0.62 0 0)"></rect><rect x="232" y="309.6" width="9" height="10" rx="2" fill="oklch(0.62 0.023 248.99)"></rect><rect x="241" y="309.6" width="9" height="10" rx="2" fill="oklch(0.62 0.016 69)"></rect></g><text x="255" y="319.6" class="t s">500</text><g class="m"><title>6.0 step 550: lightness 0.56 in every ramp</title><rect x="223" y="347.3" width="9" height="10" rx="2" fill="oklch(0.56 0 0)"></rect><rect x="232" y="347.3" width="9" height="10" rx="2" fill="oklch(0.56 0.024 248.99)"></rect><rect x="241" y="347.3" width="9" height="10" rx="2" fill="oklch(0.56 0.017 69)"></rect></g><text x="255" y="357.3" class="t s">550</text><g class="m"><title>6.0 step 600: lightness 0.5 in every ramp</title><rect x="223" y="385.0" width="9" height="10" rx="2" fill="oklch(0.5 0 0)"></rect><rect x="232" y="385.0" width="9" height="10" rx="2" fill="oklch(0.5 0.025 248.99)"></rect><rect x="241" y="385.0" width="9" height="10" rx="2" fill="oklch(0.5 0.017 69)"></rect></g><text x="255" y="395.0" class="t s">600</text><g class="m"><title>6.0 step 650: lightness 0.44 in every ramp</title><rect x="223" y="422.6" width="9" height="10" rx="2" fill="oklch(0.44 0 0)"></rect><rect x="232" y="422.6" width="9" height="10" rx="2" fill="oklch(0.44 0.025 248.99)"></rect><rect x="241" y="422.6" width="9" height="10" rx="2" fill="oklch(0.44 0.017 69)"></rect></g><text x="255" y="432.6" class="t s">650</text><g class="m"><title>6.0 step 700: lightness 0.4 in every ramp</title><rect x="223" y="447.7" width="9" height="10" rx="2" fill="oklch(0.4 0 0)"></rect><rect x="232" y="447.7" width="9" height="10" rx="2" fill="oklch(0.4 0.026 248.99)"></rect><rect x="241" y="447.7" width="9" height="10" rx="2" fill="oklch(0.4 0.017 69)"></rect></g><text x="255" y="457.7" class="t s">700</text><g class="m"><title>6.0 step 800: lightness 0.3 in every ramp</title><rect x="223" y="510.5" width="9" height="10" rx="2" fill="oklch(0.3 0 0)"></rect><rect x="232" y="510.5" width="9" height="10" rx="2" fill="oklch(0.3 0.026 248.99)"></rect><rect x="241" y="510.5" width="9" height="10" rx="2" fill="oklch(0.3 0.016 69)"></rect></g><text x="255" y="520.5" class="t s">800</text><g class="m"><title>6.0 step 850: lightness 0.24 in every ramp</title><rect x="223" y="548.2" width="9" height="10" rx="2" fill="oklch(0.24 0 0)"></rect><rect x="232" y="548.2" width="9" height="10" rx="2" fill="oklch(0.24 0.026 248.99)"></rect><rect x="241" y="548.2" width="9" height="10" rx="2" fill="oklch(0.24 0.015 69)"></rect></g><text x="255" y="558.2" class="t s">850</text><g class="m"><title>6.0 step 900: lightness 0.16 in every ramp</title><rect x="223" y="598.4" width="9" height="10" rx="2" fill="oklch(0.16 0 0)"></rect><rect x="232" y="598.4" width="9" height="10" rx="2" fill="oklch(0.16 0.025 248.99)"></rect><rect x="241" y="598.4" width="9" height="10" rx="2" fill="oklch(0.16 0.013 69)"></rect></g><text x="255" y="608.4" class="t s">900</text></svg>
-<figcaption>Every 5.x grey, and every 6.0 step, by lightness. Shape gives temperature: circle neutral, square cool, diamond warm. In the 6.0 column each step shows its neutral, cool and warm versions; step 0, white, is neutral only. Each line joins a grey that sat on no 5.x ramp to the 6.0 step it uses now. Seven of the ten land at exactly their old lightness; the other three move to the nearest step. The 5.x primitives are mapped in the migration table below.</figcaption>
-<details><summary>Data: the ten off-ramp greys and the step each uses now</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Off-ramp grey data, scrolls sideways"><table><thead><tr><th scope="col">Token</th><th scope="col">Mode</th><th scope="col">5.x value</th><th scope="col">6.0 step</th></tr></thead><tbody><tr><td><code>--color-text-subtle</code></td><td>light</td><td><code>oklch(0.5 0 0)</code></td><td><code>--gray-600</code> (0.5)</td></tr><tr><td><code>--color-text-subtle-on-surface</code></td><td>light</td><td><code>oklch(0.44 0 0)</code></td><td><code>--gray-650</code> (0.44)</td></tr><tr><td><code>--color-border-control</code></td><td>light</td><td><code>oklch(0.53 0 0)</code></td><td><code>--gray-600</code> (0.5)</td></tr><tr><td><code>--color-text-subtle-on-inverse</code></td><td>light</td><td><code>oklch(0.75 0.02 245)</code></td><td><code>--gray-300</code> (0.81)</td></tr><tr><td><code>--color-bg-elevated</code></td><td>dark</td><td><code>oklch(0.3 0.02 248)</code></td><td><code>--gray-cool-800</code> (0.3)</td></tr><tr><td><code>--color-bg-muted</code></td><td>dark</td><td><code>oklch(0.4 0.03 248.99)</code></td><td><code>--gray-cool-700</code> (0.4)</td></tr><tr><td><code>--color-text-default</code></td><td>dark</td><td><code>oklch(0.88 0.01 248)</code></td><td><code>--gray-200</code> (0.88)</td></tr><tr><td><code>--color-text-subtle-on-inverse</code></td><td>dark</td><td><code>oklch(0.4 0 0)</code></td><td><code>--gray-700</code> (0.4)</td></tr><tr><td><code>--color-border-on-inverse</code></td><td>dark</td><td><code>oklch(0.85 0 0)</code></td><td><code>--gray-200</code> (0.88)</td></tr><tr><td><code>--color-border-control</code></td><td>dark</td><td><code>oklch(0.62 0 0)</code></td><td><code>--gray-500</code> (0.62)</td></tr></tbody></table></div></details>
-</figure>
+<p>I spaced the steps unevenly on purpose. Steps 550, 600 and 650 are there because subtle text and borders need those exact lightnesses to clear their contrast floors. Putting the steps where Candor's own tokens needed them is what let every grey semantic token name a step, so none of them is a one-off any more. Pure white belongs to the neutral ramp alone; the tinted ramps start at 25. Of the ten greys that sat between 5.x steps, seven now land on a step at exactly their old lightness; the <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--off-ramp">off-ramp greys story</a> lists each one and the step it uses now.</p>
 <h2 id="chroma-from-one-curve">Chroma From One Curve</h2>
 <p>OKLCH came with a promise for accessibility. It separates a colour into lightness, chroma (colourfulness) and hue, so a designer can move a colour's lightness until it meets a contrast floor and, in principle, keep its identity, brand colour included. Years of working in it, with other designers and while maintaining Candor, showed me where that falls short. Most people will still call a darker version of a brand colour on brand. Make it lighter and most can't say the same. Holding chroma and hue fixed does not hold a colour's identity across a ramp, brand colour or not, which is why Candor's tinted greys change chroma as lightness changes.</p>
 <p>The greys have their own version of the problem. Too much chroma near black and a grey turns muddy; too little in the middle and the tint disappears. Judging whether a ramp's steps still read as one family is work for a designer's eye, and the old cool ramp was made that way. Hand-set steps are hard to keep smooth or to extend, though, and I wanted a system. A mathematical curve turned out to be the answer: it unites calibrated, accessible calls into one coherent ramp.</p>
@@ -1884,10 +1742,6 @@ const ramp =
 </figure>
 <p>An interface needs that rule, warm forward and cool back, all the time. A screen usually has a few things that should lead, more that support them, and chrome that should stay out of the way, and the differences between them are often too fine for size or weight alone. Handling hierarchy across all those cases takes temperature as a dial the system can turn without disturbing anything else. Three ramps on one lightness scale are that dial, and building them was a chance to work the way the masters did.</p>
 <p>Two new tokens put it to work. <code>--color-bg-forward</code> is warm, for the one thing a screen should lead with. <code>--color-bg-recede</code> is cool, for chrome that should step back. Each keeps the lightness of the surface it replaces, so text contrast holds. (The one exception is dark-mode recede, which steps a little darker, since dark surfaces are already cool.)</p>
-<figure class="ui-mock">
-<div class="ui-mock__pair" role="img" aria-label="A small interface shown in light and dark. In each, a side navigation uses the cool recede surface, a lead card reading Start here uses the warm forward surface, and two other cards use the neutral surface. The lead card is the warmest thing on the screen and the navigation the coolest."><div class="ui-mock__screen" style="--mock-p: oklch(0.985 0.006 248.99); --mock-s: oklch(0.91 0 0); --mock-f: oklch(0.985 0.005 69); --mock-r: oklch(0.91 0.013 248.99); --mock-b: oklch(0.88 0 0); --mock-t: oklch(0.30 0 0); --mock-ts: oklch(0.5 0 0); --mock-tss: oklch(0.44 0 0)"><p class="ui-mock__theme">Light</p><div class="ui-mock__body"><div class="ui-mock__nav"><span class="ui-mock__tag">bg-recede</span><span>Overview</span><span>Reports</span><span>Settings</span></div><div class="ui-mock__main"><div class="ui-mock__lead"><span class="ui-mock__tag">bg-forward</span><strong>Start here</strong><span>Finish setting up your project.</span></div><div class="ui-mock__card"><span class="ui-mock__tag">bg-surface</span><strong>Recent activity</strong></div><div class="ui-mock__card"><span class="ui-mock__tag">bg-surface</span><strong>Team</strong></div><span class="ui-mock__tag ui-mock__tag--page">bg-page</span></div></div></div><div class="ui-mock__screen" style="--mock-p: oklch(0.16 0.025 248.99); --mock-s: oklch(0.24 0.026 248.99); --mock-f: oklch(0.30 0.016 69); --mock-r: oklch(0.16 0.025 248.99); --mock-b: oklch(0.44 0 0); --mock-t: oklch(0.88 0 0); --mock-ts: oklch(0.71 0 0); --mock-tss: oklch(0.71 0 0)"><p class="ui-mock__theme">Dark</p><div class="ui-mock__body"><div class="ui-mock__nav"><span class="ui-mock__tag">bg-recede</span><span>Overview</span><span>Reports</span><span>Settings</span></div><div class="ui-mock__main"><div class="ui-mock__lead"><span class="ui-mock__tag">bg-forward</span><strong>Start here</strong><span>Finish setting up your project.</span></div><div class="ui-mock__card"><span class="ui-mock__tag">bg-surface</span><strong>Recent activity</strong></div><div class="ui-mock__card"><span class="ui-mock__tag">bg-surface</span><strong>Team</strong></div><span class="ui-mock__tag ui-mock__tag--page">bg-page</span></div></div></div></div>
-<figcaption>The two intent tokens in use, with Candor 6.0's values. The lead card is <code>--color-bg-forward</code>, warm; the side navigation is <code>--color-bg-recede</code>, cool; the other cards are <code>--color-bg-surface</code>. In light mode, forward keeps the page's lightness and differs from it by temperature alone, a ΔE of 4, so the card's border still does the separating. In dark mode, recede is the page colour itself, so the navigation sinks back, and forward takes the raised-card lightness and turns warm. Every text pairing shown measures at least 4.6 (OKCA) with klar.</figcaption>
-</figure>
 <p>The warm paper tone from the code-block experiment has a home in the system now: <code>--gray-warm-25</code>, the forward surface in light mode, is a warm neutral of the kind it was missing. The code blocks themselves went a different way, to a quiet teal tint.</p>
 <p>One accessibility rule governs both tokens: temperature guides the eye and never carries meaning by itself. A warm card can say &quot;start here,&quot; but it cannot be the only way a page says &quot;this is an error.&quot; Anyone who cannot perceive the difference loses only emphasis, never information.</p>
 <h2 id="what-changed-around-the-greys">What Changed Around the Greys</h2>
@@ -1966,7 +1820,7 @@ const ramp =
 </table>
 
 </div><p><code>--gray-0</code>, <code>--gray-100</code>, <code>--gray-300</code> and <code>--gray-400</code> are unchanged.</p>
-<p>Candor's Storybook shows the same comparison with swatches in <em>Design Tokens/Grey Ramps</em>, which also lists the greys that used to sit off a ramp and the step each uses now. The 6.0 values there are read straight from the token source, so the page stays accurate as the ramps evolve. The <a href="https://github.com/pawn002/candor/blob/main/docs/BREAKING-CHANGES.md#v600">migration notes</a> cover the rest.</p>
+<p>The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--before-and-after">before-and-after story</a> shows the same comparison with swatches. Its 6.0 values are read straight from the token source, so it stays accurate as the ramps evolve. The <a href="https://github.com/pawn002/candor/blob/main/docs/BREAKING-CHANGES.md#v600">migration notes</a> cover the rest.</p>
 <h2 id="lessons">Lessons</h2>
 <p><strong>A set of correct values is not yet a system.</strong> Every old grey passed its audit. What the set lacked was a rule a person could predict from, which is what lets the next decision be easy and consistent.</p>
 <p><strong>Let a curve hold the eye's calls.</strong> A designer's eye is still the judge of whether a ramp reads as one family. Fitting a curve to those judgements kept them and made the ramp easy to extend.</p>
@@ -2002,7 +1856,7 @@ const ramp =
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/candor-grey-ramps/` was built on 2026-10-21T00:51:10.212Z -->
+		<!-- This page `/blog/candor-grey-ramps/` was built on 2026-10-21T01:16:24.977Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

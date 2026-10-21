@@ -1115,8 +1115,7 @@ img.post-card__image {
 	word-break: normal;
 	white-space: pre;
 }
-.article .code-compare figcaption,
-.article .ramp-table caption {
+.article .code-compare figcaption {
 	font-style: normal;
 	font-size: var(--font-size-sm);
 	line-height: var(--line-height-normal);
@@ -1131,122 +1130,8 @@ img.post-card__image {
 /* Code inside captions, data tables and figure panels: Candor's rule, never below 14px */
 .article figcaption code,
 .article caption code,
-.article figure table code,
-.article .ui-mock code {
+.article figure table code {
 	font-size: max(0.9em, var(--font-size-sm));
-}
-
-/* Ramp table — one row per step; swatches are decorative, every value is text */
-.ramp-table {
-	margin: var(--spacing-xl) 0;
-}
-.ramp-table table {
-	width: 100%;
-	border-collapse: collapse;
-}
-.ramp-table caption {
-	caption-side: bottom;
-}
-.article .ramp-table th,
-.article .ramp-table td {
-	padding: 4px 3px;
-	font-size: var(--font-size-sm);
-	text-align: left;
-	vertical-align: middle;
-}
-.ramp-table td span:not(.ramp-table__swatch) {
-	vertical-align: middle;
-}
-.ramp-table__swatch {
-	display: block;
-	width: 1.75rem;
-	height: 1.25rem;
-	margin-bottom: 2px;
-	border-radius: var(--radius-sm);
-	box-shadow: inset 0 0 0 1px var(--color-border-strong);
-}
-
-/* Interface mock — fixed light and dark screens; each sets its own --mock-* colours inline */
-.ui-mock {
-	margin: var(--spacing-xl) 0;
-}
-.ui-mock__pair {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--spacing-sm);
-}
-@media (min-width: 40rem) {
-	.ui-mock__pair {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-.ui-mock__screen {
-	background: var(--mock-p);
-	color: var(--mock-t);
-	border: 1px solid var(--mock-b);
-	border-radius: var(--radius-md);
-	padding: var(--spacing-sm);
-	font-family: var(--font-family-base);
-	font-size: var(--font-size-sm);
-	line-height: 1.35;
-}
-.article .ui-mock__theme {
-	margin: 0 0 var(--spacing-xs);
-	font-weight: var(--font-weight-semibold);
-	font-size: var(--font-size-sm);
-}
-.ui-mock__body {
-	display: grid;
-	grid-template-columns: 34% 1fr;
-	gap: var(--spacing-sm);
-}
-.ui-mock__nav,
-.ui-mock__lead,
-.ui-mock__card {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-	border: 1px solid var(--mock-b);
-	border-radius: var(--radius-sm);
-	padding: var(--spacing-xs) var(--spacing-sm);
-}
-.ui-mock__nav {
-	background: var(--mock-r);
-	color: var(--mock-tss);
-}
-.ui-mock__main {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xs);
-}
-.ui-mock__lead {
-	background: var(--mock-f);
-}
-.ui-mock__lead > span:not(.ui-mock__tag) {
-	color: var(--mock-ts);
-}
-.ui-mock__card {
-	background: var(--mock-s);
-}
-.ui-mock__tag {
-	font-family: var(--font-family-mono);
-	font-size: var(--font-size-sm);
-	color: var(--mock-tss);
-	white-space: nowrap;
-}
-.ui-mock__lead .ui-mock__tag,
-.ui-mock__tag--page {
-	color: var(--mock-ts);
-}
-.article .ui-mock figcaption {
-	font-style: normal;
-	font-size: var(--font-size-sm);
-	line-height: var(--line-height-normal);
-	color: var(--color-text-subtle-on-surface);
-	background: var(--color-bg-surface);
-	padding: var(--spacing-sm);
-	border-radius: var(--radius-md);
-	margin-top: var(--spacing-sm);
 }
 
 /* A wide table scrolls inside its own region instead of widening the page */
@@ -1888,7 +1773,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/accessible_ai_llm_outputs/` was built on 2026-10-21T00:51:10.210Z -->
+		<!-- This page `/blog/accessible_ai_llm_outputs/` was built on 2026-10-21T01:16:24.976Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
