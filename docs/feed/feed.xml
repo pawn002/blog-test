@@ -11,13 +11,13 @@
     <name>John Rioflorido</name>
   </author>
   <entry>
-    <title>Greys Without a Ramp: How Candor Rebuilt Its Neutrals on One Lightness Scale</title>
+    <title>Greys Without a Ramp: Rebuilding a Design System&#39;s Neutrals in OKLCH</title>
     <link href="https://pawn002.github.io/blog-test/blog/candor-grey-ramps/" />
     <updated>2026-10-17T00:00:00Z</updated>
     <id>https://pawn002.github.io/blog-test/blog/candor-grey-ramps/</id>
     <content type="html">&lt;div class=&quot;exec-summary&quot;&gt;
 &lt;h2 id=&quot;executive-summary&quot;&gt;Executive Summary&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/pawn002/candor&quot;&gt;Candor&lt;/a&gt;, my design system, had greys that each passed their contrast audit and, taken together, did not form a system. One ramp held three temperatures, a second cool ramp had two steps, and many greys in use sat at lightnesses no ramp had. Version 6.0 replaces them with three ramps (neutral, cool and warm) that share one lightness scale, so a step number means the same lightness in every ramp and changing temperature barely changes contrast. Chroma in the tinted ramps comes from one curve, because holding chroma fixed does not hold a colour&#39;s identity as it lightens. Temperature now does a job of its own: warm surfaces come forward and cool ones recede. This post covers why the old greys needed rebuilding, how the new ones were built, and what changed for anyone using them.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/pawn002/candor&quot;&gt;Candor&lt;/a&gt;, my design system, had greys that each passed their contrast audit and, taken together, did not form a system. One ramp held three temperatures, a second cool ramp had two steps, and many greys in use sat at lightnesses no ramp had. Version 6.0 replaces them with three ramps (neutral, cool and warm) that share one lightness scale, so a step number means the same lightness in every ramp and changing temperature barely changes contrast. Chroma in the tinted neutrals comes from one curve, because holding chroma fixed does not hold a colour&#39;s identity as it lightens. Temperature now does a job of its own: warm surfaces come forward and cool ones recede. This post covers why the old greys needed rebuilding, how the new ones were built, and what changed for anyone using Candor&#39;s design tokens.&lt;/p&gt;
 &lt;/div&gt;
 &lt;hr&gt;
 &lt;h2 id=&quot;how-it-started&quot;&gt;How It Started&lt;/h2&gt;
