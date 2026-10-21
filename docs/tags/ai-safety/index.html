@@ -758,7 +758,7 @@ a.chip-link:focus-visible {
 }
 .article .ha {
 	color: var(--color-text-subtle);
-	font-size: 0.75em;
+	font-size: var(--font-size-sm); /* 14px floor; 0.75em rendered 12px */
 	transition: opacity 0.15s ease, color 0.15s ease;
 }
 .article :is(h2, h3, h4, h5, h6):hover + .ha {
@@ -970,8 +970,10 @@ img.post-card__image {
 .lightness-chart .s {
 	fill: var(--color-text-subtle);
 }
+/* Axes carry the scale, so they take the 1.4.11 border token; border-strong is
+ * decorative (OKCA 1.3 on the light page). */
 .lightness-chart .ax {
-	stroke: var(--color-border-strong);
+	stroke: var(--color-border-control);
 	stroke-width: 1;
 }
 .lightness-chart .cn {
@@ -1190,11 +1192,22 @@ img.post-card__image {
 	outline: var(--focus-ring-width) solid var(--color-focus);
 	outline-offset: 2px;
 }
+/* KaTeX sets sub- and superscripts at 0.7 of .katex. Its default 1.21em puts them
+ * at 13.6px on 16px body text; 1.3em lifts them to 14.6px, over the 14px floor. */
+.article .katex {
+	font-size: 1.3em;
+}
 
-/* Footnotes — markdown-it-footnote default markup, scoped to article context */
+/* Footnotes — markdown-it-footnote default markup, scoped to article context.
+ * The browser's sup shrink plus 0.85em rendered markers at 11.3px; pin the sup to
+ * the 14px floor and keep line-height 0 so it does not open up the line. */
+.article .footnote-ref {
+	font-size: var(--font-size-sm);
+	line-height: 0;
+}
 .article .footnote-ref a,
 .article .footnote-ref a:visited {
-	font-size: 0.85em;
+	font-size: 1em;
 	border-bottom: none;
 	padding: 0 0.1em;
 }
@@ -1372,7 +1385,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/ai-safety/` was built on 2026-10-21T05:42:43.675Z -->
+		<!-- This page `/tags/ai-safety/` was built on 2026-10-21T08:43:00.009Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
