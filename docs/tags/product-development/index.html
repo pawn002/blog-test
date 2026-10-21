@@ -968,14 +968,14 @@ img.post-card__image {
 .lightness-chart svg {
 	display: block;
 	width: 100%;
-	max-width: 28rem;
+	max-width: 22rem;
 	height: auto;
 	margin: 0 auto var(--spacing-sm);
 }
 .lightness-chart .t {
 	fill: var(--color-text-default);
 	font-family: var(--font-family-base);
-	font-size: 13px;
+	font-size: 16px; /* user units: drawn 300 wide, so >= 14px rendered at a 320px viewport */
 }
 .lightness-chart .h {
 	font-weight: var(--font-weight-semibold);
@@ -1004,6 +1004,34 @@ img.post-card__image {
 	padding: var(--spacing-sm);
 	border-radius: var(--radius-md);
 }
+.chart-legend {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--spacing-xs) var(--spacing-md);
+	margin: 0 0 var(--spacing-sm);
+	padding: 0;
+	list-style: none;
+	font-size: var(--font-size-sm);
+	color: var(--color-text-default);
+}
+.article .chart-legend li {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+.chart-legend svg {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	flex: none;
+}
+.chart-legend svg > :not(.ln):not(.hand) {
+	fill: var(--color-bg-surface);
+	stroke: var(--color-text-default);
+	stroke-width: 1.25;
+}
 .lightness-chart details {
 	margin-top: var(--spacing-sm);
 	font-size: var(--font-size-sm);
@@ -1011,7 +1039,7 @@ img.post-card__image {
 
 /* Chroma chart — extends .lightness-chart; curves told apart by line style, not colour */
 .chroma-chart svg {
-	max-width: 32rem;
+	max-width: 30rem;
 }
 .chroma-chart .ln {
 	fill: none;
@@ -1026,6 +1054,109 @@ img.post-card__image {
 	fill: none;
 	stroke: var(--color-text-subtle);
 	stroke-width: 1.5;
+}
+
+/* Code-block comparison — each panel sets its own --cc-* colours inline.
+ * Prose and code are reading text, so both stay at 16px (Candor: Tier 1 >= 16px). */
+.code-compare {
+	margin: var(--spacing-xl) 0;
+}
+.code-compare__pair {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-sm);
+}
+@media (min-width: 40rem) {
+	.code-compare__pair {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+.code-compare__panel {
+	min-width: 0;
+	background: var(--cc-page);
+	color: var(--cc-text);
+	border: 1px solid var(--color-border-default);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-sm);
+}
+.article .code-compare__label {
+	margin: 0;
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-semibold);
+}
+.article .code-compare__prose {
+	margin: var(--spacing-xs) 0;
+	font-size: var(--font-size-base);
+	color: var(--cc-text);
+}
+.article .code-compare__code {
+	margin: 0;
+	padding: var(--spacing-sm) var(--spacing-xs);
+	border: 0;
+	border-radius: var(--radius-sm);
+	background: var(--cc-code);
+	color: var(--cc-code-text);
+	font-size: var(--font-size-base);
+	line-height: 1.5;
+	overflow-x: auto;
+}
+.article .code-compare__code code {
+	background: none;
+	color: inherit;
+	padding: 0;
+	font-size: inherit;
+	word-break: normal;
+	white-space: pre;
+}
+.article .code-compare figcaption,
+.article .ramp-table caption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: var(--radius-md);
+	margin-top: var(--spacing-sm);
+	text-align: left;
+}
+
+/* Code inside captions, data tables and figure panels: Candor's rule, never below 14px */
+.article figcaption code,
+.article caption code,
+.article figure table code,
+.article .ui-mock code {
+	font-size: max(0.9em, var(--font-size-sm));
+}
+
+/* Ramp table — one row per step; swatches are decorative, every value is text */
+.ramp-table {
+	margin: var(--spacing-xl) 0;
+}
+.ramp-table table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.ramp-table caption {
+	caption-side: bottom;
+}
+.article .ramp-table th,
+.article .ramp-table td {
+	padding: 4px 3px;
+	font-size: var(--font-size-sm);
+	text-align: left;
+	vertical-align: middle;
+}
+.ramp-table td span:not(.ramp-table__swatch) {
+	vertical-align: middle;
+}
+.ramp-table__swatch {
+	display: block;
+	width: 1.75rem;
+	height: 1.25rem;
+	margin-bottom: 2px;
+	border-radius: var(--radius-sm);
+	box-shadow: inset 0 0 0 1px var(--color-border-strong);
 }
 
 /* Interface mock — fixed light and dark screens; each sets its own --mock-* colours inline */
@@ -1049,13 +1180,13 @@ img.post-card__image {
 	border-radius: var(--radius-md);
 	padding: var(--spacing-sm);
 	font-family: var(--font-family-base);
-	font-size: 0.8rem;
+	font-size: var(--font-size-sm);
 	line-height: 1.35;
 }
 .article .ui-mock__theme {
 	margin: 0 0 var(--spacing-xs);
 	font-weight: var(--font-weight-semibold);
-	font-size: 0.8rem;
+	font-size: var(--font-size-sm);
 }
 .ui-mock__body {
 	display: grid;
@@ -1092,7 +1223,7 @@ img.post-card__image {
 }
 .ui-mock__tag {
 	font-family: var(--font-family-mono);
-	font-size: 0.7rem;
+	font-size: var(--font-size-sm);
 	color: var(--mock-tss);
 	white-space: nowrap;
 }
@@ -1161,7 +1292,7 @@ img.post-card__image {
 	background: oklch(0.2 0 0);
 	color: oklch(1 0 0);
 	font-family: var(--font-family-base);
-	font-size: 0.75rem;
+	font-size: var(--font-size-sm);
 	line-height: 1.4;
 	white-space: nowrap;
 }
@@ -1368,7 +1499,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/product-development/` was built on 2026-10-21T00:16:59.876Z -->
+		<!-- This page `/tags/product-development/` was built on 2026-10-21T00:51:10.779Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
