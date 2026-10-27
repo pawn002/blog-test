@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Greys Without a Ramp: Rebuilding a Design System&#39;s Neutrals in OKLCH</title>
+		<meta name="description" content="Candor 6.0 rebuilds its gray scale in OKLCH: neutral, cool and warm ramps on one lightness scale, so changing temperature barely moves contrast. Tinted neutrals take their chroma from one curve, and warm surfaces come forward while cool ones recede.">
+		<meta name="author" content="John Rioflorido">
+		<meta name="robots" content="noindex, nofollow">
+		<link rel="canonical" href="https://pawn002.github.io/blog-public/blog/candor-grey-ramps/">
+		<link rel="author" href="/blog-test/about/">
+		<link rel="alternate" href="/blog-test/feed/feed.xml" type="application/atom+xml" title="pawn002 Blog">
+		<meta property="og:site_name" content="pawn002 Blog">
+		<meta property="og:type" content="article">
+		<meta property="og:title" content="Greys Without a Ramp: Rebuilding a Design System&#39;s Neutrals in OKLCH">
+		<meta property="og:description" content="Candor 6.0 rebuilds its gray scale in OKLCH: neutral, cool and warm ramps on one lightness scale, so changing temperature barely moves contrast. Tinted neutrals take their chroma from one curve, and warm surfaces come forward while cool ones recede.">
+		<meta property="og:url" content="https://pawn002.github.io/blog-public/blog/candor-grey-ramps/">
+		<meta property="og:image" content="https://pawn002.github.io/blog-public/img/candor-grey-ramps_hero.png">
+		<meta property="og:image:alt" content="Three tall navy cards stand side by side on a dark navy field, holding eight grey swatches that step diagonally down them: three cool blue-greys, two neutrals and three warm browns. From each swatch a burgundy line runs level to the summit of the mountain ridge painted in that grey. The pale, cool ridges sit farthest away and blur into the sky; the dark, warm ones stand nearest and sharp. On one lightness scale, warm comes forward and cool recedes.">
+		<meta name="twitter:image:alt" content="Three tall navy cards stand side by side on a dark navy field, holding eight grey swatches that step diagonally down them: three cool blue-greys, two neutrals and three warm browns. From each swatch a burgundy line runs level to the summit of the mountain ridge painted in that grey. The pale, cool ridges sit farthest away and blur into the sky; the dark, warm ones stand nearest and sharp. On one lightness scale, warm comes forward and cool recedes.">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="article:published_time" content="2026-10-27">
+		<meta property="article:author" content="John Rioflorido">
+		<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"pawn002 Blog","description":"Writing on AI evaluation and accessibility by John Rioflorido, a design technologist. Safe AI requires accessible AI.","url":"https://pawn002.github.io/blog-public/","publisher":{"@type":"Person","name":"John Rioflorido","url":"https://github.com/pawn002","email":"john.rioflorido@outlook.com","sameAs":["https://www.linkedin.com/in/johnrioflorido/","https://bsky.app/profile/pawn002.bsky.social"]}}</script>
+			<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Greys Without a Ramp: Rebuilding a Design System's Neutrals in OKLCH","description":"Candor 6.0 rebuilds its gray scale in OKLCH: neutral, cool and warm ramps on one lightness scale, so changing temperature barely moves contrast. Tinted neutrals take their chroma from one curve, and warm surfaces come forward while cool ones recede.","datePublished":"2026-10-27","url":"https://pawn002.github.io/blog-public/blog/candor-grey-ramps/","mainEntityOfPage":"https://pawn002.github.io/blog-public/blog/candor-grey-ramps/","image":"https://pawn002.github.io/blog-public/img/candor-grey-ramps_hero.png","keywords":"Accessibility, Design-Architecture, Systems-Design, Design-Strategy, Inclusive-Design, WCAG-Compliance, Case-Study, Open-Source, Portfolio","author":{"@type":"Person","name":"John Rioflorido","url":"https://github.com/pawn002","email":"john.rioflorido@outlook.com","sameAs":["https://www.linkedin.com/in/johnrioflorido/","https://bsky.app/profile/pawn002.bsky.social"]}}</script>
+			<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://pawn002.github.io/blog-public/"},{"@type":"ListItem","position":2,"name":"Archive","item":"https://pawn002.github.io/blog-public/blog/"},{"@type":"ListItem","position":3,"name":"Greys Without a Ramp: Rebuilding a Design System's Neutrals in OKLCH","item":"https://pawn002.github.io/blog-public/blog/candor-grey-ramps/"}]}</script>
+		
+		
+		
+		
+		
+		<style>
+			:root{--navy-50: oklch(0.97 0.01 252.84);--navy-100: oklch(0.93 0.02 252.41);--navy-200: oklch(0.86 0.04 251.66);--navy-300: oklch(0.76 0.05 250.59);--navy-400: oklch(0.64 0.06 249.3);--navy-500: oklch(0.53 0.06 248.13);--navy-600: oklch(0.44 0.06 247.16);--navy-700: oklch(0.35 0.06 246.2);--navy-800: oklch(0.27 0.06 245.34);--navy-900: oklch(0.19 0.04 245.34);--burgundy-50: oklch(0.97 0.01 347.43);--burgundy-100: oklch(0.93 0.03 347.43);--burgundy-200: oklch(0.86 0.05 347.43);--burgundy-300: oklch(0.76 0.06 347.43);--burgundy-400: oklch(0.64 0.07 347.43);--burgundy-500: oklch(0.52 0.08 347.43);--burgundy-600: oklch(0.44 0.08 347.43);--burgundy-700: oklch(0.37 0.08 347.43);--burgundy-800: oklch(0.28 0.07 347.43);--burgundy-900: oklch(0.20 0.05 347.43);--azure-50: oklch(0.97 0.01 250.80);--azure-100: oklch(0.93 0.03 250.80);--azure-200: oklch(0.86 0.07 250.80);--azure-300: oklch(0.77 0.12 250.80);--azure-400: oklch(0.65 0.18 250.80);--azure-500: oklch(0.53 0.15 250.80);--azure-600: oklch(0.45 0.13 250.80);--azure-700: oklch(0.37 0.10 250.80);--azure-800: oklch(0.28 0.08 250.80);--azure-900: oklch(0.20 0.05 250.80);--indigo-50: oklch(0.97 0.01 278.14);--indigo-100: oklch(0.93 0.03 278.14);--indigo-200: oklch(0.86 0.06 278.14);--indigo-300: oklch(0.77 0.11 278.14);--indigo-400: oklch(0.68 0.17 278.14);--indigo-500: oklch(0.60 0.21 278.14);--indigo-600: oklch(0.56 0.21 278.14);--indigo-700: oklch(0.47 0.20 278.14);--indigo-800: oklch(0.37 0.17 278.14);--indigo-900: oklch(0.27 0.13 278.14);--gray-0: oklch(1 0 0);--gray-25: oklch(0.985 0 0);--gray-100: oklch(0.91 0 0);--gray-200: oklch(0.88 0 0);--gray-300: oklch(0.81 0 0);--gray-400: oklch(0.71 0 0);--gray-500: oklch(0.62 0 0);--gray-550: oklch(0.56 0 0);--gray-600: oklch(0.5 0 0);--gray-650: oklch(0.44 0 0);--gray-700: oklch(0.4 0 0);--gray-800: oklch(0.30 0 0);--gray-850: oklch(0.24 0 0);--gray-900: oklch(0.16 0 0);--gray-cool-25: oklch(0.985 0.006 248.99);--gray-cool-100: oklch(0.91 0.013 248.99);--gray-cool-200: oklch(0.88 0.014 248.99);--gray-cool-300: oklch(0.81 0.018 248.99);--gray-cool-400: oklch(0.71 0.021 248.99);--gray-cool-500: oklch(0.62 0.023 248.99);--gray-cool-550: oklch(0.56 0.024 248.99);--gray-cool-600: oklch(0.5 0.025 248.99);--gray-cool-650: oklch(0.44 0.025 248.99);--gray-cool-700: oklch(0.4 0.026 248.99);--gray-cool-800: oklch(0.30 0.026 248.99);--gray-cool-850: oklch(0.24 0.026 248.99);--gray-cool-900: oklch(0.16 0.025 248.99);--gray-warm-25: oklch(0.985 0.005 69);--gray-warm-100: oklch(0.91 0.010 69);--gray-warm-200: oklch(0.88 0.011 69);--gray-warm-300: oklch(0.81 0.014 69);--gray-warm-400: oklch(0.71 0.015 69);--gray-warm-500: oklch(0.62 0.016 69);--gray-warm-550: oklch(0.56 0.017 69);--gray-warm-600: oklch(0.5 0.017 69);--gray-warm-650: oklch(0.44 0.017 69);--gray-warm-700: oklch(0.4 0.017 69);--gray-warm-800: oklch(0.30 0.016 69);--gray-warm-850: oklch(0.24 0.015 69);--gray-warm-900: oklch(0.16 0.013 69);--space-1: 0.5rem;--space-2: 1rem;--space-3: 1.5rem;--space-4: 2rem;--space-6: 3rem;--space-8: 4rem;--space-12: 6rem;--text-xs: 0.75rem;--text-sm: 0.875rem;--text-base: 1rem;--text-lg: 1.25rem;--text-xl: 1.5625rem;--text-2xl: 1.953rem;--text-3xl: 2.441rem;--font-sans: "Roboto Flex Variable", "Roboto Flex", system-ui, -apple-system, sans-serif;--font-accessible: "Atkinson Hyperlegible", system-ui, sans-serif;--font-mono: "Roboto Mono", "SF Mono", Monaco, Consolas, monospace;--font-reading: "Noto Sans", system-ui, sans-serif;--font-serif: "Noto Serif", Georgia, serif;--weight-light: 300;--weight-regular: 400;--weight-medium: 500;--weight-semibold: 600;--weight-bold: 700;--leading-display: 1.1;--leading-snug: 1.2;--leading-tight: 1.25;--leading-normal: 1.5;--leading-relaxed: 1.75;--tracking-tight: -0.02em;--tracking-normal: 0;--tracking-wide: 0.05em;--border-radius-sm: 0.25rem;--border-radius-md: 0.5rem;--border-radius-lg: 1rem;--border-radius-full: 9999px;--border-width-1: 1px;--border-width-2: 2px;--border-width-4: 4px}:root{--color-bg-page: var(--gray-cool-25);--color-bg-surface: var(--gray-100);--color-bg-subtle: var(--gray-200);--color-bg-elevated: var(--gray-0);--color-bg-forward: var(--gray-warm-25);--color-bg-recede: var(--gray-cool-100);--color-bg-muted: var(--gray-300);--color-bg-hover: var(--color-bg-muted);--color-bg-inverse: var(--navy-800);--color-text-default: var(--gray-800);--color-text-subtle: var(--gray-600);--color-text-subtle-on-surface: var(--gray-650);--color-text-disabled: var(--gray-400);--color-toast-message: var(--color-text-default);--color-text-inverse: var(--gray-0);--color-text-subtle-on-inverse: var(--gray-300);--color-text-on-action: var(--gray-0);--color-border-default: var(--gray-200);--color-border-strong: var(--gray-300);--color-border-on-inverse: var(--gray-cool-700);--color-border-control: var(--gray-600);--color-slider-thumb: var(--gray-0);--color-action-primary: var(--navy-800);--color-action-primary-hover: var(--navy-900);--color-action-primary-active: var(--navy-900);--color-action-secondary: var(--burgundy-700);--color-action-secondary-hover: var(--burgundy-800);--color-action-secondary-active: var(--burgundy-900);--color-action-destructive: transparent;--color-action-destructive-hover: oklch(0.45 0.18 25 / 0.08);--color-action-destructive-active: oklch(0.45 0.18 25 / 0.15);--color-action-destructive-text: var(--color-status-error-text);--color-action-destructive-border: var(--color-status-error-text);--color-action-tertiary: var(--gray-200);--color-action-tertiary-hover: var(--gray-300);--color-action-tertiary-text: var(--navy-800);--color-link: oklch(0.49 0.14 250.80);--color-link-hover: var(--azure-600);--color-link-visited: var(--indigo-700);--color-bg-code: oklch(0.92 0.018 195);--color-text-code: var(--color-text-default);--color-border-code: transparent;--color-focus: var(--azure-500);--color-status-error: oklch(0.54 0.21 25);--color-status-error-bg: oklch(0.95 0.02 25);--color-status-error-text: oklch(0.45 0.18 25);--color-status-success: oklch(0.55 0.15 144.2);--color-status-success-bg: oklch(0.95 0.05 145);--color-status-success-text: oklch(0.46 0.14 144.2);--color-status-warning: oklch(0.54 0.105 88);--color-status-warning-bg: oklch(0.95 0.05 88);--color-status-warning-text: oklch(0.42 0.085 88);--color-blockquote-text: var(--color-text-default);--color-callout-bg: var(--color-bg-surface);--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);--shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);--shadow-modal: 0 20px 48px rgba(0, 0, 0, 0.20), 0 8px 16px rgba(0, 0, 0, 0.12);--spacing-2xs: 0.25rem;--spacing-xs: var(--space-1);--spacing-sm: var(--space-2);--spacing-md: var(--space-3);--spacing-lg: var(--space-4);--spacing-xl: var(--space-6);--spacing-2xl: var(--space-8);--spacing-3xl: var(--space-12);--spacing-button-padding-y: var(--spacing-sm);--spacing-button-padding-x: var(--spacing-md);--spacing-button-padding-y-sm: var(--spacing-xs);--spacing-button-padding-x-sm: var(--spacing-sm);--spacing-button-padding-y-lg: var(--spacing-md);--spacing-button-padding-x-lg: var(--spacing-lg);--spacing-input-padding-y: var(--spacing-sm);--spacing-input-padding-x: var(--spacing-sm);--spacing-card-padding: var(--spacing-md);--spacing-card-gap: var(--spacing-md);--color-overlay: rgba(0, 0, 0, 0.50);--radius-sm: var(--border-radius-sm);--radius-md: var(--border-radius-md);--radius-lg: var(--border-radius-lg);--radius-full: var(--border-radius-full);--border-width-thin: var(--border-width-1);--border-width-medium: var(--border-width-2);--border-width-thick: var(--border-width-4);--focus-ring-width: var(--border-width-2);--focus-ring-offset: var(--border-width-2);--hit-target-aaa: 2.75rem;--hit-target-aa: 1.5rem;--scrollbar-size: var(--hit-target-aa);--scrollbar-thumb-size: 0.375rem;--scrollbar-inset-outer: 0.375rem;--font-family-base: var(--font-sans);--font-family-display: var(--font-sans);--font-family-accessible: var(--font-accessible);--font-family-mono: var(--font-mono);--font-family-reading: var(--font-reading);--font-family-serif: var(--font-serif);--font-size-base: var(--text-base);--font-size-xs: var(--text-xs);--font-size-sm: var(--text-sm);--font-size-md: var(--text-base);--font-size-lg: var(--text-lg);--font-size-xl: var(--text-xl);--font-size-2xl: var(--text-2xl);--font-size-3xl: var(--text-3xl);--font-size-h1: var(--text-3xl);--font-size-h2: var(--text-2xl);--font-size-h3: var(--text-xl);--font-size-h4: var(--text-lg);--font-size-h5: var(--text-base);--font-size-h6: var(--text-sm);--font-weight-light: var(--weight-light);--font-weight-regular: var(--weight-regular);--font-weight-medium: var(--weight-medium);--font-weight-semibold: var(--weight-semibold);--font-weight-bold: var(--weight-bold);--line-height-display: var(--leading-display);--line-height-snug: var(--leading-snug);--line-height-tight: var(--leading-tight);--line-height-normal: var(--leading-normal);--line-height-relaxed: var(--leading-relaxed);--letter-spacing-tight: var(--tracking-tight);--letter-spacing-normal: var(--tracking-normal);--letter-spacing-relaxed: 0.03em;--letter-spacing-wide: var(--tracking-wide);--letter-spacing-italic: 0.02em;--letter-spacing-body: 0.02em}@media(prefers-color-scheme: dark){:root{--color-bg-page: var(--gray-cool-900);--color-bg-surface: var(--gray-cool-850);--color-bg-subtle: var(--gray-cool-800);--color-bg-elevated: var(--gray-cool-800);--color-bg-forward: var(--gray-warm-800);--color-bg-recede: var(--gray-cool-900);--color-bg-muted: var(--gray-cool-700);--color-bg-hover: var(--color-bg-muted);--color-bg-inverse: var(--gray-0);--shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.04), 0 1px 2px rgba(255, 255, 255, 0.03);--shadow-md: 0 4px 8px rgba(255, 255, 255, 0.06), 0 2px 4px rgba(255, 255, 255, 0.04);--shadow-lg: 0 10px 24px rgba(255, 255, 255, 0.08), 0 4px 8px rgba(255, 255, 255, 0.05);--shadow-modal: 0 20px 48px rgba(255, 255, 255, 0.10), 0 8px 16px rgba(255, 255, 255, 0.06);--color-text-default: var(--gray-200);--color-text-subtle: var(--gray-400);--color-text-subtle-on-surface: var(--gray-400);--color-toast-message: var(--color-text-subtle);--color-text-disabled: var(--gray-650);--color-text-inverse: var(--gray-850);--color-text-subtle-on-inverse: var(--gray-700);--color-text-on-action: var(--gray-900);--color-border-default: var(--gray-650);--color-border-strong: var(--gray-550);--color-border-on-inverse: var(--gray-200);--color-border-control: var(--gray-500);--color-slider-thumb: var(--gray-100);--color-action-primary: var(--navy-200);--color-action-primary-hover: var(--navy-100);--color-action-primary-active: var(--navy-100);--color-action-secondary: var(--burgundy-300);--color-action-secondary-hover: var(--burgundy-200);--color-action-secondary-active: var(--burgundy-200);--color-action-destructive: transparent;--color-action-destructive-hover: oklch(0.79 0.12 25 / 0.12);--color-action-destructive-active: oklch(0.79 0.12 25 / 0.22);--color-action-destructive-text: var(--color-status-error-text);--color-action-destructive-border: var(--color-status-error-text);--color-action-tertiary: var(--gray-cool-800);--color-action-tertiary-hover: var(--gray-cool-650);--color-action-tertiary-text: var(--gray-0);--color-link: var(--azure-300);--color-link-hover: var(--azure-200);--color-link-visited: var(--indigo-300);--color-focus: var(--azure-300);--color-status-error: oklch(0.68 0.11 25);--color-status-error-bg: oklch(0.23 0.02 18);--color-status-error-text: oklch(0.79 0.12 25);--color-status-success: oklch(0.70 0.08 144.2);--color-status-success-bg: oklch(0.23 0.02 144);--color-status-success-text: oklch(0.80 0.15 144.2);--color-status-warning: oklch(0.74 0.10 88);--color-status-warning-bg: oklch(0.25 0.03 88);--color-status-warning-text: oklch(0.82 0.10 88);--color-bg-code: oklch(0.22 0.02 195);--color-text-code: var(--color-text-default);--color-border-code: var(--color-border-strong)}}[data-theme=dark]{--color-bg-page: var(--gray-cool-900);--color-bg-surface: var(--gray-cool-850);--color-bg-subtle: var(--gray-cool-800);--color-bg-elevated: var(--gray-cool-800);--color-bg-forward: var(--gray-warm-800);--color-bg-recede: var(--gray-cool-900);--color-bg-muted: var(--gray-cool-700);--color-bg-hover: var(--color-bg-muted);--color-bg-inverse: var(--gray-0);--shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.04), 0 1px 2px rgba(255, 255, 255, 0.03);--shadow-md: 0 4px 8px rgba(255, 255, 255, 0.06), 0 2px 4px rgba(255, 255, 255, 0.04);--shadow-lg: 0 10px 24px rgba(255, 255, 255, 0.08), 0 4px 8px rgba(255, 255, 255, 0.05);--shadow-modal: 0 20px 48px rgba(255, 255, 255, 0.10), 0 8px 16px rgba(255, 255, 255, 0.06);--color-text-default: var(--gray-200);--color-text-subtle: var(--gray-400);--color-text-subtle-on-surface: var(--gray-400);--color-toast-message: var(--color-text-subtle);--color-text-disabled: var(--gray-650);--color-text-inverse: var(--gray-850);--color-text-subtle-on-inverse: var(--gray-700);--color-text-on-action: var(--gray-900);--color-border-default: var(--gray-650);--color-border-strong: var(--gray-550);--color-border-on-inverse: var(--gray-200);--color-border-control: var(--gray-500);--color-slider-thumb: var(--gray-100);--color-action-primary: var(--navy-200);--color-action-primary-hover: var(--navy-100);--color-action-primary-active: var(--navy-100);--color-action-secondary: var(--burgundy-300);--color-action-secondary-hover: var(--burgundy-200);--color-action-secondary-active: var(--burgundy-200);--color-action-destructive: transparent;--color-action-destructive-hover: oklch(0.79 0.12 25 / 0.12);--color-action-destructive-active: oklch(0.79 0.12 25 / 0.22);--color-action-destructive-text: var(--color-status-error-text);--color-action-destructive-border: var(--color-status-error-text);--color-action-tertiary: var(--gray-cool-800);--color-action-tertiary-hover: var(--gray-cool-650);--color-action-tertiary-text: var(--gray-0);--color-link: var(--azure-300);--color-link-hover: var(--azure-200);--color-link-visited: var(--indigo-300);--color-focus: var(--azure-300);--color-status-error: oklch(0.68 0.11 25);--color-status-error-bg: oklch(0.23 0.02 18);--color-status-error-text: oklch(0.79 0.12 25);--color-status-success: oklch(0.70 0.08 144.2);--color-status-success-bg: oklch(0.23 0.02 144);--color-status-success-text: oklch(0.80 0.15 144.2);--color-status-warning: oklch(0.74 0.10 88);--color-status-warning-bg: oklch(0.25 0.03 88);--color-status-warning-text: oklch(0.82 0.10 88);--color-bg-code: oklch(0.22 0.02 195);--color-text-code: var(--color-text-default);--color-border-code: var(--color-border-strong)}[data-theme=light]{--color-bg-page: var(--gray-cool-25);--color-bg-surface: var(--gray-100);--color-bg-subtle: var(--gray-200);--color-bg-elevated: var(--gray-0);--color-bg-forward: var(--gray-warm-25);--color-bg-recede: var(--gray-cool-100);--color-bg-muted: var(--gray-300);--color-bg-hover: var(--color-bg-muted);--color-bg-inverse: var(--navy-800);--color-text-default: var(--gray-800);--color-text-subtle: var(--gray-600);--color-text-subtle-on-surface: var(--gray-650);--color-text-disabled: var(--gray-400);--color-toast-message: var(--color-text-default);--color-text-inverse: var(--gray-0);--color-text-subtle-on-inverse: var(--gray-300);--color-text-on-action: var(--gray-0);--color-border-default: var(--gray-200);--color-border-strong: var(--gray-300);--color-border-on-inverse: var(--gray-cool-700);--color-border-control: var(--gray-600);--color-slider-thumb: var(--gray-0);--color-action-primary: var(--navy-800);--color-action-primary-hover: var(--navy-900);--color-action-primary-active: var(--navy-900);--color-action-secondary: var(--burgundy-700);--color-action-secondary-hover: var(--burgundy-800);--color-action-secondary-active: var(--burgundy-900);--color-action-destructive: transparent;--color-action-destructive-hover: oklch(0.45 0.18 25 / 0.08);--color-action-destructive-active: oklch(0.45 0.18 25 / 0.15);--color-action-destructive-text: var(--color-status-error-text);--color-action-destructive-border: var(--color-status-error-text);--color-action-tertiary: var(--gray-200);--color-action-tertiary-hover: var(--gray-300);--color-action-tertiary-text: var(--navy-800);--color-link: oklch(0.49 0.14 250.80);--color-link-hover: var(--azure-600);--color-link-visited: var(--indigo-700);--color-bg-code: oklch(0.92 0.018 195);--color-text-code: var(--color-text-default);--color-border-code: transparent;--color-focus: var(--azure-500);--color-status-error: oklch(0.54 0.21 25);--color-status-error-bg: oklch(0.95 0.02 25);--color-status-error-text: oklch(0.45 0.18 25);--color-status-success: oklch(0.55 0.15 144.2);--color-status-success-bg: oklch(0.95 0.05 145);--color-status-success-text: oklch(0.46 0.14 144.2);--color-status-warning: oklch(0.54 0.105 88);--color-status-warning-bg: oklch(0.95 0.05 88);--color-status-warning-text: oklch(0.42 0.085 88);--color-blockquote-text: var(--color-text-default);--color-callout-bg: var(--color-bg-surface);--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);--shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);--shadow-modal: 0 20px 48px rgba(0, 0, 0, 0.20), 0 8px 16px rgba(0, 0, 0, 0.12)}
+/* Candor design system fonts — latin subset only
+ * @font-face declarations for self-hosted font files copied to /fonts/
+ * Source packages: @fontsource-variable/*, @fontsource/atkinson-hyperlegible
+ *
+ * Note: this file is inlined into a <style> tag in base.njk via Nunjucks include,
+ * so url() targets must be path-prefix-aware. The `| url` filter handles that.
+ */
+
+/* Roboto Flex Variable — UI text, headings (--font-sans) */
+@font-face {
+  font-family: 'Roboto Flex Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 1000;
+  src: url('/blog-test/fonts/roboto-flex-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Roboto Mono Variable — code blocks (--font-mono) */
+@font-face {
+  font-family: 'Roboto Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url('/blog-test/fonts/roboto-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Noto Sans — blog reading text (--font-reading: "Noto Sans") */
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/blog-test/fonts/noto-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/blog-test/fonts/noto-sans-latin-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Noto Serif — editorial prose (--font-serif: "Noto Serif") */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/blog-test/fonts/noto-serif-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/blog-test/fonts/noto-serif-latin-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Atkinson Hyperlegible — accessible UI labels (--font-accessible) */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('/blog-test/fonts/atkinson-hyperlegible-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('/blog-test/fonts/atkinson-hyperlegible-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* Compiled from Candor v6.0.0, src/design-tokens/blog.scss (sass --style=expanded).
+ * Candor stopped shipping this stylesheet in @candor-design/tokens 4.0.0; the blog owns the compiled copy.
+ * To update: compile the file at the new Candor tag and bump the tag here. Do not hand-edit. */
+@charset "UTF-8";
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.post-list.post-list--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+  gap: var(--spacing-lg);
+}
+.post-list.post-list--grid .post-card {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border-top: none;
+  padding: 0;
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+.post-list.post-list--grid .post-card:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.post-list.post-list--grid .post-card:has(.post-card__title a:hover) {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.post-list.post-list--grid .post-card .post-card__image {
+  aspect-ratio: 3/2;
+  border-radius: 0;
+}
+.post-list.post-list--grid .post-card .post-card__image-link {
+  display: block;
+}
+.post-list.post-list--grid .post-card .post-card__body {
+  padding: var(--spacing-md);
+}
+.post-list.post-list--grid .post-card .post-card__title {
+  font-size: var(--font-size-h3);
+}
+
+.post-card {
+  padding: var(--spacing-lg) 0;
+  border-top: var(--border-width-thin) solid var(--color-border-default);
+}
+@media (min-width: 640px) {
+  .post-card {
+    padding: var(--spacing-xl) 0;
+  }
+}
+.post-card:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.post-card.post-card--featured {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
+}
+@media (min-width: 640px) {
+  .post-card.post-card--featured {
+    grid-template-columns: 2fr 3fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+  }
+}
+.post-card.post-card--featured .post-card__image {
+  aspect-ratio: 16/9;
+}
+@media (min-width: 640px) {
+  .post-card.post-card--featured .post-card__image {
+    aspect-ratio: 4/3;
+  }
+}
+.post-card.post-card--featured .post-card__image-link {
+  margin-bottom: 0;
+}
+.post-card.post-card--featured .post-card__body {
+  padding: 0;
+}
+.post-card.post-card--featured .post-card__title {
+  font-size: var(--font-size-h3);
+}
+@media (min-width: 640px) {
+  .post-card.post-card--featured .post-card__title {
+    font-size: var(--font-size-h2);
+  }
+}
+.post-card.post-card--featured .post-card__excerpt {
+  -webkit-line-clamp: 3;
+}
+@media (min-width: 640px) {
+  .post-card.post-card--featured .post-card__excerpt {
+    -webkit-line-clamp: 4;
+  }
+}
+.post-card.post-card--compact {
+  padding: var(--spacing-sm) 0;
+}
+.post-card.post-card--compact .post-card__image-link {
+  display: none;
+}
+.post-card.post-card--compact .post-card__title {
+  font-size: var(--font-size-h4);
+}
+.post-card.post-card--compact .post-card__excerpt {
+  -webkit-line-clamp: 2;
+  font-size: var(--font-size-sm);
+}
+
+.post-card__image-link {
+  display: block;
+  margin-bottom: var(--spacing-md);
+  outline: none;
+}
+.post-card__image-link:hover .post-card__image, .post-card__image-link:focus-visible .post-card__image {
+  transform: scale(1.01);
+}
+.post-card__image-link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-md);
+}
+
+.post-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/7;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  transition: transform 200ms ease;
+}
+
+.post-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.post-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2xs);
+  margin-bottom: var(--spacing-2xs);
+}
+
+.post-card__tag {
+  font-family: var(--font-family-accessible);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+.post-card__tag:not(:last-child)::after {
+  content: "·"/"";
+  margin-left: var(--spacing-2xs);
+  font-weight: var(--font-weight-normal);
+}
+.post-card__tag {
+  line-height: 1;
+}
+
+.post-card__title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  font-optical-sizing: auto;
+  line-height: var(--line-height-tight);
+  color: var(--color-text-default);
+  margin: 0;
+}
+.post-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.post-card__title a:hover {
+  color: var(--color-link);
+}
+.post-card__title a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+.post-card__excerpt {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-subtle);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-accessible);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text-subtle);
+  margin-top: var(--spacing-2xs);
+}
+/* Global stylesheet — uses Candor design system tokens
+ * Candor tokens and fonts are loaded in base.njk before this file.
+ */
+
+* {
+	box-sizing: border-box;
+}
+
+@view-transition {
+	navigation: auto;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-sans);
+	font-optical-sizing: auto;
+	color: var(--color-text-default);
+	background-color: var(--color-bg-page);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 100%;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Utility classes */
+.min-text {
+	font-size: var(--text-sm);
+}
+
+.article .min-text {
+	margin-bottom: var(--spacing-xl);
+}
+
+/* Fluid images via https://www.zachleat.com/web/fluid-images/ */
+img {
+	max-width: 100%;
+}
+img[width][height] {
+	height: auto;
+}
+img[src$=".svg"] {
+	width: 100%;
+	height: auto;
+	max-width: none;
+}
+video,
+iframe {
+	width: 100%;
+	height: auto;
+}
+iframe {
+	aspect-ratio: 16/9;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: var(--leading-normal);
+}
+
+li {
+	line-height: var(--leading-normal);
+}
+
+/* Color only — prose underline treatment is scoped to .article a (see pawn002/candor#98) */
+a[href] {
+	color: var(--color-link);
+}
+a[href]:visited {
+	color: var(--color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--color-link-hover);
+}
+
+main {
+	max-width: 48rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding: var(--space-2) var(--space-2) var(--spacing-3xl);
+}
+main :first-child {
+	margin-top: 0;
+}
+
+/* #site-header border handled in full rule below */
+
+footer {
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	background-color: var(--color-bg-surface);
+	padding: var(--spacing-2xs) var(--spacing-md) var(--spacing-xs);
+}
+
+.footer-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2xs);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.footer-links li {
+	display: inline-flex;
+}
+
+.footer-links a[href],
+.footer-links a[href]:visited {
+	display: inline-flex;
+	align-items: center;
+	color: var(--color-text-subtle-on-surface);
+	font-size: var(--font-size-sm);
+	padding: var(--spacing-xs) var(--spacing-sm);
+	border-radius: var(--radius-sm);
+	text-decoration: none;
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.footer-links a[href]:hover,
+.footer-links a[href]:active {
+	color: var(--color-text-default);
+	background-color: var(--color-action-tertiary);
+}
+
+#skip-link {
+	text-decoration: none;
+	background: var(--color-bg-page);
+	color: var(--color-text-default);
+	padding: var(--space-1) var(--space-2);
+	border: var(--border-width-1) solid var(--color-border-strong);
+	border-radius: var(--border-radius-sm);
+}
+
+/* Prevent visually-hidden skip link from pushing content around when focused */
+#skip-link.visually-hidden:focus {
+	position: absolute;
+	top: var(--space-2);
+	left: var(--space-2);
+	z-index: 999;
+}
+
+.links-nextprev {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.5em 1em;
+	list-style: "";
+	border-top: var(--border-width-1) dashed var(--color-border-default);
+	padding: 1em 0;
+}
+.links-nextprev > * {
+	flex-grow: 1;
+}
+.links-nextprev-next {
+	text-align: right;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+.table-scroll {
+	overflow-x: auto;
+	max-width: 100%;
+}
+.table-scroll:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+pre,
+code {
+	font-family: var(--font-mono);
+}
+pre:not([class*="language-"]) {
+	margin: 0.5em 0;
+	line-height: var(--leading-normal);
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
+	tab-size: 2;
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	overflow-x: auto;
+}
+code {
+	word-break: break-all;
+}
+
+/* Site header */
+#site-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--spacing-xs);
+	padding: var(--spacing-sm) var(--spacing-md);
+	background-color: var(--color-bg-surface);
+	border-bottom: var(--border-width-thin) solid var(--color-border-default);
+}
+a.home-link,
+a.home-link:visited {
+	font-family: var(--font-family-base);
+	font-size: var(--font-size-lg);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text-default);
+	text-decoration: none;
+	margin-right: var(--spacing-md);
+}
+a.home-link:hover,
+a.home-link:active {
+	color: var(--color-text-default);
+	text-decoration: underline;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: var(--spacing-xs);
+	padding: 0;
+	margin: 0;
+	margin-left: auto;
+	list-style: none;
+}
+@media (max-width: 639px) {
+	.nav {
+		margin-left: 0;
+		width: 100%;
+	}
+}
+.nav-item {
+	display: inline-flex;
+}
+.nav-item a[href],
+.nav-item a[href]:visited {
+	display: inline-flex;
+	align-items: center;
+	color: var(--color-text-subtle-on-surface);
+	font-size: var(--font-size-base);
+	padding: var(--spacing-xs) var(--spacing-sm);
+	border-radius: var(--radius-sm);
+	text-decoration: none;
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+.nav-item a[href]:hover,
+.nav-item a[href]:active {
+	color: var(--color-text-default);
+	background-color: var(--color-action-tertiary);
+}
+.nav a[href][aria-current="page"] {
+	color: var(--color-action-primary);
+	font-weight: var(--font-weight-semibold);
+	text-decoration: none;
+}
+.nav-item a[href]:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: var(--focus-ring-offset);
+}
+
+/* Posts list */
+.postlist {
+	counter-reset: start-from var(--postlist-index);
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: var(--text-sm);
+	color: var(--color-text-subtle);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: var(--text-lg);
+	font-weight: var(--weight-bold);
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: 0.25em;
+	padding-right: 0.5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: var(--weight-bold);
+}
+
+/* Post header — flex column so CSS order can place tags visually first
+ * while DOM order keeps h1 first for AT reading order. */
+.post-header {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: var(--spacing-xl);
+}
+.post-header__tags {
+	display: flex;
+	order: -1;
+	gap: var(--spacing-xs);
+	flex-wrap: wrap;
+	margin-bottom: var(--spacing-md);
+}
+.post-header__title {
+	font-family: var(--font-family-display);
+	font-size: var(--font-size-h1);
+	font-weight: var(--font-weight-bold);
+	font-optical-sizing: auto;
+	line-height: var(--line-height-tight);
+	color: var(--color-text-default);
+	letter-spacing: var(--letter-spacing-tight);
+	margin: 0 0 var(--spacing-sm);
+}
+.post-header__description {
+	font-family: var(--font-family-base);
+	font-size: var(--font-size-lg);
+	color: var(--color-text-subtle);
+	line-height: var(--line-height-normal);
+	margin: 0 0 var(--spacing-md);
+}
+.post-header__meta {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	padding-bottom: var(--spacing-md);
+	border-bottom: var(--border-width-thin) solid var(--color-border-default);
+	font-family: var(--font-family-accessible);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+	letter-spacing: 0.02em;
+}
+
+/* Chip link — navigable taxonomy tag (see pawn002/candor#97 for component proposal) */
+a.chip-link,
+a.chip-link:visited {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: var(--radius-full);
+	font-family: var(--font-family-accessible);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-bold);
+	letter-spacing: 0.06em;
+	white-space: nowrap;
+	line-height: var(--line-height-tight);
+	padding: 0.2rem 0.5rem;
+	background-color: var(--color-bg-surface);
+	color: var(--color-text-subtle-on-surface);
+	text-decoration: none;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+a.chip-link:hover,
+a.chip-link:active {
+	background-color: var(--color-action-tertiary);
+	color: var(--color-text-default);
+}
+a.chip-link:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: var(--focus-ring-offset);
+}
+
+/* Post-card title link: set color to inherit from card heading */
+.post-card__title a[href],
+.post-card__title a[href]:visited {
+	color: inherit;
+}
+.post-card__title a[href]:hover {
+	color: var(--color-link);
+}
+
+/* Suppress heading-anchors (#) symbols on post-card titles in listings */
+.post-card__title .ha-placeholder {
+	display: none;
+}
+
+/* Prose link treatment scoped to article context (see pawn002/candor#98).
+ * border-bottom and padding-bottom are handled by candor-article.css.
+ * box-decoration-break ensures visited border appears on every wrapped line. */
+.article a {
+	text-underline-offset: 0.2em;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* Heading anchors — Candor-aligned overrides for @zachleat/heading-anchors.
+ * opacity: 0 (not display/visibility: none) — component uses CSS anchor
+ * positioning (anchor-name/position-anchor) in Chrome; visibility: hidden
+ * breaks that tracking. opacity: 0 hides visually while preserving layout
+ * and anchor registration. */
+.article .ha-placeholder {
+	opacity: 0;
+}
+.article .ha {
+	color: var(--color-text-subtle);
+	font-size: var(--font-size-sm); /* 14px floor; 0.75em rendered 12px */
+	transition: opacity 0.15s ease, color 0.15s ease;
+}
+.article :is(h2, h3, h4, h5, h6):hover + .ha {
+	opacity: 1;
+}
+.article .ha:hover,
+.article .ha:focus-within {
+	opacity: 1;
+	color: var(--color-link);
+}
+.article .ha:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: var(--focus-ring-offset);
+	border-radius: var(--radius-sm);
+}
+
+/* Fix .post-card:first-child specificity when articles are wrapped in <li>
+ * candor-blog.css targets .post-card:first-child, which matches every <article>
+ * since each is the sole child of its <li>. Override to restore correct behavior. */
+.post-list > li .post-card {
+	padding-top: var(--spacing-lg);
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+}
+@media (min-width: 640px) {
+	.post-list > li .post-card {
+		padding-top: var(--spacing-xl);
+	}
+}
+.post-list > li:first-child .post-card {
+	border-top: none;
+	padding-top: 0;
+}
+
+/* Post-card hero image — soften bottom edge so image flows into card body.
+ * mask-image adapts to both light and dark image backgrounds.
+ * Note: postslist.njk uses <img class="post-card__image"> directly (not eleventy-img <picture>),
+ * so the picture img rules below are reserved for future use if that changes. */
+img.post-card__image {
+	-webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+	mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+}
+
+/* Reserved: eleventy-img <picture> output in post-card image slots */
+.post-card__image-link picture {
+	display: block;
+	width: 100%;
+}
+.post-card__image-link picture img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16/7;
+	object-fit: cover;
+	border-radius: var(--radius-md);
+	transition: transform 200ms ease;
+}
+.post-card--featured .post-card__image-link picture img {
+	aspect-ratio: 16/9;
+}
+@media (min-width: 640px) {
+	.post-card--featured .post-card__image-link picture img {
+		aspect-ratio: 4/3;
+	}
+}
+.post-list--grid .post-card .post-card__image-link picture img {
+	aspect-ratio: 3/2;
+	border-radius: 0;
+}
+.post-card__image-link:hover picture img,
+.post-card__image-link:focus-visible picture img {
+	transform: scale(1.01);
+}
+
+/* Executive Summary — prefatory block, 14px body, overline label heading */
+.article .exec-summary h2 {
+	font-family: var(--font-family-accessible);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-bold);
+	text-transform: uppercase;
+	letter-spacing: var(--letter-spacing-wide);
+	color: var(--color-text-subtle);
+	margin-top: 0;
+	margin-bottom: var(--spacing-sm);
+}
+.article .exec-summary p,
+.article .exec-summary li {
+	font-size: var(--font-size-sm);
+	letter-spacing: 0.03em;
+}
+
+/* Screenshot figure — bordered container for before/after screenshot pairs in articles */
+.screenshot-figure {
+	margin: var(--spacing-xl) 0;
+	padding: 0;
+	border: var(--border-width-thin) solid var(--color-border-default);
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+.article .screenshot-figure figcaption {
+	margin: 0;
+	font-family: var(--font-family-base);
+	font-size: var(--font-size-sm);
+	font-style: normal;
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+}
+.article .screenshot-figure figcaption strong {
+	font-weight: var(--font-weight-semibold);
+}
+.screenshot-figure p {
+	margin: 0;
+	line-height: 0;
+}
+.screenshot-figure picture,
+.screenshot-figure img {
+	display: block;
+	width: 100%;
+}
+
+/* Swatch comparison table — colour samples with their measured figures as real text.
+ * Swatch colours are set inline per cell; everything around them uses blog tokens. */
+.swatch-table {
+	margin: var(--spacing-xl) 0;
+}
+.swatch-table table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+.article .swatch-table caption {
+	caption-side: bottom;
+	text-align: left;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.article .swatch-table th,
+.article .swatch-table td {
+	padding: var(--spacing-xs);
+	vertical-align: top;
+	text-align: left;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+}
+.swatch-table thead th {
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table thead td:first-child {
+	width: 22%;
+}
+.swatch-table tbody th {
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table tbody th span {
+	display: block;
+	font-weight: normal;
+	color: var(--color-text-subtle);
+}
+.swatch-table__sample {
+	display: block;
+	padding: var(--spacing-md) var(--spacing-sm);
+	margin-bottom: var(--spacing-xs);
+	border-radius: var(--radius-md);
+	font-size: var(--font-size-base);
+	font-weight: var(--font-weight-semibold);
+}
+.swatch-table__fig {
+	display: block;
+	white-space: nowrap;
+}
+@media (max-width: 30rem) {
+	.article .swatch-table th,
+	.article .swatch-table td {
+		padding: var(--spacing-xs) 2px;
+	}
+	.swatch-table thead td:first-child {
+		width: 19%;
+	}
+	.swatch-table__sample {
+		padding: var(--spacing-sm) var(--spacing-xs);
+		text-align: center;
+	}
+}
+
+/* Lightness chart — inline SVG; mark fills are data (literal colours), all ink is tokens */
+.lightness-chart {
+	margin: var(--spacing-xl) 0;
+}
+.lightness-chart svg {
+	display: block;
+	width: 100%;
+	max-width: 22rem;
+	height: auto;
+	margin: 0 auto var(--spacing-sm);
+}
+.lightness-chart .t {
+	fill: var(--color-text-default);
+	font-family: var(--font-family-base);
+	font-size: 16px; /* user units: drawn 300 wide, so >= 14px rendered at a 320px viewport */
+}
+.lightness-chart .h {
+	font-weight: var(--font-weight-semibold);
+}
+.lightness-chart .s {
+	fill: var(--color-text-subtle);
+}
+/* Axes carry the scale, so they take the 1.4.11 border token; border-strong is
+ * decorative (OKCA 1.3 on the light page). */
+.lightness-chart .ax {
+	stroke: var(--color-border-control);
+	stroke-width: 1;
+}
+.lightness-chart .cn {
+	stroke: var(--color-text-subtle);
+	stroke-width: 1.5;
+}
+.lightness-chart .m > :not(title) {
+	stroke: var(--color-text-default);
+	stroke-width: 1.25;
+}
+.article .lightness-chart figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: var(--radius-md);
+}
+.chart-legend {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--spacing-xs) var(--spacing-md);
+	margin: 0 0 var(--spacing-sm);
+	padding: 0;
+	list-style: none;
+	font-size: var(--font-size-sm);
+	color: var(--color-text-default);
+}
+.article .chart-legend li {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+.chart-legend svg {
+	width: auto;
+	height: 16px;
+	margin: 0;
+	flex: none;
+}
+.chart-legend svg > .pt,
+.chart-legend svg > :not(.ln):not(.hand) {
+	fill: var(--color-bg-surface);
+	stroke: var(--color-text-default);
+	stroke-width: 1.25;
+}
+.lightness-chart details {
+	margin-top: var(--spacing-sm);
+	font-size: var(--font-size-sm);
+}
+
+/* Chroma chart — extends .lightness-chart; curves told apart by line style, not colour */
+.chroma-chart svg {
+	max-width: 30rem;
+}
+.chroma-chart .ln {
+	fill: none;
+	stroke: var(--color-text-default);
+	stroke-width: 2;
+}
+.chroma-chart .dash {
+	stroke-dasharray: 6 4;
+}
+.chroma-chart .hand,
+.chroma-chart .m > .hand {
+	fill: none;
+	stroke: var(--color-text-subtle);
+	stroke-width: 1.5;
+}
+
+/* Code-block comparison — each panel sets its own --cc-* colours inline.
+ * Prose and code are reading text, so both stay at 16px (Candor: Tier 1 >= 16px). */
+.code-compare {
+	margin: var(--spacing-xl) 0;
+}
+.code-compare__pair {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-sm);
+}
+@media (min-width: 40rem) {
+	.code-compare__pair {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+.code-compare__panel {
+	min-width: 0;
+	background: var(--cc-page);
+	color: var(--cc-text);
+	border: 1px solid var(--color-border-default);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-sm);
+}
+.article .code-compare__label {
+	margin: 0;
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-semibold);
+}
+.article .code-compare__prose {
+	margin: var(--spacing-xs) 0;
+	font-size: var(--font-size-base);
+	color: var(--cc-text);
+}
+.article .code-compare__code {
+	margin: 0;
+	padding: var(--spacing-sm) var(--spacing-xs);
+	border: 0;
+	border-radius: var(--radius-sm);
+	background: var(--cc-code);
+	color: var(--cc-code-text);
+	font-size: var(--font-size-base);
+	line-height: 1.5;
+	overflow-x: auto;
+}
+.article .code-compare__code code {
+	background: none;
+	color: inherit;
+	padding: 0;
+	font-size: inherit;
+	word-break: normal;
+	white-space: pre;
+}
+.article .code-compare figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: var(--radius-md);
+	margin-top: var(--spacing-sm);
+	text-align: left;
+}
+
+/* Code inside captions, data tables and figure panels: Candor's rule, never below 14px */
+.article figcaption code,
+.article caption code,
+.article figure table code {
+	font-size: max(0.9em, var(--font-size-sm));
+}
+
+/* A wide table scrolls inside its own region instead of widening the page */
+.table-scroll {
+	overflow-x: auto;
+}
+.table-scroll:focus-visible {
+	outline: 2px solid var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* Painting figure — image with an outline layer marking sampled patches.
+ * Chips carry their own opaque background so their contrast never depends on the image. */
+.painting-figure {
+	margin: var(--spacing-xl) 0;
+}
+.painting-figure__frame {
+	position: relative;
+	line-height: 0;
+}
+.painting-figure__frame picture,
+.painting-figure__frame img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.painting-figure__frame svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+.painting-figure__frame rect {
+	fill: none;
+	vector-effect: non-scaling-stroke;
+}
+.painting-figure__frame .halo {
+	stroke: oklch(1 0 0);
+	stroke-width: 4;
+}
+.painting-figure__frame .line {
+	stroke: oklch(0.2 0 0);
+	stroke-width: 2;
+}
+.painting-figure__chip {
+	position: absolute;
+	padding: 2px 6px;
+	border-radius: var(--radius-sm);
+	background: oklch(0.2 0 0);
+	color: oklch(1 0 0);
+	font-family: var(--font-family-base);
+	font-size: var(--font-size-sm);
+	line-height: 1.4;
+	white-space: nowrap;
+}
+.article .painting-figure figcaption {
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-normal);
+	color: var(--color-text-subtle-on-surface);
+	background: var(--color-bg-surface);
+	padding: var(--spacing-sm);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* KaTeX display equations — allow horizontal scroll on narrow viewports
+ * so long equations don't force the page wider than the column. */
+.article .katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.25em 0;
+}
+.article .katex-display:focus-visible {
+	outline: var(--focus-ring-width) solid var(--color-focus);
+	outline-offset: 2px;
+}
+/* KaTeX sets sub- and superscripts at 0.7 of .katex. Its default 1.21em puts them
+ * at 13.6px on 16px body text; 1.3em lifts them to 14.6px, over the 14px floor. */
+.article .katex {
+	font-size: 1.3em;
+}
+
+/* Footnotes — markdown-it-footnote default markup, scoped to article context.
+ * The browser's sup shrink plus 0.85em rendered markers at 11.3px; pin the sup to
+ * the 14px floor and keep line-height 0 so it does not open up the line. */
+.article .footnote-ref {
+	font-size: var(--font-size-sm);
+	line-height: 0;
+}
+.article .footnote-ref a,
+.article .footnote-ref a:visited {
+	font-size: 1em;
+	border-bottom: none;
+	padding: 0 0.1em;
+}
+.article .footnotes {
+	margin-top: var(--spacing-2xl);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-subtle);
+}
+.article .footnotes-sep {
+	border: none;
+	border-top: var(--border-width-thin) solid var(--color-border-default);
+	margin: var(--spacing-2xl) 0 var(--spacing-md);
+}
+.article .footnotes-list {
+	padding-left: 1.5rem;
+}
+.article .footnote-item p {
+	margin: 0 0 var(--spacing-xs);
+	line-height: var(--line-height-normal);
+}
+.article .footnote-backref {
+	margin-left: 0.25em;
+	text-decoration: none;
+	border-bottom: none;
+}
+
+/* Hero image — soften edges so the image flows into the page rather than jarring against it.
+ * :has(picture) guards against applying image styles to text-only first paragraphs.
+ * mask-image fade adapts to both light and dark backgrounds. */
+.article > p:first-child:has(picture) {
+	margin: 0 0 var(--spacing-xl);
+	line-height: 0;
+}
+.article > p:first-child:has(picture) img {
+	display: block;
+	width: 100%;
+	border-radius: var(--radius-md);
+	-webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+	mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+/* Compiled from Candor v6.0.0, src/design-tokens/article.scss (sass --style=expanded).
+ * Candor stopped shipping this stylesheet in @candor-design/tokens 4.0.0; the blog owns the compiled copy.
+ * To update: compile the file at the new Candor tag and bump the tag here. Do not hand-edit. */
+.article {
+  display: block;
+  max-width: 65ch;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-default);
+}
+.article.article--font-serif {
+  font-family: var(--font-family-serif);
+}
+.article.article--font-sans {
+  font-family: var(--font-family-reading);
+}
+.article h1, .article h2, .article h3, .article h4, .article h5, .article h6 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-bold);
+  font-optical-sizing: auto;
+  line-height: var(--line-height-tight);
+  color: var(--color-text-default);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+}
+.article h1:first-child, .article h2:first-child, .article h3:first-child, .article h4:first-child, .article h5:first-child, .article h6:first-child {
+  margin-top: 0;
+}
+.article h1 {
+  font-size: var(--font-size-h1);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-display);
+}
+.article h2 {
+  font-size: var(--font-size-h2);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-display);
+}
+.article h3 {
+  font-size: var(--font-size-h3);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-snug);
+}
+.article h4 {
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-snug);
+}
+.article h5 {
+  font-size: var(--font-size-base);
+  margin-top: var(--spacing-lg);
+}
+.article h6 {
+  font-size: 0.875rem;
+  margin-top: var(--spacing-md);
+}
+.article p {
+  margin-bottom: var(--spacing-md);
+}
+.article p:last-child {
+  margin-bottom: 0;
+}
+.article ul, .article ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-md);
+}
+.article li {
+  margin-bottom: var(--spacing-xs);
+}
+.article blockquote {
+  margin-block: var(--spacing-lg);
+  margin-inline: var(--spacing-xl) 0;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+  font-style: italic;
+  letter-spacing: var(--letter-spacing-italic);
+  color: var(--color-blockquote-text);
+}
+.article figure:has(> blockquote) {
+  margin-inline: var(--spacing-xl) 0;
+}
+.article figure:has(> blockquote) > blockquote {
+  margin: 0;
+}
+.article figure:has(> blockquote) > figcaption {
+  font-size: var(--font-size-md);
+  font-style: normal;
+  letter-spacing: var(--letter-spacing-normal);
+}
+.article figcaption cite {
+  font-style: italic;
+}
+.article .callout {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-default);
+  background-color: var(--color-callout-bg);
+  border-radius: var(--radius-md);
+}
+.article .callout > :last-child {
+  margin-bottom: 0;
+}
+.article code {
+  font-family: var(--font-family-mono);
+  font-size: max(0.9em, var(--font-size-sm));
+  background-color: var(--color-bg-code);
+  color: var(--color-text-code);
+  border: var(--border-width-thin) solid var(--color-border-code);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+.article pre {
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem;
+  line-height: var(--line-height-normal);
+  background-color: var(--color-bg-code);
+  color: var(--color-text-code);
+  border: var(--border-width-thin) solid var(--color-border-code);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+}
+.article pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1em;
+  color: inherit;
+  border-radius: 0;
+}
+.article a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  border-bottom: var(--border-width-thin) solid transparent;
+  padding-bottom: 0.15em;
+}
+.article a:visited {
+  color: var(--color-link-visited);
+  border-bottom-color: var(--color-link-visited);
+}
+.article a:hover {
+  color: var(--color-link-hover);
+}
+.article a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+.article hr {
+  border: none;
+  border-top: var(--border-width-thin) solid var(--color-border-default);
+  margin: var(--spacing-xl) 0;
+}
+.article strong {
+  font-weight: var(--font-weight-bold);
+}
+.article em {
+  font-style: italic;
+  letter-spacing: var(--letter-spacing-italic);
+}
+.article abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+.article figure {
+  margin: var(--spacing-lg) 0;
+}
+.article figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+.article figure figcaption {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  margin-top: var(--spacing-xs);
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-md);
+}
+.article table th, .article table td {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-align: left;
+  border-bottom: var(--border-width-thin) solid var(--color-border-default);
+}
+.article table td {
+  font-variant-numeric: tabular-nums;
+}
+.article table th.numeric,
+.article table td.numeric {
+  font-family: var(--font-family-mono);
+  text-align: right;
+}
+.article table thead th {
+  font-weight: var(--font-weight-bold);
+  border-bottom: var(--border-width-medium) solid var(--color-border-strong);
+}
+.article table tbody tr:last-child td {
+  border-bottom: none;
+}
+/* Compiled from Candor v6.0.0, src/design-tokens/syntax.scss (sass --style=expanded).
+ * Candor stopped shipping this stylesheet in @candor-design/tokens 4.0.0; the blog owns the compiled copy.
+ * To update: compile the file at the new Candor tag and bump the tag here. Do not hand-edit. */
+:root {
+  --syntax-comment: oklch(0.438 0.040 248);
+  --syntax-keyword: oklch(0.422 0.110 250.8);
+  --syntax-string: oklch(0.405 0.084 78);
+  --syntax-number: oklch(0.406 0.100 278);
+  --syntax-function: oklch(0.328 0.050 250);
+  --syntax-property: oklch(0.406 0.100 347);
+  --syntax-operator: oklch(0.422 0.030 248);
+  --syntax-deleted: oklch(0.40 0.15 30);
+  --syntax-inserted: oklch(0.425 0.136 144.2);
+  --syntax-regex: oklch(0.405 0.102 53.54);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --syntax-comment: oklch(0.72 0.04 248);
+    --syntax-keyword: oklch(0.79 0.11 250.80);
+    --syntax-string: oklch(0.85 0.13 78);
+    --syntax-number: oklch(0.80 0.10 278);
+    --syntax-function: oklch(0.90 0.05 250);
+    --syntax-property: oklch(0.83 0.10 347);
+    --syntax-operator: oklch(0.75 0.03 248);
+    --syntax-deleted: oklch(0.79 0.12 25);
+    --syntax-inserted: oklch(0.80 0.15 144.2);
+    --syntax-regex: oklch(0.82 0.11 53.54);
+  }
+}
+[data-theme=dark] {
+  --syntax-comment: oklch(0.72 0.04 248);
+  --syntax-keyword: oklch(0.79 0.11 250.80);
+  --syntax-string: oklch(0.85 0.13 78);
+  --syntax-number: oklch(0.80 0.10 278);
+  --syntax-function: oklch(0.90 0.05 250);
+  --syntax-property: oklch(0.83 0.10 347);
+  --syntax-operator: oklch(0.75 0.03 248);
+  --syntax-deleted: oklch(0.79 0.12 25);
+  --syntax-inserted: oklch(0.80 0.15 144.2);
+  --syntax-regex: oklch(0.82 0.11 53.54);
+}
+
+[data-theme=light] {
+  --syntax-comment: oklch(0.438 0.040 248);
+  --syntax-keyword: oklch(0.422 0.110 250.8);
+  --syntax-string: oklch(0.405 0.084 78);
+  --syntax-number: oklch(0.406 0.100 278);
+  --syntax-function: oklch(0.328 0.050 250);
+  --syntax-property: oklch(0.406 0.100 347);
+  --syntax-operator: oklch(0.422 0.030 248);
+  --syntax-deleted: oklch(0.40 0.15 30);
+  --syntax-inserted: oklch(0.425 0.136 144.2);
+  --syntax-regex: oklch(0.405 0.102 53.54);
+}
+
+code[class*=language-] .token.comment, code[class*=language-] .token.prolog, code[class*=language-] .token.doctype, code[class*=language-] .token.cdata,
+pre[class*=language-] .token.comment,
+pre[class*=language-] .token.prolog,
+pre[class*=language-] .token.doctype,
+pre[class*=language-] .token.cdata {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+code[class*=language-] .token.punctuation,
+pre[class*=language-] .token.punctuation {
+  color: var(--syntax-operator);
+}
+code[class*=language-] .token.namespace,
+pre[class*=language-] .token.namespace {
+  color: var(--syntax-comment);
+}
+code[class*=language-] .token.keyword, code[class*=language-] .token.atrule,
+pre[class*=language-] .token.keyword,
+pre[class*=language-] .token.atrule {
+  color: var(--syntax-keyword);
+  font-weight: bold;
+}
+code[class*=language-] .token.tag,
+pre[class*=language-] .token.tag {
+  color: var(--syntax-keyword);
+}
+code[class*=language-] .token.attr-name,
+pre[class*=language-] .token.attr-name {
+  color: var(--syntax-property);
+}
+code[class*=language-] .token.attr-value,
+pre[class*=language-] .token.attr-value {
+  color: var(--syntax-string);
+}
+code[class*=language-] .token.string, code[class*=language-] .token.char, code[class*=language-] .token.url,
+pre[class*=language-] .token.string,
+pre[class*=language-] .token.char,
+pre[class*=language-] .token.url {
+  color: var(--syntax-string);
+}
+code[class*=language-] .token.number, code[class*=language-] .token.boolean, code[class*=language-] .token.constant, code[class*=language-] .token.symbol,
+pre[class*=language-] .token.number,
+pre[class*=language-] .token.boolean,
+pre[class*=language-] .token.constant,
+pre[class*=language-] .token.symbol {
+  color: var(--syntax-number);
+}
+code[class*=language-] .token.function, code[class*=language-] .token.class-name, code[class*=language-] .token.builtin,
+pre[class*=language-] .token.function,
+pre[class*=language-] .token.class-name,
+pre[class*=language-] .token.builtin {
+  color: var(--syntax-function);
+}
+code[class*=language-] .token.property, code[class*=language-] .token.selector,
+pre[class*=language-] .token.property,
+pre[class*=language-] .token.selector {
+  color: var(--syntax-property);
+}
+code[class*=language-] .token.operator,
+pre[class*=language-] .token.operator {
+  color: var(--syntax-operator);
+}
+code[class*=language-] .token.regex, code[class*=language-] .token.variable,
+pre[class*=language-] .token.regex,
+pre[class*=language-] .token.variable {
+  color: var(--syntax-regex);
+}
+code[class*=language-] .token.deleted,
+pre[class*=language-] .token.deleted {
+  color: var(--syntax-deleted);
+  background-color: color-mix(in oklch, var(--syntax-deleted) 15%, transparent);
+}
+code[class*=language-] .token.inserted,
+pre[class*=language-] .token.inserted {
+  color: var(--syntax-inserted);
+  background-color: color-mix(in oklch, var(--syntax-inserted) 15%, transparent);
+}
+code[class*=language-] .token.important,
+pre[class*=language-] .token.important {
+  color: var(--syntax-regex);
+  font-weight: bold;
+}
+code[class*=language-] .token.bold,
+pre[class*=language-] .token.bold {
+  font-weight: bold;
+}
+code[class*=language-] .token.italic,
+pre[class*=language-] .token.italic {
+  font-style: italic;
+}
+code[class*=language-] .token.entity,
+pre[class*=language-] .token.entity {
+  cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+		</style>
+		
+	</head>
+	<body>
+		<a href="#main" id="skip-link" class="visually-hidden">Skip to main content</a>
+
+		<header id="site-header">
+			<a href="/blog-test/" class="home-link">pawn002 Blog</a>
+			<nav aria-label="Top level navigation menu">
+				<ul class="nav">
+						<li class="nav-item">
+							<a href="/blog-test/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/blog/">Archive</a>
+						</li>
+						<li class="nav-item">
+							<a href="/blog-test/about/">About</a>
+						</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="main">
+			<heading-anchors>
+				
+
+
+
+
+
+	<link rel="stylesheet" href="/blog-test/css/katex.min.css">
+
+<header class="post-header">
+	<h1 class="post-header__title" id="greys-without-a-ramp-rebuilding-a-design-systems-neutrals-in-oklch">Greys Without a Ramp: Rebuilding a Design System&#39;s Neutrals in OKLCH</h1>
+		<p class="post-header__description">Candor 6.0 rebuilds its gray scale in OKLCH: neutral, cool and warm ramps on one lightness scale, so changing temperature barely moves contrast. Tinted neutrals take their chroma from one curve, and warm surfaces come forward while cool ones recede.</p>
+
+	<div class="post-header__meta">
+		<time datetime="2026-10-27">27 October 2026</time>
+		<span class="post-header__meta-sep" aria-hidden="true">·</span>
+		<span class="post-header__byline">By <a href="/blog-test/about/" rel="author">John Rioflorido</a></span>
+	</div>
+		<div class="post-header__tags" role="group" aria-label="Post tags">
+				<a href="/blog-test/tags/accessibility/" class="chip-link">Accessibility</a>
+				<a href="/blog-test/tags/design-architecture/" class="chip-link">Design-Architecture</a>
+				<a href="/blog-test/tags/systems-design/" class="chip-link">Systems-Design</a>
+				<a href="/blog-test/tags/design-strategy/" class="chip-link">Design-Strategy</a>
+				<a href="/blog-test/tags/inclusive-design/" class="chip-link">Inclusive-Design</a>
+				<a href="/blog-test/tags/wcag-compliance/" class="chip-link">WCAG-Compliance</a>
+				<a href="/blog-test/tags/case-study/" class="chip-link">Case-Study</a>
+				<a href="/blog-test/tags/open-source/" class="chip-link">Open-Source</a>
+				<a href="/blog-test/tags/portfolio/" class="chip-link">Portfolio</a>
+		</div>
+</header>
+
+<div class="article article--font-serif">
+	<p><picture><source type="image/avif" srcset="/blog-test/img/lUzfBFVMo--400.avif 400w, /blog-test/img/lUzfBFVMo--800.avif 800w, /blog-test/img/lUzfBFVMo--1536.avif 1536w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/lUzfBFVMo--400.webp 400w, /blog-test/img/lUzfBFVMo--800.webp 800w, /blog-test/img/lUzfBFVMo--1536.webp 1536w" sizes="100vw"><img src="/blog-test/img/lUzfBFVMo--400.png" alt="Three tall navy cards stand side by side on a dark navy field, holding eight grey swatches that step diagonally down them: three cool blue-greys, two neutrals and three warm browns. From each swatch a burgundy line runs level to the summit of the mountain ridge painted in that grey. The pale, cool ridges sit farthest away and blur into the sky; the dark, warm ones stand nearest and sharp. On one lightness scale, warm comes forward and cool recedes." loading="lazy" decoding="async" width="1536" height="1024" srcset="/blog-test/img/lUzfBFVMo--400.png 400w, /blog-test/img/lUzfBFVMo--800.png 800w, /blog-test/img/lUzfBFVMo--1536.png 1536w" sizes="100vw"></picture></p>
+<div class="exec-summary">
+<h2 id="executive-summary">Executive Summary</h2>
+<p><a href="https://github.com/pawn002/candor">Candor</a>, my design system, had greys that each passed their contrast audit and, taken together, did not form a system. One ramp held three temperatures, a second cool ramp had two steps, and many greys in use sat at lightnesses no ramp had. Version 6.0 replaces them with three ramps (neutral, cool and warm) that share one lightness scale, so a step number means the same lightness in every ramp and changing temperature barely changes contrast. Chroma in the tinted neutrals comes from one curve, because holding chroma fixed does not hold a colour's identity as it lightens. Temperature now does a job of its own: warm surfaces come forward and cool ones recede. This post covers why the old greys needed rebuilding, how the new ones were built, and what changed for anyone using Candor's design tokens.</p>
+</div>
+<hr>
+<h2 id="how-it-started">How It Started</h2>
+<p>The prompt was a code block. Candor's code blocks were dark navy panels on a white page, a jump in colour large enough that reading them felt like switching documents. The plan was a faint tint instead, a background only slightly different from the page.</p>
+<figure class="code-compare">
+<div class="code-compare__pair"><div class="code-compare__panel" style="--cc-page: oklch(1 0 0); --cc-text: oklch(0.32 0 0); --cc-code: oklch(0.27 0.06 245.34); --cc-code-text: oklch(1 0 0)"><p class="code-compare__label">5.x</p><p class="code-compare__prose">A paragraph of article text, then the example.</p><pre class="code-compare__code"><code>const steps = [25, 100];
+const ramp =
+  steps.map(toGrey);</code></pre></div><div class="code-compare__panel" style="--cc-page: oklch(0.985 0.006 248.99); --cc-text: oklch(0.30 0 0); --cc-code: oklch(0.92 0.018 195); --cc-code-text: oklch(0.30 0 0)"><p class="code-compare__label">6.0</p><p class="code-compare__prose">A paragraph of article text, then the example.</p><pre class="code-compare__code"><code>const steps = [25, 100];
+const ramp =
+  steps.map(toGrey);</code></pre></div></div>
+<figcaption>The same code block in Candor 5.x and 6.0, light mode. In 5.x the block was a filled navy panel a ΔE of 79 from the white page. In 6.0 it is a teal tint a ΔE of 8 from the page, set in the page's own text colour. Code text measures 14.5 (OKCA) in 5.x and 9.6 in 6.0, both well above the floor. Measured with klar.</figcaption>
+</figure>
+<p>Trying tints from each of Candor's brand colours went poorly. Navy came out sky blue and pushed forward. Burgundy, the one warm brand hue, sat close enough to the error red that a code block started to look like it was flagging something. The option I liked best was a warm paper tone, and Candor had nothing like it: every neutral in the system was either pure grey or cool grey.</p>
+<p>That raised a broader question than the code block. If the system had no warm neutral, what did its neutrals actually look like as a set?</p>
+<h2 id="what-the-greys-looked-like">What the Greys Looked Like</h2>
+<p>Laid out in one place, the greys were a series of reasonable decisions made one at a time.</p>
+<ul>
+<li><strong>One ramp, three temperatures.</strong> The main <code>--gray-*</code> ramp was neutral through its middle, faintly warm at step 200 (a hue of 17), and cool at 800 and 900, which carried the navy undertone of the dark theme.</li>
+<li><strong>A second, two-step cool ramp</strong> (<code>--gray-cool-600</code> and <code>-700</code>) sat beside it for dark surfaces.</li>
+<li><strong>Greys in use that were on no ramp at all.</strong> Subtle text was <code>oklch(0.50 0 0)</code>, its variant on surfaces <code>oklch(0.44 0 0)</code>, control borders <code>oklch(0.53 0 0)</code> in light mode and <code>oklch(0.62 0 0)</code> in dark, and so on. Each was tuned to clear a contrast floor, and each was correct for that job.</li>
+<li><strong>The cool undertone spread across three hues</strong>: 245, 248 and 248.99.</li>
+</ul>
+<p>The problem was what those values did not give a designer or a developer. A primitive's name did not predict its colour: <code>--gray-800</code> was cool, <code>--gray-700</code> next to it was not. Choosing a warmer grey meant choosing a different lightness too, which moved contrast. And a new token had nowhere obvious to land, so the next one would likely become another one-off.</p>
+<h2 id="three-ramps-one-scale">Three Ramps, One Scale</h2>
+<p>The new greys are three ramps: neutral <code>--gray-*</code>, cool <code>--gray-cool-*</code> (hue 248.99, the navy undertone) and warm <code>--gray-warm-*</code> (hue 69, opposite cool on the hue wheel). All three share the same 14 steps: 0, 25, 100, 200, 300, 400, 500, 550, 600, 650, 700, 800, 850 and 900.</p>
+<p>The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--ramps">6.0 ramps story</a> in Candor's Storybook lays them out side by side, one row per step. A step number means the same lightness in every ramp, so <code>--gray-cool-300</code> and <code>--gray-warm-300</code> have the same lightness and differ only in temperature. Moving a surface from cool to warm is now a decision about temperature alone, and its contrast against text barely moves. That independence is also what lets temperature rank surfaces, which a later section covers.</p>
+<div class="swatch-table">
+<table>
+<caption>The same body text on the neutral, cool and warm versions of one step, in each theme. The tints differ from neutral by a ΔE of 5 to 8, enough to see, and contrast is identical across each row. Row labels give the text step, then the background step. Figures measured with klar: OKCA first, then WCAG 2.</caption>
+<thead><tr><td></td><th scope="col">Neutral</th><th scope="col">Cool</th><th scope="col">Warm</th></tr></thead>
+<tbody>
+<tr><th scope="row">Light<span>800 on 300</span></th>
+<td><span class="swatch-table__sample" style="background: oklch(0.81 0 0); color: oklch(0.30 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 6.5</span><span class="swatch-table__fig">WCAG 7.5</span></td>
+<td><span class="swatch-table__sample" style="background: oklch(0.81 0.018 248.99); color: oklch(0.30 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 6.5</span><span class="swatch-table__fig">WCAG 7.5</span><span class="swatch-table__fig">ΔE 6</span></td>
+<td><span class="swatch-table__sample" style="background: oklch(0.81 0.014 69); color: oklch(0.30 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 6.5</span><span class="swatch-table__fig">WCAG 7.5</span><span class="swatch-table__fig">ΔE 5</span></td></tr>
+<tr><th scope="row">Dark<span>200 on 850</span></th>
+<td><span class="swatch-table__sample" style="background: oklch(0.24 0 0); color: oklch(0.88 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 10.7</span><span class="swatch-table__fig">WCAG 11.4</span></td>
+<td><span class="swatch-table__sample" style="background: oklch(0.24 0.026 248.99); color: oklch(0.88 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 10.7</span><span class="swatch-table__fig">WCAG 11.4</span><span class="swatch-table__fig">ΔE 8</span></td>
+<td><span class="swatch-table__sample" style="background: oklch(0.24 0.015 69); color: oklch(0.88 0 0)" aria-hidden="true">Text</span><span class="swatch-table__fig">OKCA 10.7</span><span class="swatch-table__fig">WCAG 11.4</span><span class="swatch-table__fig">ΔE 6</span></td></tr>
+</tbody>
+</table>
+</div>
+<p>I spaced the steps unevenly on purpose. Steps 550, 600 and 650 are there because subtle text and borders need those exact lightnesses to clear their contrast floors. Putting the steps where Candor's own tokens needed them is what let every grey semantic token name a step, so none of them is a one-off any more. Pure white belongs to the neutral ramp alone; the tinted ramps start at 25. Of the ten greys that sat between 5.x steps, seven now land on a step at exactly their old lightness; the <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--off-ramp">off-ramp greys story</a> lists each one and the step it uses now.</p>
+<h2 id="chroma-from-one-curve">Chroma From One Curve</h2>
+<p>OKLCH came with a promise for accessibility. It separates a colour into lightness, chroma (colourfulness) and hue, so a designer can move a colour's lightness until it meets a contrast floor and, in principle, keep its identity, brand colour included. Years of working in it, with other designers and while maintaining Candor, showed me where that falls short. Most people will still call a darker version of a brand colour on brand. Make it lighter and most can't say the same. Holding chroma and hue fixed does not hold a colour's identity across a ramp, brand colour or not, which is why Candor's tinted greys change chroma as lightness changes.</p>
+<p>The greys have their own version of the problem. Too much chroma near black and a grey turns muddy; too little in the middle and the tint disappears. Judging whether a ramp's steps still read as one family is work for a designer's eye, and the old cool ramp was made that way. Hand-set steps are hard to keep smooth or to extend, though, and I wanted a system. A mathematical curve turned out to be the answer: it unites calibrated, accessible calls into one coherent ramp.</p>
+<p>In 6.0 both tinted ramps follow one formula:</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="center" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>C</mi><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo><mo>=</mo><mi>K</mi><mo>×</mo><mo fence="true" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mn>4</mn><mi>u</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>u</mi><mo stretchy="false">)</mo><msup><mo fence="true" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mn>0.44</mn></msup></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mtext>where </mtext><mi>u</mi><mo>=</mo><msup><mi>L</mi><mi>g</mi></msup></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{gathered} C(L) = K \times \bigl(4u(1 - u)\bigr)^{0.44} \\ \text{where } u = L^{g} \end{gathered}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.914em;vertical-align:-1.207em;"></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.707em;"><span style="top:-3.707em;"><span class="pstrut" style="height:3.054em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mopen">(</span><span class="mord mathnormal">L</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mopen"><span class="delimsizing size1">(</span></span><span class="mord">4</span><span class="mord mathnormal">u</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mclose"><span class="mclose"><span class="delimsizing size1">)</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.054em;"><span style="top:-3.3029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0.44</span></span></span></span></span></span></span></span></span></span></span><span style="top:-2.207em;"><span class="pstrut" style="height:3.054em;"></span><span class="mord"><span class="mord text"><span class="mord">where </span></span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">g</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.207em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>The core, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>u</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>u</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">4u(1 - u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord mathnormal">u</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span>, is a hump that is zero at black and white and peaks in between. Two parameters shape it. <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span> sets the height of the peak and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi></mrow><annotation encoding="application/x-tex">g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span></span></span></span> moves it along the lightness axis. The exponent 0.44 keeps a trace of chroma close to white, which the lightly tinted page depends on.</p>
+<figure class="lightness-chart chroma-chart">
+<ul class="chart-legend"><li><svg viewBox="0 0 28 16" aria-hidden="true"><line x1="1" y1="8" x2="27" y2="8" class="ln"></line><rect x="10.5" y="4.5" width="7" height="7" rx="1" class="pt"></rect></svg>cool: curve and 6.0 steps</li><li><svg viewBox="0 0 28 16" aria-hidden="true"><line x1="1" y1="8" x2="27" y2="8" class="ln dash"></line><path d="M14 3.5 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" class="pt"></path></svg>warm: curve and 6.0 steps</li><li><svg viewBox="0 0 28 16" aria-hidden="true"><circle cx="14" cy="8" r="5" class="hand"></circle></svg>hand-set, both ramps</li></ul><svg viewBox="0 0 300 262" role="img" aria-labelledby="cc-title cc-desc"><title id="cc-title">Grey chroma by lightness: the 6.0 curves and the hand-set values they replaced</title><desc id="cc-desc">Chroma on the vertical axis, lightness on the horizontal. Before the curve, cool and warm shared one hand-set chroma profile. The 6.0 cool curve stays within a delta E of 2 of every hand-set value. The 6.0 warm curve matches through the light and middle steps, then drops below the hand-set values from step 650 to 850, by a delta E of 4 to 5, so warm does not turn brown in dark mode. The data table after the chart lists every value.</desc><line x1="50" y1="200" x2="282" y2="200" class="ax"></line><line x1="50" y1="200" x2="50" y2="14" class="ax"></line><line x1="46" y1="200.0" x2="50" y2="200.0" class="ax"></line><text x="43" y="205.0" text-anchor="end" class="t s">0</text><line x1="46" y1="141.9" x2="50" y2="141.9" class="ax"></line><text x="43" y="146.9" text-anchor="end" class="t s">0.01</text><line x1="46" y1="83.8" x2="50" y2="83.8" class="ax"></line><text x="43" y="88.8" text-anchor="end" class="t s">0.02</text><line x1="46" y1="25.6" x2="50" y2="25.6" class="ax"></line><text x="43" y="30.6" text-anchor="end" class="t s">0.03</text><line x1="75.8" y1="200" x2="75.8" y2="204" class="ax"></line><text x="75.8" y="221" text-anchor="middle" class="t s">0.2</text><line x1="127.3" y1="200" x2="127.3" y2="204" class="ax"></line><text x="127.3" y="221" text-anchor="middle" class="t s">0.4</text><line x1="178.9" y1="200" x2="178.9" y2="204" class="ax"></line><text x="178.9" y="221" text-anchor="middle" class="t s">0.6</text><line x1="230.4" y1="200" x2="230.4" y2="204" class="ax"></line><text x="230.4" y="221" text-anchor="middle" class="t s">0.8</text><line x1="282.0" y1="200" x2="282.0" y2="204" class="ax"></line><text x="282.0" y="221" text-anchor="middle" class="t s">1.0</text><text x="166.0" y="244" text-anchor="middle" class="t s">lightness (OKLCH L)</text><polyline points="55.2,58.9 56.7,57.8 58.2,56.8 59.8,55.9 61.3,55.0 62.9,54.2 64.4,53.4 66.0,52.7 67.5,52.0 69.1,51.4 70.6,50.8 72.2,50.3 73.7,49.7 75.3,49.3 76.8,48.8 78.4,48.4 79.9,48.0 81.4,47.7 83.0,47.4 84.5,47.1 86.1,46.8 87.6,46.6 89.2,46.4 90.7,46.2 92.3,46.0 93.8,45.8 95.4,45.7 96.9,45.6 98.5,45.5 100.0,45.5 101.6,45.4 103.1,45.4 104.6,45.4 106.2,45.4 107.7,45.4 109.3,45.5 110.8,45.5 112.4,45.6 113.9,45.7 115.5,45.8 117.0,45.9 118.6,46.1 120.1,46.2 121.7,46.4 123.2,46.6 124.8,46.8 126.3,47.0 127.8,47.2 129.4,47.4 130.9,47.7 132.5,48.0 134.0,48.2 135.6,48.5 137.1,48.8 138.7,49.2 140.2,49.5 141.8,49.8 143.3,50.2 144.9,50.6 146.4,51.0 148.0,51.3 149.5,51.8 151.0,52.2 152.6,52.6 154.1,53.1 155.7,53.5 157.2,54.0 158.8,54.5 160.3,55.0 161.9,55.5 163.4,56.0 165.0,56.5 166.5,57.1 168.1,57.6 169.6,58.2 171.2,58.8 172.7,59.4 174.2,60.0 175.8,60.6 177.3,61.3 178.9,61.9 180.4,62.6 182.0,63.2 183.5,63.9 185.1,64.6 186.6,65.4 188.2,66.1 189.7,66.8 191.3,67.6 192.8,68.4 194.4,69.2 195.9,70.0 197.4,70.8 199.0,71.6 200.5,72.5 202.1,73.4 203.6,74.2 205.2,75.1 206.7,76.1 208.3,77.0 209.8,78.0 211.4,78.9 212.9,79.9 214.5,80.9 216.0,82.0 217.6,83.0 219.1,84.1 220.6,85.2 222.2,86.3 223.7,87.5 225.3,88.7 226.8,89.9 228.4,91.1 229.9,92.3 231.5,93.6 233.0,94.9 234.6,96.2 236.1,97.6 237.7,99.0 239.2,100.5 240.8,101.9 242.3,103.4 243.8,105.0 245.4,106.6 246.9,108.2 248.5,109.9 250.0,111.7 251.6,113.5 253.1,115.4 254.7,117.3 256.2,119.3 257.8,121.4 259.3,123.5 260.9,125.8 262.4,128.1 264.0,130.6 265.5,133.2 267.0,136.0 268.6,138.9 270.1,142.1 271.7,145.5 273.2,149.2 274.8,153.3 276.3,157.9 277.9,163.4 279.4,170.2 281.0,180.1" class="ln"></polyline><polyline points="55.2,130.8 56.7,129.5 58.2,128.3 59.8,127.1 61.3,125.9 62.9,124.8 64.4,123.7 66.0,122.7 67.5,121.7 69.1,120.7 70.6,119.8 72.2,118.9 73.7,118.0 75.3,117.2 76.8,116.4 78.4,115.6 79.9,114.8 81.4,114.1 83.0,113.3 84.5,112.6 86.1,112.0 87.6,111.3 89.2,110.7 90.7,110.1 92.3,109.5 93.8,108.9 95.4,108.4 96.9,107.8 98.5,107.3 100.0,106.8 101.6,106.3 103.1,105.9 104.6,105.4 106.2,105.0 107.7,104.6 109.3,104.2 110.8,103.8 112.4,103.4 113.9,103.1 115.5,102.8 117.0,102.4 118.6,102.1 120.1,101.8 121.7,101.6 123.2,101.3 124.8,101.0 126.3,100.8 127.8,100.6 129.4,100.4 130.9,100.2 132.5,100.0 134.0,99.8 135.6,99.7 137.1,99.5 138.7,99.4 140.2,99.3 141.8,99.2 143.3,99.1 144.9,99.0 146.4,99.0 148.0,98.9 149.5,98.9 151.0,98.9 152.6,98.9 154.1,98.9 155.7,98.9 157.2,98.9 158.8,98.9 160.3,99.0 161.9,99.1 163.4,99.1 165.0,99.2 166.5,99.3 168.1,99.5 169.6,99.6 171.2,99.7 172.7,99.9 174.2,100.1 175.8,100.3 177.3,100.5 178.9,100.7 180.4,100.9 182.0,101.1 183.5,101.4 185.1,101.6 186.6,101.9 188.2,102.2 189.7,102.5 191.3,102.9 192.8,103.2 194.4,103.6 195.9,103.9 197.4,104.3 199.0,104.7 200.5,105.1 202.1,105.6 203.6,106.0 205.2,106.5 206.7,107.0 208.3,107.5 209.8,108.0 211.4,108.5 212.9,109.1 214.5,109.7 216.0,110.3 217.6,110.9 219.1,111.5 220.6,112.2 222.2,112.9 223.7,113.6 225.3,114.3 226.8,115.0 228.4,115.8 229.9,116.6 231.5,117.4 233.0,118.3 234.6,119.2 236.1,120.1 237.7,121.0 239.2,122.0 240.8,123.0 242.3,124.1 243.8,125.2 245.4,126.3 246.9,127.4 248.5,128.7 250.0,129.9 251.6,131.2 253.1,132.6 254.7,134.0 256.2,135.5 257.8,137.0 259.3,138.7 260.9,140.4 262.4,142.2 264.0,144.1 265.5,146.1 267.0,148.2 268.6,150.5 270.1,153.0 271.7,155.6 273.2,158.6 274.8,161.9 276.3,165.6 277.9,170.0 279.4,175.6 281.0,183.6" class="ln dash"></polyline><g class="m"><title>Hand-set step 25 (both ramps): L 0.985, chroma 0.005</title><circle cx="278.1" cy="170.9" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 100 (both ramps): L 0.91, chroma 0.008</title><circle cx="258.8" cy="153.5" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 200 (both ramps): L 0.88, chroma 0.01</title><circle cx="251.1" cy="141.9" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 300 (both ramps): L 0.81, chroma 0.015</title><circle cx="233.0" cy="112.8" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 400 (both ramps): L 0.71, chroma 0.02</title><circle cx="207.2" cy="83.8" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 500 (both ramps): L 0.62, chroma 0.02</title><circle cx="184.0" cy="83.8" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 550 (both ramps): L 0.56, chroma 0.025</title><circle cx="168.6" cy="54.7" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 600 (both ramps): L 0.5, chroma 0.025</title><circle cx="153.1" cy="54.7" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 650 (both ramps): L 0.44, chroma 0.03</title><circle cx="137.6" cy="25.6" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 700 (both ramps): L 0.4, chroma 0.03</title><circle cx="127.3" cy="25.6" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 800 (both ramps): L 0.3, chroma 0.03</title><circle cx="101.6" cy="25.6" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 850 (both ramps): L 0.24, chroma 0.03</title><circle cx="86.1" cy="25.6" r="5" class="hand"></circle></g><g class="m"><title>Hand-set step 900 (both ramps): L 0.16, chroma 0.02</title><circle cx="65.5" cy="83.8" r="5" class="hand"></circle></g><g class="m"><title>Cool 25: chroma 0.006, delta E 0 from hand-set</title><rect x="274.6" y="161.6" width="7" height="7" rx="1" fill="oklch(0.985 0.006 248.99)" class="pt"></rect></g><g class="m"><title>Warm 25: chroma 0.005, delta E 0 from hand-set</title><path d="M278.1 166.4 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.985 0.005 69)" class="pt"></path></g><g class="m"><title>Cool 100: chroma 0.013, delta E 2 from hand-set</title><rect x="255.3" y="120.9" width="7" height="7" rx="1" fill="oklch(0.91 0.013 248.99)" class="pt"></rect></g><g class="m"><title>Warm 100: chroma 0.01, delta E 1 from hand-set</title><path d="M258.8 137.4 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.91 0.01 69)" class="pt"></path></g><g class="m"><title>Cool 200: chroma 0.014, delta E 1 from hand-set</title><rect x="247.6" y="115.1" width="7" height="7" rx="1" fill="oklch(0.88 0.014 248.99)" class="pt"></rect></g><g class="m"><title>Warm 200: chroma 0.011, delta E 0 from hand-set</title><path d="M251.1 131.6 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.88 0.011 69)" class="pt"></path></g><g class="m"><title>Cool 300: chroma 0.018, delta E 1 from hand-set</title><rect x="229.5" y="91.9" width="7" height="7" rx="1" fill="oklch(0.81 0.018 248.99)" class="pt"></rect></g><g class="m"><title>Warm 300: chroma 0.014, delta E 0 from hand-set</title><path d="M233.0 114.1 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.81 0.014 69)" class="pt"></path></g><g class="m"><title>Cool 400: chroma 0.021, delta E 0 from hand-set</title><rect x="203.7" y="74.4" width="7" height="7" rx="1" fill="oklch(0.71 0.021 248.99)" class="pt"></rect></g><g class="m"><title>Warm 400: chroma 0.015, delta E 2 from hand-set</title><path d="M207.2 108.3 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.71 0.015 69)" class="pt"></path></g><g class="m"><title>Cool 500: chroma 0.023, delta E 1 from hand-set</title><rect x="180.5" y="62.8" width="7" height="7" rx="1" fill="oklch(0.62 0.023 248.99)" class="pt"></rect></g><g class="m"><title>Warm 500: chroma 0.016, delta E 1 from hand-set</title><path d="M184.0 102.5 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.62 0.016 69)" class="pt"></path></g><g class="m"><title>Cool 550: chroma 0.024, delta E 0 from hand-set</title><rect x="165.1" y="57.0" width="7" height="7" rx="1" fill="oklch(0.56 0.024 248.99)" class="pt"></rect></g><g class="m"><title>Warm 550: chroma 0.017, delta E 2 from hand-set</title><path d="M168.6 96.7 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.56 0.017 69)" class="pt"></path></g><g class="m"><title>Cool 600: chroma 0.025, delta E 0 from hand-set</title><rect x="149.6" y="51.2" width="7" height="7" rx="1" fill="oklch(0.5 0.025 248.99)" class="pt"></rect></g><g class="m"><title>Warm 600: chroma 0.017, delta E 2 from hand-set</title><path d="M153.1 96.7 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.5 0.017 69)" class="pt"></path></g><g class="m"><title>Cool 650: chroma 0.025, delta E 1 from hand-set</title><rect x="134.1" y="51.2" width="7" height="7" rx="1" fill="oklch(0.44 0.025 248.99)" class="pt"></rect></g><g class="m"><title>Warm 650: chroma 0.017, delta E 4 from hand-set</title><path d="M137.6 96.7 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.44 0.017 69)" class="pt"></path></g><g class="m"><title>Cool 700: chroma 0.026, delta E 1 from hand-set</title><rect x="123.8" y="45.4" width="7" height="7" rx="1" fill="oklch(0.4 0.026 248.99)" class="pt"></rect></g><g class="m"><title>Warm 700: chroma 0.017, delta E 4 from hand-set</title><path d="M127.3 96.7 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.4 0.017 69)" class="pt"></path></g><g class="m"><title>Cool 800: chroma 0.026, delta E 1 from hand-set</title><rect x="98.1" y="45.4" width="7" height="7" rx="1" fill="oklch(0.3 0.026 248.99)" class="pt"></rect></g><g class="m"><title>Warm 800: chroma 0.016, delta E 4 from hand-set</title><path d="M101.6 102.5 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.3 0.016 69)" class="pt"></path></g><g class="m"><title>Cool 850: chroma 0.026, delta E 1 from hand-set</title><rect x="82.6" y="45.4" width="7" height="7" rx="1" fill="oklch(0.24 0.026 248.99)" class="pt"></rect></g><g class="m"><title>Warm 850: chroma 0.015, delta E 5 from hand-set</title><path d="M86.1 108.3 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.24 0.015 69)" class="pt"></path></g><g class="m"><title>Cool 900: chroma 0.025, delta E 1 from hand-set</title><rect x="62.0" y="51.2" width="7" height="7" rx="1" fill="oklch(0.16 0.025 248.99)" class="pt"></rect></g><g class="m"><title>Warm 900: chroma 0.013, delta E 1 from hand-set</title><path d="M65.5 119.9 l4.5 4.5 l-4.5 4.5 l-4.5 -4.5 z" fill="oklch(0.16 0.013 69)" class="pt"></path></g></svg>
+<figcaption>Chroma against lightness for the tinted ramps. Hollow circles are the values I set by hand before the curve, one profile shared by cool and warm; filled marks are the 6.0 steps. The vertical axis is stretched: no hollow circle sits more than a ΔE of 2 from the cool curve, while warm drops ΔE 4 to 5 below them from step 650 to 850. Differences measured with klar.</figcaption>
+<details><summary>Data: hand-set chroma and the 6.0 curves, per step</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Chroma data, scrolls sideways"><table><thead><tr><th scope="col">Step</th><th scope="col">L</th><th scope="col">Hand-set</th><th scope="col">Cool</th><th scope="col">ΔE</th><th scope="col">Warm</th><th scope="col">ΔE</th></tr></thead><tbody><tr><td>25</td><td>0.985</td><td>0.005</td><td>0.006</td><td>0</td><td>0.005</td><td>0</td></tr><tr><td>100</td><td>0.91</td><td>0.008</td><td>0.013</td><td>2</td><td>0.01</td><td>1</td></tr><tr><td>200</td><td>0.88</td><td>0.01</td><td>0.014</td><td>1</td><td>0.011</td><td>0</td></tr><tr><td>300</td><td>0.81</td><td>0.015</td><td>0.018</td><td>1</td><td>0.014</td><td>0</td></tr><tr><td>400</td><td>0.71</td><td>0.02</td><td>0.021</td><td>0</td><td>0.015</td><td>2</td></tr><tr><td>500</td><td>0.62</td><td>0.02</td><td>0.023</td><td>1</td><td>0.016</td><td>1</td></tr><tr><td>550</td><td>0.56</td><td>0.025</td><td>0.024</td><td>0</td><td>0.017</td><td>2</td></tr><tr><td>600</td><td>0.5</td><td>0.025</td><td>0.025</td><td>0</td><td>0.017</td><td>2</td></tr><tr><td>650</td><td>0.44</td><td>0.03</td><td>0.025</td><td>1</td><td>0.017</td><td>4</td></tr><tr><td>700</td><td>0.4</td><td>0.03</td><td>0.026</td><td>1</td><td>0.017</td><td>4</td></tr><tr><td>800</td><td>0.3</td><td>0.03</td><td>0.026</td><td>1</td><td>0.016</td><td>4</td></tr><tr><td>850</td><td>0.24</td><td>0.03</td><td>0.026</td><td>1</td><td>0.015</td><td>5</td></tr><tr><td>900</td><td>0.16</td><td>0.02</td><td>0.025</td><td>1</td><td>0.013</td><td>1</td></tr></tbody></table></div></details>
+</figure>
+<ul>
+<li><strong>Cool</strong> peaks low, at a lightness of 0.31, where it carries the navy cast of dark surfaces. I fitted its settings to the hand-set values it replaced, and every step lands within a ΔE of 2 of them, about the smallest difference most people can see.</li>
+<li><strong>Warm</strong> peaks in the middle, at 0.50. Before the curve, warm and cool shared one hand-set chroma profile, and warm tints darkened at that rate turn brown in dark mode. The warm curve holds back at the dark end instead and reads about as strong in either theme.</li>
+</ul>
+<p>I round every value inward, toward less chroma, so no step can fall outside sRGB, the colour space every screen can show. Candor's build fails on any colour that does.</p>
+<h2 id="temperature-as-hierarchy">Temperature as Hierarchy</h2>
+<p>The idea behind the warm ramp is one I first met in art history class: cool what should recede, warm what should come forward. Leonardo da Vinci was the example, and his use of it was taught as one sign of his mastery. His notebooks tell the painter to make distant things bluer and less defined, in proportion to how far away they should look.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> The <em>Mona Lisa</em> does exactly that: the near landscape behind her is warm ochre, and the far mountains turn blue.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> My design coursework later turned that observation into a working rule: warm colours advance and cool colours recede.</p>
+<figure class="painting-figure">
+<div class="painting-figure__frame">
+<picture><source type="image/avif" srcset="/blog-test/img/JzhoOnAqWQ-400.avif 400w, /blog-test/img/JzhoOnAqWQ-800.avif 800w, /blog-test/img/JzhoOnAqWQ-1600.avif 1600w" sizes="100vw"><source type="image/webp" srcset="/blog-test/img/JzhoOnAqWQ-400.webp 400w, /blog-test/img/JzhoOnAqWQ-800.webp 800w, /blog-test/img/JzhoOnAqWQ-1600.webp 1600w" sizes="100vw"><img src="/blog-test/img/JzhoOnAqWQ-400.jpeg" alt="The background of the Mona Lisa behind her head and shoulders: a warm, reddish-ochre winding path and bridge in the near ground, and pale, cool blue-green mountains in the distance. Four outlined patches mark where the colour was sampled, showing that the far ground is cooler than the near ground, the effect the warm-forward, cool-back rule borrows." loading="lazy" decoding="async" width="1600" height="1207" srcset="/blog-test/img/JzhoOnAqWQ-400.jpeg 400w, /blog-test/img/JzhoOnAqWQ-800.jpeg 800w, /blog-test/img/JzhoOnAqWQ-1600.jpeg 1600w" sizes="100vw"></picture>
+<svg viewBox="0 0 1000 754.4" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect class="halo" x="36.1" y="573.3" width="72.1" height="60.4" rx="3"></rect><rect class="line" x="36.1" y="573.3" width="72.1" height="60.4" rx="3"></rect><rect class="halo" x="871.1" y="528.1" width="72.2" height="60.4" rx="3"></rect><rect class="line" x="871.1" y="528.1" width="72.2" height="60.4" rx="3"></rect><rect class="halo" x="46.4" y="181.1" width="61.8" height="45.3" rx="3"></rect><rect class="line" x="46.4" y="181.1" width="61.8" height="45.3" rx="3"></rect><rect class="halo" x="747.4" y="120.7" width="61.9" height="60.4" rx="3"></rect><rect class="line" x="747.4" y="120.7" width="61.9" height="60.4" rx="3"></rect></svg>
+<span class="painting-figure__chip" style="left: 3.6%; bottom: 25.0%">near, hue 53</span>
+<span class="painting-figure__chip" style="right: 5.7%; bottom: 31.0%">near, hue 73</span>
+<span class="painting-figure__chip" style="left: 4.6%; top: 31.0%">far, hue 123</span>
+<span class="painting-figure__chip" style="right: 19.1%; top: 25.0%">far, hue 124</span>
+</div>
+<figcaption>Leonardo da Vinci, <em>Mona Lisa</em>, c. 1503–1519, the landscape behind the figure. The outlined patches were sampled in OKLCH with klar: the near ground, at lower left and lower right, measures hue 53 and 73, a warm ochre; the far peaks measure hue 123 and 124. Five centuries of yellowed varnish have turned Leonardo's blues toward green, but the far ground is still the cooler of the two. Unretouched C2RMF scan via <a href="https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF.jpg">Wikimedia Commons</a>, public domain.</figcaption>
+</figure>
+<p>An interface needs that rule, warm forward and cool back, all the time. A screen usually has a few things that should lead, more that support them, and chrome that should stay out of the way, and the differences between them are often too fine for size or weight alone. Handling hierarchy across all those cases takes temperature as a dial the system can turn without disturbing anything else. Three ramps on one lightness scale are that dial, and building them was a chance to work the way the masters did.</p>
+<p>Two new tokens put it to work. <code>--color-bg-forward</code> is warm, for the one thing a screen should lead with. <code>--color-bg-recede</code> is cool, for chrome that should step back. Each keeps the lightness of the surface it replaces, so text contrast holds. (The one exception is dark-mode recede, which steps a little darker, since dark surfaces are already cool.)</p>
+<p>The warm paper tone from the code-block experiment has a home in the system now: <code>--gray-warm-25</code>, the forward surface in light mode, is a warm neutral of the kind it was missing. The code blocks themselves went a different way, to a quiet teal tint.</p>
+<p>One accessibility rule governs both tokens: temperature guides the eye and never carries meaning by itself. A warm card can say &quot;start here,&quot; but it cannot be the only way a page says &quot;this is an error.&quot; Anyone who cannot perceive the difference loses only emphasis, never information.</p>
+<h2 id="what-changed-around-the-greys">What Changed Around the Greys</h2>
+<p>The new ramps let me make a few other decisions. The light page is now a cool off-white, <code>--gray-cool-25</code>, matching the undertone of the dark theme. Raised surfaces such as dialogs and menus stay pure white, so they lift slightly off the page.</p>
+<p>Text is neutral in both themes. With the page carrying the temperature, text no longer needs to, and hierarchy can be pushed warmer or cooler from a neutral starting point.</p>
+<p>The tinted page cost some contrast. Candor's contrast audit re-checks every recorded figure against the current values, and it re-measured forty-seven. Most fell by 0.2 to 0.5, and the lowest, subtle text, sits at 4.8 against a floor of 4.5. My first pass broke two control borders on dark raised surfaces (2.9 against a floor of 3.0), so I moved step 800 to a lightness of 0.30.</p>
+<h2 id="what-it-means-for-anyone-using-candor">What It Means for Anyone Using Candor</h2>
+<p>Semantic token names did not change. A component styled with <code>--color-text-subtle</code> or <code>--color-bg-surface</code> picks up the new values with no edits.</p>
+<p>Grey primitive names did change meaning. Eight 5.x names now resolve to a different colour, six of them to a different lightness: <code>--gray-700</code> was a lightness of 0.32 and is now 0.40, for example. Anyone who referenced a primitive directly should check the <a href="https://github.com/pawn002/candor/blob/main/docs/BREAKING-CHANGES.md#grey-primitives-re-stepped-into-three-ramps-318">migration table in Candor's breaking-changes notes</a>, which maps each old name to the step that holds its colour now. The <a href="https://main--69c25e2492ad056c24329876.chromatic.com/?path=/story/design-tokens-grey-ramps--before-and-after">before-and-after story</a> shows the same mapping with swatches, read straight from the token source.</p>
+<h2 id="lessons">Lessons</h2>
+<p><strong>A set of correct values is not yet a system.</strong> Every old grey passed its audit. What the set lacked was a rule a person could predict from, which is what lets the next decision be easy and consistent.</p>
+<p><strong>Let a curve hold the eye's calls.</strong> A designer's eye is still the judge of whether a ramp reads as one family. Fitting a curve to those judgements kept them and made the ramp easy to extend.</p>
+<p><strong>Give a perceptual property one job.</strong> Lightness carries contrast and temperature carries emphasis. Because the ramps keep the two independent, changing temperature barely moves contrast, and that is what makes the warm and cool ramps safe to use.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Leonardo da Vinci, <em>The Notebooks of Leonardo da Vinci</em>, vol. 1, trans. Jean Paul Richter (1888), §295, &quot;Of Aerial Perspective&quot;: &quot;Those you wish should look farthest away you must make proportionately bluer; thus, if one is to be five times as distant, make it five times bluer.&quot; Available from <a href="https://www.gutenberg.org/ebooks/5000">Project Gutenberg</a>. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Musée du Louvre, <a href="https://api-www.louvre.fr/sites/default/files/2024-09/Dossier%20p%C3%A9dagogique%20Joconde.pdf"><em>La Joconde : dossier documentaire</em></a>, p. 4. The Louvre describes the landscape in two parts: below, paths and a bridge &quot;dans une palette chaude d'ocre roux&quot; (in a warm palette of russet ochre); above, &quot;un paysage bleuté&quot; (a bluish landscape) of jagged mountains. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+
+
+
+			</heading-anchors>
+		</main>
+
+		<footer>
+
+			
+
+			<ul class="footer-links" aria-label="Site links">
+				<li><a href="/blog-test/feed/feed.xml">RSS Feed</a></li>
+				<li><a href="/blog-test/blog/legal_disclaimer/">Legal Disclaimer</a></li>
+				<li><a href="/blog-test/blog/organizational_disclaimer/">Organizational Disclaimer</a></li>
+				<li><a href="/blog-test/blog/accessibility_policy/">Accessibility Policy</a></li>
+				<li><a href="/blog-test/blog/post_policy/">Post Policy</a></li>
+				<li><a href="/blog-test/blog/privacy_policy/">Privacy Policy</a></li>
+			</ul>
+		</footer>
+
+		<!-- This page `/blog/candor-grey-ramps/` was built on 2026-10-27T11:41:04.379Z -->
+		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
+	</body>
+</html>
