@@ -363,15 +363,6 @@ body {
 	width: 1px;
 }
 
-/* Utility classes */
-.min-text {
-	font-size: var(--text-sm);
-}
-
-.article .min-text {
-	margin-bottom: var(--spacing-xl);
-}
-
 /* Fluid images via https://www.zachleat.com/web/fluid-images/ */
 img {
 	max-width: 100%;
@@ -846,6 +837,17 @@ img.post-card__image {
 .article .exec-summary li {
 	font-size: var(--font-size-sm);
 	letter-spacing: 0.03em;
+}
+
+/* Post notice — update, disclaimer or policy date above the body. House style in CLAUDE.md */
+.article .post-notice {
+	margin-block: var(--spacing-md) var(--spacing-xl);
+}
+.article .post-notice p {
+	font-family: var(--font-family-accessible);
+	font-size: var(--font-size-sm);
+	letter-spacing: 0.03em;
+	color: var(--color-text-subtle);
 }
 
 /* Screenshot figure — bordered container for before/after screenshot pairs in articles */
@@ -1355,7 +1357,7 @@ img.post-card__image {
 				<h2 class="post-card__title" id="hot-pink-passes-wcag-thats-the-problem">
 					<a href="/blog-test/blog/okca-algorithm/">Hot Pink Passes WCAG. That&#39;s the Problem.</a>
 				</h2>
-					<p class="post-card__excerpt">WCAG&#39;s contrast formula was built for 1999 display calibration, not legibility. Hot pink on near-black scores 6.6:1 and passes — and isn&#39;t readable. OKCA closes the gap at the algorithm layer with chroma compression, polarity-aware scaling, and a zero-false-pass invariant proven by construction across sRGB.</p>
+					<p class="post-card__excerpt">WCAG&#39;s contrast formula was built in 1999 to calibrate displays. Hot pink on near-black scores 6.6:1 and passes, but a red-blind reader gets only 5.3:1. OKCA closes the gap at the algorithm layer with a hue-weighted chroma penalty, corrections for dark backgrounds, and a zero-false-pass invariant proven by construction across sRGB.</p>
 				<div class="post-card__meta">
 					<time datetime="2026-05-06">May 2026</time>
 				</div>
@@ -1427,7 +1429,7 @@ img.post-card__image {
 			</ul>
 		</footer>
 
-		<!-- This page `/tags/open-source/` was built on 2026-10-27T11:41:04.713Z -->
+		<!-- This page `/tags/open-source/` was built on 2026-11-19T03:22:32.762Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

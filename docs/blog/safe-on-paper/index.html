@@ -370,15 +370,6 @@ body {
 	width: 1px;
 }
 
-/* Utility classes */
-.min-text {
-	font-size: var(--text-sm);
-}
-
-.article .min-text {
-	margin-bottom: var(--spacing-xl);
-}
-
 /* Fluid images via https://www.zachleat.com/web/fluid-images/ */
 img {
 	max-width: 100%;
@@ -853,6 +844,17 @@ img.post-card__image {
 .article .exec-summary li {
 	font-size: var(--font-size-sm);
 	letter-spacing: 0.03em;
+}
+
+/* Post notice — update, disclaimer or policy date above the body. House style in CLAUDE.md */
+.article .post-notice {
+	margin-block: var(--spacing-md) var(--spacing-xl);
+}
+.article .post-notice p {
+	font-family: var(--font-family-accessible);
+	font-size: var(--font-size-sm);
+	letter-spacing: 0.03em;
+	color: var(--color-text-subtle);
 }
 
 /* Screenshot figure — bordered container for before/after screenshot pairs in articles */
@@ -1769,7 +1771,7 @@ pre[class*="language-diff-"] {
 			</ul>
 		</footer>
 
-		<!-- This page `/blog/safe-on-paper/` was built on 2026-10-27T11:41:04.382Z -->
+		<!-- This page `/blog/safe-on-paper/` was built on 2026-11-19T03:22:32.398Z -->
 		<script type="module" src="/blog-test/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
